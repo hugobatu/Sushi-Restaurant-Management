@@ -4,7 +4,7 @@
 git clone https://github.com/hugobatu/Sushi-Restaurant-Management.git
 ```
 ```sh
-cd socket-programming
+cd Sushi-Restaurant-Management
 ```
 ```sh
 code .
