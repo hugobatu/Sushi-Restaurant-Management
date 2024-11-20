@@ -2,3 +2,6 @@
 node_modules
 
 .env
+
+# Ignore the public folder with test.html file
+/src/public/
