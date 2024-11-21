@@ -44,6 +44,8 @@ con.connect((err) => {
 
 app.use('/auth', authRoutes);
 
+
+
 // Routes
 // app.get("/", (req, res) => {
 //     res.send("<h1>Home page</h1>");
@@ -52,6 +54,12 @@ app.use('/auth', authRoutes);
 app.post('/signup', authController.signup);
 app.post('/login', authController.login);
 
+
+
+// test FE
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public', 'index.html'));
+});
 // Start server
 const port = process.env.PORT || 8000;
 

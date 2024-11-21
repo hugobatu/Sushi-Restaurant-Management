@@ -44,7 +44,7 @@ exports.signup = async (req, res) => {
     try {
         // Check if user already exists
         const [rows] = await con.promise().query(
-            'SELECT * FROM users WHERE username = ?',
+            'SELECT * FROM Account WHERE username = ?',
             [username]
         );
 
@@ -57,7 +57,7 @@ exports.signup = async (req, res) => {
 
         // Insert new user into the database
         await con.promise().query(
-            'INSERT INTO users (username, password, role) VALUES (?, ?, ?)',
+            'INSERT INTO Account (username, password, role) VALUES (?, ?, ?)',
             [username, hashedPassword, role]
         );
 
@@ -79,7 +79,7 @@ exports.login = async (req, res) => {
     try {
         // Fetch user from the database
         const [rows] = await con.promise().query(
-            'SELECT * FROM users WHERE username = ?',
+            'SELECT * FROM Account WHERE username = ?',
             [username]
         );
 
@@ -87,10 +87,10 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials.' });
         }
 
-        const user = rows[0];
+        const account = rows[0];
 
         // Compare password with hashed password
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, account.password);
 
         if (!isMatch) {
             return res.status(401).json({ message: 'Invalid credentials.' });
@@ -98,7 +98,7 @@ exports.login = async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign(
-            { id: user.id, role: user.role },
+            { id: account.id, role: account.role },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );
