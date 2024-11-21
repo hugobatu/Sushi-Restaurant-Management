@@ -4,7 +4,8 @@ const fs = require('fs')
 const path = require('path');
 const cors = require('cors');
 const mysql = require('mysql2'); // Database module
-
+const authRoutes = require('./src/routes/authRoutes');
+const authController = require('./src/controllers/authController');
 const app = express();
 
 // Middleware
@@ -40,10 +41,16 @@ con.connect((err) => {
         })
 });
 
+
+app.use('/auth', authRoutes);
+
 // Routes
-app.get("/", (req, res) => {
-    res.send("<h1>Home page</h1>");
-});
+// app.get("/", (req, res) => {
+//     res.send("<h1>Home page</h1>");
+// });
+
+app.post('/signup', authController.signup);
+app.post('/login', authController.login);
 
 // Start server
 const port = process.env.PORT || 8000;

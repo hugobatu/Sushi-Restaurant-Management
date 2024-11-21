@@ -11,6 +11,8 @@ CREATE DATABASE SushiXRestaurant;
 GO
 USE SushiXRestaurant;
 
+
+
 -- Region
 GO
 CREATE TABLE Region (
@@ -278,6 +280,16 @@ CREATE TABLE Account (
 	PRIMARY KEY (username),
 	FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
 	FOREIGN KEY (staff_id) REFERENCES Staff(staff_id)
+);
+
+-- Users
+GO
+CREATE TABLE users (
+	id INT IDENTITY(1,1) PRIMARY KEY,
+	username NVARCHAR(100) NOT NULL UNIQUE,
+	password NVARCHAR(100) NOT NULL,
+	role NVARCHAR(20) CHECK (role IN ('customer', 'admin', 'branchManager')) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- online connection
 CREATE TABLE OnlineConnection (
