@@ -1,16 +1,9 @@
-// src/controllers/companyController.js
-
-// Đảm bảo rằng bạn khai báo các phương thức như sau
 exports.getBranches = (req, res) => {
     res.json({ message: 'Danh sách các chi nhánh' });
 };
 
 exports.addBranch = (req, res) => {
     res.json({ message: 'Thêm chi nhánh thành công' });
-};
-
-exports.getBranchById = (req, res) => {
-    res.json({ message: `Chi nhánh với ID: ${req.params.id}` });
 };
 
 exports.updateBranch = (req, res) => {

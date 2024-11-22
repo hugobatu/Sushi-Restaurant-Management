@@ -1,18 +1,17 @@
 const express = require('express');
-const router = express.Router();
+const {protect} = require('../../middlewares/authMiddleware');
 const companyController = require('../controllers/companyController');
 
-// company routes
-router.get('/branches', companyController.getBranches);
-router.post('/branches', companyController.addBranch);
-router.get('/branches/:id', companyController.getBranchById);
-router.put('/branches/:id', companyController.updateBranch);
-router.delete('/branches/:id', companyController.deleteBranch);
-// staff management
-router.get('/staff', companyController.getStaff);
-router.post('/staff', companyController.addStaff);
-router.get('/staff/:id', companyController.getStaffById);
-router.put('/staff/:id', companyController.updateStaff);
-router.delete('/staff/:id', companyController.deleteStaff);
+const router = express.Router();
 
-module.exports = router;
+router.use(protect(['admin']));
+
+// xem danh sách các chi nhánh đang hoạt động
+router.get
+// thêm chi nhánh
+router.post('/branch', companyController.addBranch);
+// xóa chi nhánh
+router.delete('/branch', companyController.deleteBranch);
+// chỉnh sửa thông tin của chi nhánh
+router.get('/branch', companyController.updateBranch);
+// 

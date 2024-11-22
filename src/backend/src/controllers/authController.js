@@ -3,35 +3,7 @@ const jwt = require('jsonwebtoken');
 const mysql = require('mysql2');
 const path = require('path');
 const fs = require('fs');
-
-// Set up the SSL connection to TiDB Cloud
-// Correct the path to the certificate
-const con = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT,
-    ssl: {
-        ca: fs.readFileSync(path.join(__dirname, '../../certs/isrgrootx1.pem'))
-    },
-});
-
-con.connect((err) => {
-    if (err) {
-        console.error('Database connection failed:', err.message);
-        process.exit(1); // Exit the app if database connection fails
-    }
-    console.log('Connected to the database!');
-});
-
-con.connect((err) => {
-    if (err) {
-        console.error('Database connection failed:', err.message);
-        process.exit(1); // Exit the app if database connection fails
-    }
-    console.log('Connected to the database!');
-});
+const pool = require('../configs/dbConfig'); // Import the pool from dbConfig.js
 
 // Signup function
 exports.signup = async (req, res) => {
@@ -43,7 +15,7 @@ exports.signup = async (req, res) => {
 
     try {
         // Check if user already exists
-        const [rows] = await con.promise().query(
+        const [rows] = await pool.query(
             'SELECT * FROM Account WHERE username = ?',
             [username]
         );
@@ -56,7 +28,7 @@ exports.signup = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insert new user into the database
-        await con.promise().query(
+        await pool.query(
             'INSERT INTO Account (username, password, role) VALUES (?, ?, ?)',
             [username, hashedPassword, role]
         );
@@ -78,7 +50,7 @@ exports.login = async (req, res) => {
 
     try {
         // Fetch user from the database
-        const [rows] = await con.promise().query(
+        const [rows] = await pool.query(
             'SELECT * FROM Account WHERE username = ?',
             [username]
         );
