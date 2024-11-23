@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const menuController = require('../controllers/menuController');
 
+
 // Menu Routes
 router.get('/:branchId', menuController.getMenuByBranch);
 router.post('/:branchId', menuController.addMenuItem);

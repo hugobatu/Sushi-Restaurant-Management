@@ -6,7 +6,10 @@ const cors = require('cors');
 const mysql = require('mysql2'); // Database module
 const authRoutes = require('./src/routes/authRoutes');
 const authController = require('./src/controllers/authController');
+const menuRoutes = require('./src/routes/menuRoutes');
+
 const app = express();
+
 
 // Middleware
 app.use(cors());
@@ -43,6 +46,7 @@ con.connect((err) => {
 
 
 app.use('/auth', authRoutes);
+app.use('/api/menu', menuRoutes);
 
 
 
@@ -57,10 +61,13 @@ app.post('/login', authController.login);
 
 
 // test FE
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public', 'index.html'));
-});
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'src/public', 'index.html'));
+// });
+
+
 // Start server
+
 const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
