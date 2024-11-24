@@ -9,7 +9,7 @@ export function HeroSection() {
           <div className="w-16 h-16 bg-red-200 rounded-full opacity-20" />
         </div>
       </div>
-      <div className="container relative z-10 py-12 lg:py-20">
+      <div className="container relative z-10 py-12 lg:py-20 px-12">
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
           <div className="space-y-6">
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">

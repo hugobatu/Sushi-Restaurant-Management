@@ -12,15 +12,15 @@ import {
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
-      <div className="container flex h-16 items-center">
-        <Link href="/" className="mr-6">
+      <div className="flex h-16 items-center w-full px-10">
+        <Link href="/" className="mr-auto">
           <img 
             src="/placeholder.svg?height=40&width=160" 
             alt="Tokyo Deli" 
             className="h-10 w-40"
           />
         </Link>
-        <NavigationMenu className="hidden md:flex">
+        <NavigationMenu className="hidden md:flex justify-center content-center text-center">
           <NavigationMenuList>
             <NavigationMenuItem>
               <Link href="/menu" legacyBehavior passHref>

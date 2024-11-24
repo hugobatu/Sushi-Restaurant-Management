@@ -42,7 +42,7 @@ export default function PromotionsPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
-      <main className="flex-1 container py-8">
+      <main className="flex-1 container py-8 mx-auto ">
         <h1 className="text-3xl font-bold text-center mb-8">Khuyến mãi</h1>
         
         <Tabs defaultValue="promotions" className="w-full">
