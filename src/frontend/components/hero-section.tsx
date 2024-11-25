@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button"
-import { BikeIcon as Scooter } from 'lucide-react'
 
 export function HeroSection() {
   return (
@@ -31,9 +30,6 @@ export function HeroSection() {
             </div>
           </div>
           <div className="relative">
-            <div className="absolute -right-4 top-1/2 transform -translate-y-1/2">
-              <Scooter className="w-16 h-16 text-red-600" />
-            </div>
             <img
               alt="Sushi Selection"
               className="aspect-[4/3] object-cover rounded-lg"

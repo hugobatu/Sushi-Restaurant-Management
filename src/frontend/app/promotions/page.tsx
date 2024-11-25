@@ -1,4 +1,3 @@
-import { SiteHeader } from "@/components/site-header"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { PromotionCard } from "@/components/promotion-card"
 
@@ -41,16 +40,15 @@ const news = [
 export default function PromotionsPage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <SiteHeader />
       <main className="flex-1 container py-8 mx-auto ">
-        <h1 className="text-3xl font-bold text-center mb-8">Khuyến mãi</h1>
+        <h1 className="text-3xl font-bold text-center mb-8">THÔNG TIN & KHUYẾN MÃI</h1>
         
         <Tabs defaultValue="promotions" className="w-full">
           <TabsList className="w-full max-w-[400px] mx-auto grid grid-cols-2 mb-8">
-            <TabsTrigger value="news" className="text-base bg-background text-black data-[state=active]:bg-red-700">
+            <TabsTrigger value="news" className="text-base bg-background text-black data-[state=active]:bg-red-700 data-[state=active]:text-white">
               Tin Tức
             </TabsTrigger>
-            <TabsTrigger value="promotions" className="text-base bg-background text-black data-[state=active]:bg-red-700">
+            <TabsTrigger value="promotions" className="text-base bg-background text-black data-[state=active]:bg-red-700 data-[state=active]:text-white">
               Khuyến mãi
             </TabsTrigger>
           </TabsList>
