@@ -1,5 +1,6 @@
-const { CharsetToEncoding } = require('mysql2');
 const con = require('../configs/dbConfig');
+const { getUniqueUsername, hashPassword } = require('../utils/accountService');
+const { generateUsername, formatBirthDate } = require('../utils/stringUtils');
 
 exports.getBranches = async (req, res) => {
     try {
@@ -84,11 +85,11 @@ exports.addBranch = async (req, res) => {
         });
     } 
     catch (error) {
-        console.error("Error inserting branch:", error); // ghi ra log lỗi
+        console.error("Error inserting branch:", error);
         res.status(500).json({
             success: false,
             message: "Error adding branch",
-            error: error.message, // in ra thông tin lỗi
+            error: error.message,
         });
     }
 };
@@ -183,7 +184,7 @@ exports.addRegion = async(req, res) => {
             message: "Insert new region successfully",
             result: result,
         });
-    } catch (error) {
+    } catch (error){
         console.error("Error inserting new region:", error);
         res.status(500).json({
             success: true,
@@ -215,13 +216,102 @@ exports.deleteRegion = async (req, res) => {
         });
     }
 };
-
 // quản lý staff
-exports.getStaff = (req, res) => {
-    res.json({ message: 'Danh sách nhân viên' });
+exports.getStaff = async(req, res) => {
+    try {
+        const [result] = await con.execute(
+            'SELECT * FROM Staff'
+        );
+        res.status(200).json({
+            success: true,
+            message: "Getting staff information successfully",
+            result: result
+        });
+    } catch (error) {
+        console.error("Error fetching staff data:", error);
+        res.status(500).json({
+            success: false,
+            message: "Cannot fetch staff data",
+            error: error.message,
+        });
+    }
 };
-exports.addStaff = (req, res) => {
-    res.json({ message: 'Thêm nhân viên thành công' });
+exports.addStaff = async (req, res) => {
+    const {
+        staff_id,
+        branch_id,
+        department_id,
+        staff_name,
+        birth_date,
+        gender,
+        salary,
+        join_date,
+        staff_status,
+    } = req.body;       
+    if (!staff_id || !branch_id || !department_id || !staff_name || !birth_date) {
+        return res.status(400).json({
+            success: false,
+            message: 'Missing required fields.',
+        });
+    }
+    try {
+        const [staffResult] = await con.execute(
+            `INSERT INTO Staff (
+                staff_id, branch_id, department_id, staff_name, birth_date, gender, 
+                salary, join_date, staff_status, username
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                staff_id,
+                branch_id,
+                department_id,
+                staff_name,
+                birth_date,
+                gender,
+                salary,
+                join_date,
+                staff_status,
+                null, // username null by default for non-manager staff
+            ]
+        );
+        let accountInfo = null; // in case of creating new account for customer
+        if (department_id === 'QL') {
+            let usernameBase = generateUsername(staff_name);
+            let username = await getUniqueUsername(usernameBase, con);
+            const plain = formatBirthDate(birth_date);
+            const hashed = await hashPassword(plain);
+
+            await con.execute(
+                `INSERT INTO Account (username, password, role)
+                VALUES (?, ?, ?)`,
+                [username, hashed, 'branchManager']
+            );
+                await con.execute(
+                `UPDATE Staff
+                SET username = ?
+                WHERE staff_id = ?`,
+                [username, staff_id]
+            );
+            accountInfo = {
+                username,
+                plain,
+            };
+        }
+        res.status(200).json({
+            success: true,
+            message: 'Nhân viên được thêm thành công',
+            data: {
+                staff_id,
+                account: accountInfo,
+            },
+        });
+    } catch (error) {
+        console.error('Error adding staff:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi khi thêm nhân viên',
+            error: error.message,
+        });
+    }
 };
 
 exports.getStaffById = (req, res) => {

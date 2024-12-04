@@ -270,7 +270,7 @@ CREATE TABLE MembershipLevel (
 	FOREIGN KEY (card_id) REFERENCES Membership(card_id)
 );
 -- account
-CREATE TABLE Account (
+CREATE TABLE [Account] (
     username CHAR(50) NOT NULL,
     customer_id CHAR(10) NULL,
     staff_id CHAR(10) NULL,
@@ -284,12 +284,12 @@ CREATE TABLE Account (
 
 -- Users
 GO
-CREATE TABLE users (
-	id INT IDENTITY(1,1) PRIMARY KEY,
-	username NVARCHAR(100) NOT NULL UNIQUE,
-	password NVARCHAR(100) NOT NULL,
-	role NVARCHAR(20) CHECK (role IN ('customer', 'admin', 'branchManager')) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE [User] (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    username NVARCHAR(100) NOT NULL UNIQUE,
+    password NVARCHAR(100) NOT NULL,
+    role NVARCHAR(20) CHECK (role IN ('customer', 'admin', 'branchManager')) NOT NULL,
+    created_at DATETIME DEFAULT GETDATE()
 );
 -- online connection
 CREATE TABLE OnlineConnection (

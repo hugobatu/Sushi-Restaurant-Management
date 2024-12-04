@@ -1,20 +1,19 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const mysql = require('mysql2');
-const path = require('path');
-const fs = require('fs');
 const pool = require('../configs/dbConfig'); // Import the pool from dbConfig.js
 
 // Signup function
 exports.signup = async (req, res) => {
-    const { username, password, role } = req.body;
+    const { username, password } = req.body;
 
-    if (!username || !password || !role) {
-        return res.status(400).json({ message: 'Please provide username, password, and role.' });
+    // Gán mặc định role là 'customer' (bởi vì chỉ có 1 admin, và khi thêm mới nhân viên với vai trò quản lý thì sẽ tự động cấp tài khoản)
+    const role = 'customer';
+
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Please provide username and password.' });
     }
 
     try {
-        // Check if user already exists
         const [rows] = await pool.query(
             'SELECT * FROM Account WHERE username = ?',
             [username]
@@ -27,7 +26,7 @@ exports.signup = async (req, res) => {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Insert new user into the database
+        // Insert new user into the database with the 'customer' role
         await pool.query(
             'INSERT INTO Account (username, password, role) VALUES (?, ?, ?)',
             [username, hashedPassword, role]
@@ -80,9 +79,4 @@ exports.login = async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Server error.' });
     }
-};
-
-// Test route for middleware
-exports.test = (req, res) => {
-    res.send('AuthController Test Route');
 };
