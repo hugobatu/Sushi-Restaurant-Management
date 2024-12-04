@@ -19,15 +19,15 @@ const config = {
     port: process.env.PORT
 };
 
-// Create a connection pool
-const pool = sql.connect(config)
-    .then(pool => {
+const con = new sql.ConnectionPool(config)
+    .connect()
+    .then((pool) => {
         console.log('Connected to SQL Server');
-        return pool; // Return the pool for reusability
+        return pool;
     })
-    .catch(err => {
+    .catch((err) => {
         console.error('Database connection failed:', err.message);
         throw err;
     });
 
-module.exports = pool;
+module.exports = con; 

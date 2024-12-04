@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // app.use('/auth', authRoutes);
 // app.use('/api/menu', menuRoutes);
-// app.use('/company', companyRoutes); // company api
+app.use('/company', companyRoutes); // company api
 
 
 // app.post('/signup', authController.signup);
