@@ -10,7 +10,7 @@ exports.getBranches = async (req, res) => {
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: 'No branches found',
+                message: 'No branches founed',
             });
         }
         res.status(200).json({

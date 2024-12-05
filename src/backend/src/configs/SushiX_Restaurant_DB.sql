@@ -13,26 +13,26 @@ USE SushiXRestaurant;
 
 -- account
 CREATE TABLE Account (
-    username CHAR(50) NOT NULL,
+    username VARCHAR(50) NOT NULL,
     [password] NVARCHAR(255) NOT NULL,
-    account_type NVARCHAR(20) NOT NULL CHECK (account_type IN ('admin', 'user', 'guest')),
+    account_type NVARCHAR(20) NOT NULL CHECK (account_type IN ('admin', 'manager', 'guest')),
     account_status NVARCHAR(20) NOT NULL CHECK (account_status IN ('active', 'inactive')),
     day_created DATETIME2 NOT NULL DEFAULT GETDATE(),
     PRIMARY KEY (username)
 );
 
--- Region
+-- region
 GO
 CREATE TABLE Region (
-	region_id CHAR(10) NOT NULL,
+	region_id VARCHAR(10) NOT NULL,
 	region_name NVARCHAR(50) NOT NULL,
 	PRIMARY KEY (region_id)
 );
--- Branch
+-- region
 GO
 CREATE TABLE Branch (
-	branch_id CHAR(10) NOT NULL,
-	region_id CHAR(10)  NOT NULL,
+	branch_id VARCHAR(10) NOT NULL,
+	region_id VARCHAR(10)  NOT NULL,
 	branch_address NVARCHAR(50),
 	opening_time TIME,
 	closing_time TIME,
@@ -42,20 +42,20 @@ CREATE TABLE Branch (
 	PRIMARY KEY (branch_id),
 	FOREIGN KEY (region_id) REFERENCES Region(region_id)
 );
--- Table
+-- region
 GO
 CREATE TABLE [Table] (
-	table_id CHAR(10) NOT NULL,
-	branch_id CHAR(10) NOT NULL,
+	table_id VARCHAR(10) NOT NULL,
+	branch_id VARCHAR(10) NOT NULL,
 	capacity INT,
 	is_available BIT DEFAULT 1,
 	PRIMARY KEY (table_id),
 	FOREIGN KEY (branch_id) REFERENCES Branch(branch_id)
 );
--- Department
+-- department
 GO
 CREATE TABLE Department (
-	department_id CHAR(10) NOT NULL,
+	department_id VARCHAR(10) NOT NULL,
 	department_name NVARCHAR(50) NOT NULL,
 	base_salary FLOAT NOT NULL,
 	PRIMARY KEY (department_id)
@@ -63,9 +63,9 @@ CREATE TABLE Department (
 -- Staff
 GO
 CREATE TABLE Staff (
-	staff_id CHAR(10) NOT NULL,
-	branch_id CHAR(10) NOT NULL,
-	department_id CHAR(10) NOT NULL,
+	staff_id VARCHAR(10) NOT NULL,
+	branch_id VARCHAR(10) NOT NULL,
+	department_id VARCHAR(10) NOT NULL,
 	staff_name NVARCHAR(50) NOT NULL,
 	birth_date DATE NOT NULL,
 	gender NVARCHAR(10) NOT NULL CHECK (gender IN (N'Male', N'Female')),
@@ -73,7 +73,7 @@ CREATE TABLE Staff (
 	join_date DATE NOT NULL,
 	resign_date DATE NULL,
     staff_status NVARCHAR(20) CHECK (staff_status IN (N'active', N'resigned')),
-	username CHAR(50),
+	username VARCHAR(50),
 	PRIMARY KEY (staff_id),
 	FOREIGN KEY (branch_id) REFERENCES Branch(branch_id),
 	FOREIGN KEY (department_id) REFERENCES Department(department_id),
@@ -82,8 +82,8 @@ CREATE TABLE Staff (
 -- Work history
 GO
 CREATE TABLE WorkHistory(
-	staff_id CHAR(10) NOT NULL,
-	department_id CHAR(10) NOT NULL,
+	staff_id VARCHAR(10) NOT NULL,
+	department_id VARCHAR(10) NOT NULL,
 	starting_date DATE NOT NULL,
 	ending_date DATE,
 	PRIMARY KEY (staff_id, department_id),
@@ -93,7 +93,7 @@ CREATE TABLE WorkHistory(
 -- Menu item
 GO
 CREATE TABLE MenuItem (
-    item_id CHAR(10) NOT NULL,
+    item_id VARCHAR(10) NOT NULL,
     item_name NVARCHAR(50) NOT NULL,
     menu_item_description NVARCHAR(255),
     base_price FLOAT NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE MenuItem (
 -- Menu category
 GO
 CREATE TABLE MenuCategory (
-    category_id CHAR(10) NOT NULL,
+    category_id VARCHAR(10) NOT NULL,
     category_name NVARCHAR(50) NOT NULL,
     menu_category_description NVARCHAR(255),
 	PRIMARY KEY (category_id)
@@ -111,8 +111,8 @@ CREATE TABLE MenuCategory (
 -- Menu item category (using for linking between menucategory and menu items)
 GO
 CREATE TABLE MenuItemCategory (
-    item_id CHAR(10) NOT NULL,
-    category_id CHAR(10) NOT NULL,
+    item_id VARCHAR(10) NOT NULL,
+    category_id VARCHAR(10) NOT NULL,
     PRIMARY KEY (item_id, category_id),
     FOREIGN KEY (item_id) REFERENCES MenuItem(item_id),
     FOREIGN KEY (category_id) REFERENCES MenuCategory(category_id)
@@ -120,8 +120,8 @@ CREATE TABLE MenuItemCategory (
 -- Branch menu item link menu item to branch with availability
 GO
 CREATE TABLE BranchMenuItem (
-    branch_id CHAR(10) NOT NULL,
-    item_id CHAR(10) NOT NULL,
+    branch_id VARCHAR(10) NOT NULL,
+    item_id VARCHAR(10) NOT NULL,
     is_available BIT DEFAULT 1,
     PRIMARY KEY (branch_id, item_id),
     FOREIGN KEY (branch_id) REFERENCES Branch(branch_id),
@@ -130,7 +130,7 @@ CREATE TABLE BranchMenuItem (
 -- Combo
 GO
 CREATE TABLE Combo (
-    combo_id CHAR(10) NOT NULL,
+    combo_id VARCHAR(10) NOT NULL,
     combo_name NVARCHAR(50),
     combo_description NVARCHAR(255),
 	PRIMARY KEY (combo_id)
@@ -138,14 +138,14 @@ CREATE TABLE Combo (
 -- Customer
 GO
 CREATE TABLE Customer (
-	customer_id CHAR(10) NOT NULL,
+	customer_id VARCHAR(10) NOT NULL,
 	customer_name NVARCHAR(50) NOT NULL,
-	email CHAR(50) NOT NULL UNIQUE,
-	phone_number CHAR(10) NOT NULL UNIQUE,
+	email VARCHAR(50) NOT NULL UNIQUE,
+	phone_number VARCHAR(10) NOT NULL UNIQUE,
 	gender NVARCHAR(10) NOT NULL CHECK (gender IN (N'Male', N'Female')),
 	birth_date DATE NOT NULL,
-	id_number CHAR(12) NOT NULL,
-	username CHAR(50) NULL,
+	id_number VARCHAR(12) NOT NULL,
+	username VARCHAR(50) NULL,
 	PRIMARY KEY (customer_id),
 	FOREIGN KEY (username) REFERENCES Account(username)
 );
@@ -153,8 +153,8 @@ CREATE TABLE Customer (
 GO
 CREATE TABLE CustomerRating (
     rating_id INT IDENTITY(1,1), --auto increment
-	customer_id CHAR(10) NOT NULL,
-	branch_id CHAR(10) NOT NULL,
+	customer_id VARCHAR(10) NOT NULL,
+	branch_id VARCHAR(10) NOT NULL,
 	service_manner_rating TINYINT CHECK(service_manner_rating > 0 AND service_manner_rating <= 10),
 	branch_rating TINYINT CHECK(branch_rating > 0 AND branch_rating <= 10),
 	food_quality_rating TINYINT CHECK(food_quality_rating > 0 AND food_quality_rating <= 10),
@@ -168,9 +168,9 @@ CREATE TABLE CustomerRating (
 -- Order
 GO
 CREATE TABLE Ordering(
-	order_id CHAR(10) NOT NULL,
-	customer_id CHAR(10) NOT NULL,
-	branch_id CHAR(10) NOT NULL,
+	order_id VARCHAR(10) NOT NULL,
+	customer_id VARCHAR(10) NOT NULL,
+	branch_id VARCHAR(10) NOT NULL,
 	order_datetime DATETIME NOT NULL,
     order_status NVARCHAR(20) NOT NULL CHECK (order_status IN (N'Pending', N'Done')),
 	PRIMARY KEY (order_id),
@@ -180,8 +180,8 @@ CREATE TABLE Ordering(
 -- Order details
 GO
 CREATE TABLE OrderDetails (
-	order_id CHAR(10) NOT NULL,
-	item_id CHAR(10) NOT NULL,
+	order_id VARCHAR(10) NOT NULL,
+	item_id VARCHAR(10) NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
 	unit_price FLOAT NOT NULL,
 	PRIMARY KEY (order_id, item_id),
@@ -191,8 +191,8 @@ CREATE TABLE OrderDetails (
 -- Direct service order
 GO
 CREATE TABLE DirectServiceOrder (
-	order_id CHAR(10) ,
-	table_id CHAR(10) ,
+	order_id VARCHAR(10) ,
+	table_id VARCHAR(10) ,
 	PRIMARY KEY (order_id, table_id),
 	FOREIGN KEY (order_id) REFERENCES Ordering(order_id),
 	FOREIGN KEY (table_id) REFERENCES [Table](table_id)
@@ -200,7 +200,7 @@ CREATE TABLE DirectServiceOrder (
 -- Delivery order
 GO
 CREATE TABLE DeliveryOrder (
-	order_id CHAR(10) NOT NULL,
+	order_id VARCHAR(10) NOT NULL,
 	delivery_address NVARCHAR(255) NOT NULL,
 	delivery_fee FLOAT NOT NULL,
 	PRIMARY KEY (order_id),
@@ -209,7 +209,7 @@ CREATE TABLE DeliveryOrder (
 -- Reservation order
 GO
 CREATE TABLE ReservationOrder (
-	order_id CHAR(10) NOT NULL,
+	order_id VARCHAR(10) NOT NULL,
 	reservation_datetime DATETIME NOT NULL,
     num_guests INT NOT NULL CHECK (num_guests > 0),
     reservation_order_status NVARCHAR(20) NOT NULL CHECK (reservation_order_status IN (N'Pending', N'Confirmed')),
@@ -219,8 +219,8 @@ CREATE TABLE ReservationOrder (
 -- Bill
 GO
 CREATE TABLE Bill (
-	bill_id CHAR(10) NOT NULL,
-	order_id CHAR(10) NOT NULL,
+	bill_id VARCHAR(10) NOT NULL,
+	order_id VARCHAR(10) NOT NULL,
 	subtotal FLOAT NOT NULL	,
 	discount_amount FLOAT DEFAULT 0, --default is not discounted
 	tax_amount FLOAT DEFAULT 0.8, --vat dafault is 8%
@@ -233,7 +233,7 @@ CREATE TABLE Bill (
 -- promotion program
 GO
 CREATE TABLE PromotionProgram (
-	program_id CHAR(10) NOT NULL,
+	program_id VARCHAR(10) NOT NULL,
 	promotion_program_name NVARCHAR(50) NOT NULL,
 	program_description NVARCHAR(255) ,
 	starting_date DATETIME,
@@ -244,10 +244,10 @@ CREATE TABLE PromotionProgram (
 -- Coupon giam gia
 GO
 CREATE TABLE Coupon (
-	coupon_id CHAR(10) NOT NULL,
-	program_id CHAR(10) NOT NULL,
-	bill_id CHAR(10) NULL,
-	coupon_code CHAR(10) NOT NULL UNIQUE,
+	coupon_id VARCHAR(10) NOT NULL,
+	program_id VARCHAR(10) NOT NULL,
+	bill_id VARCHAR(10) NULL,
+	coupon_code VARCHAR(10) NOT NULL UNIQUE,
     discount_rate FLOAT NOT NULL CHECK (discount_rate > 0 AND discount_rate <= 1),
 	max_amount INT NOT NULL,
 	valid_from DATETIME NOT NULL,
@@ -260,7 +260,7 @@ CREATE TABLE Coupon (
 -- membership level
 GO
 CREATE TABLE MembershipLevel (
-	level_id CHAR(10) NOT NULL,
+	level_id VARCHAR(10) NOT NULL,
 	level_name NVARCHAR(20) NOT NULL CHECK (level_name IN (N'Silver', N'Gold')),
 	discount_percentage FLOAT NOT NULL,
 	min_points_required INT NOT NULL,
@@ -271,10 +271,10 @@ CREATE TABLE MembershipLevel (
 -- Membership
 GO
 CREATE TABLE Membership(
-	card_id CHAR(10) NOT NULL,
-	level_id CHAR(10) NOT NULL,
-	customer_id CHAR(10) NOT NULL,
-	bill_id CHAR(10)  NULL,
+	card_id VARCHAR(10) NOT NULL,
+	level_id VARCHAR(10) NOT NULL,
+	customer_id VARCHAR(10) NOT NULL,
+	bill_id VARCHAR(10)  NULL,
 	issued_date DATE NOT NULL,
 	valid_until DATE NOT NULL,
     points INT NOT NULL CHECK (points >= 0),
@@ -286,8 +286,8 @@ CREATE TABLE Membership(
 );
 -- online connection
 CREATE TABLE OnlineConnection (
-    connection_id CHAR(10) NOT NULL,
-    username CHAR(50) NOT NULL,
+    connection_id VARCHAR(10) NOT NULL,
+    username VARCHAR(50) NOT NULL,
     start_datetime DATETIME NOT NULL,
     end_datetime DATETIME DEFAULT NULL,
     PRIMARY KEY (connection_id),

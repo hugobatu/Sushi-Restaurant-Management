@@ -15,7 +15,7 @@ select * from Region
 select * from Branch
 
 INSERT INTO Branch (
-    branch_id, 
+    branch_id,
     region_id, 
     branch_address, 
     opening_time, 
