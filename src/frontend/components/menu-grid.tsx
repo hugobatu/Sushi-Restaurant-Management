@@ -8,7 +8,7 @@ import { useCart } from "@/contexts/cart-context"
 interface MenuItem {
   id: string
   name: string
-  price: string
+  price: number
   image: string
 }
 
@@ -49,4 +49,3 @@ export function MenuGrid({ items }: MenuGridProps) {
     </div>
   )
 }
-
