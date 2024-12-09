@@ -64,7 +64,10 @@ const menuItems = {
 }
 
 export default function CategoryPage({ params }: { params: { category: string } }) {
-  const items = menuItems[params.category as keyof typeof menuItems] || []
+  const items = (menuItems[params.category as keyof typeof menuItems] || []).map(item => ({
+    ...item,
+    price: parseFloat(item.price.replace(/\./g, ''))
+  }))
 
   return (
     <div className="flex min-h-screen flex-col">
