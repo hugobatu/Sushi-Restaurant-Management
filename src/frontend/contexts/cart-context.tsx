@@ -110,14 +110,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       id: "ST2",
       name: "TRỨNG HẤP KIỂU NHẬT VÀ LƯƠN NHẬT",
       price: 39000,
-      quantity: 2,
+      quantity: 1,
       checked: true,
     },
     {
       id: "ST3",
       name: "TRỨNG HẤP KIỂU NHẬT",
       price: 32000,
-      quantity: 3,
+      quantity: 1,
       checked: false, // Not selected by default
     },
   ]);

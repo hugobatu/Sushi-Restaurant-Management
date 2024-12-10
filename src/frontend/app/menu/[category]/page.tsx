@@ -1,17 +1,16 @@
-import { MenuSidebar } from "@/components/menu-sidebar"
-import { MenuGrid } from "@/components/menu-grid"
-import fs from 'fs'
-import path from 'path'
+import { MenuSidebar } from "@/components/menu-sidebar";
+import { MenuGrid } from "@/components/menu-grid";
+import fs from "fs";
+import path from "path";
 
 interface MenuItem {
-  item_id: string
-  item_name: string
-  base_price: string
-  image_url: string
-  menu_item_status: string
+  item_id: string;
+  item_name: string;
+  base_price: string;
+  image_url: string;
+  menu_item_status: string;
 }
 
-// Categories mapping (from your data)
 const categoryMapping = {
   A: "Appetizer",
   BE: "Beer",
@@ -34,43 +33,65 @@ const categoryMapping = {
   SL: "Salad",
   SO: "Soda",
   ST: "Starter",
-  T: "Teppan",
+  T: "Tempura",
   TE: "Tea",
-  TP: "Tempura",
+  TP: "Teppan",
   WI: "Wine",
-  Y: "Yaki"
-}
+  Y: "Yaki",
+};
 
-// Function to get items by category from final_data.json
-function getItemsByCategory(category: string) {
-  // Get the path to the final_data.json file
-  const filePath = path.join(process.cwd(), 'app/DataTest/final_data.json')
-  const fileData = fs.readFileSync(filePath, 'utf8')
-  const menuItems: MenuItem[] = JSON.parse(fileData)
+// Create the reverse mapping properly with type assertion
+const categoryMappingReverse = Object.entries(categoryMapping).reduce(
+  (acc, [key, value]) => {
+    acc[value.toLowerCase()] = key as keyof typeof categoryMapping; // Explicitly cast to valid category keys
+    return acc;
+  },
+  {} as Record<string, keyof typeof categoryMapping> // Ensure the result type is properly asserted
+);
 
-  // Filter items by category prefix from item_id (match the full category ID)
-  const filteredItems = menuItems.filter(item => {
-    // Check if the item_id starts with the category prefix and matches exactly
-    return item.item_id.startsWith(category)
-  })
+function getItemsByCategory(category: keyof typeof categoryMapping) {
+  const filePath = path.join(process.cwd(), "app/DataTest/final_data.json");
+  const fileData = fs.readFileSync(filePath, "utf8");
+  const menuItems: MenuItem[] = JSON.parse(fileData);
 
-  return filteredItems.map(item => ({
+  const filteredItems = menuItems.filter((item) => {
+    const prefix = category;
+    if (!item.item_id.startsWith(prefix)) return false;
+
+    // Ensure the next character after the prefix is either undefined or a digit
+    const nextChar = item.item_id[prefix.length];
+    return nextChar === undefined || /^[0-9]$/.test(nextChar);
+  });
+
+  return filteredItems.map((item) => ({
     id: item.item_id,
     name: item.item_name,
-    price: parseFloat(item.base_price), // Ensure price is a number
+    price: parseFloat(item.base_price),
     image_url: item.image_url,
-  }))
+  }));
 }
 
-export default function CategoryPage({ params }: { params: { category: string } }) {
-  // Convert category from URL to category ID (e.g., "sushi" -> "A", "appetizer" -> "A")
-  const categoryMappingReverse = Object.entries(categoryMapping).reduce((acc, [key, value]) => {
-    acc[value.toLowerCase()] = key
-    return acc
-  }, {} as Record<string, string>)
+export default function CategoryPage({
+  params,
+}: {
+  params: { category: string };
+}) {
+  // Get categoryId from the reverse mapping and ensure it is a valid category
+  const categoryId =
+    categoryMappingReverse[params.category.toLowerCase()] || "A";
 
-  const categoryId = categoryMappingReverse[params.category] || "A" // Default to "A" if category is not found
-  const items = getItemsByCategory(categoryId)
+  // If category is invalid, fallback to "A" (Appetizer)
+  if (!categoryId) {
+    console.error("Invalid category");
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <h1 className="text-2xl font-bold">Category Not Found</h1>
+      </div>
+    );
+  }
+
+  // Get items for the valid category
+  const items = getItemsByCategory(categoryId);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -79,5 +100,5 @@ export default function CategoryPage({ params }: { params: { category: string } 
         <MenuGrid items={items} />
       </div>
     </div>
-  )
+  );
 }
