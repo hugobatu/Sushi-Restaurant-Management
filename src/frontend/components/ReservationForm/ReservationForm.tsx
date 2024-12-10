@@ -1,4 +1,3 @@
-// src/components/ReservationForm/ReservationForm.tsx
 "use client";
 
 import "./formStyles.css";
@@ -13,7 +12,6 @@ const ReservationForm = () => {
     guests: 0,
     date: "",
     time: "",
-    note: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -27,14 +25,16 @@ const ReservationForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form data submitted:", formData);
-    // TODO: Send the form data to an API or process it further
+    // TODO: Send the form data to the API or process it further
   };
 
   return (
     <div className="reservation-form-container">
       <form onSubmit={handleSubmit} className="reservation-form">
-        <h1 className="form-title">Đặt bàn</h1>
-        <p className="form-subtitle">Vui lòng điền đầy đủ thông tin</p>
+        <div className="form-header">
+          <h1 className="form-title">Đặt bàn</h1>
+          <p className="form-subtitle">Vui lòng điền đầy đủ thông tin</p>
+        </div>
 
         <div className="form-group">
           <label htmlFor="name" className="form-label">Họ và tên *</label>
@@ -49,31 +49,29 @@ const ReservationForm = () => {
           />
         </div>
 
-        <div className="form-group-inline">
-          <div className="form-group phone-field">
-            <label htmlFor="phone" className="form-label">Số điện thoại *</label>
-            <input
-              type="text"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="form-input"
-              required
-            />
-          </div>
-          <div className="form-group email-field">
-            <label htmlFor="email" className="form-label">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="form-input email-field"
-            />
-  
-          </div>
+        <div className="form-group">
+          <label htmlFor="phone" className="form-label">Số điện thoại *</label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            className="form-input"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="email" className="form-label">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="form-input"
+          />
         </div>
 
         <div className="form-group">
@@ -93,43 +91,40 @@ const ReservationForm = () => {
           </select>
         </div>
 
-        <div className="form-group-inline">
-          <div className="form-group">
-            <label htmlFor="guests" className="form-label">Số lượng khách</label>
-            <input
-              type="number"
-              id="guests"
-              name="guests"
-              value={formData.guests}
-              onChange={handleChange}
-              className="form-input"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="date" className="form-label">Ngày</label>
-            <input
-              type="date"
-              id="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              className="form-input"
-            />
-          </div>
+        <div className="form-group">
+          <label htmlFor="guests" className="form-label">Số lượng khách</label>
+          <input
+            type="number"
+            id="guests"
+            name="guests"
+            value={formData.guests}
+            onChange={handleChange}
+            className="form-input"
+          />
         </div>
 
-        <div className="form-group-inline">
-          <div className="form-group">
-            <label htmlFor="time" className="form-label">Giờ</label>
-            <input
-              type="time"
-              id="time"
-              name="time"
-              value={formData.time}
-              onChange={handleChange}
-              className="form-input"
-            />
-          </div>
+        <div className="form-group">
+          <label htmlFor="date" className="form-label">Ngày</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            className="form-input"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="time" className="form-label">Giờ</label>
+          <input
+            type="time"
+            id="time"
+            name="time"
+            value={formData.time}
+            onChange={handleChange}
+            className="form-input"
+          />
         </div>
 
         <button type="submit" className="submit-button">
