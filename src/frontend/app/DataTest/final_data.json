@@ -1,0 +1,1442 @@
+[
+    {
+        "item_id": "A1",
+        "item_name": "BÁNH XÈO KIỂU NHẬT",
+        "menu_item_description": "",
+        "base_price": "95000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2239/b%C3%A1nh-x%C3%A8o-ki%E1%BB%83u-nh%E1%BA%ADt.jpg"
+    },
+    {
+        "item_id": "A10",
+        "item_name": "BÁNH NƯỚNG NHÂN BẠCH TUỘC",
+        "menu_item_description": "",
+        "base_price": "69000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2249/b%C3%A1nh-n%C6%B0%E1%BB%9Bng-nh%C3%A2n-b%E1%BA%A1ch-tu%E1%BB%99c.jpg"
+    },
+    {
+        "item_id": "A11",
+        "item_name": "BÁNH XẾP KIỂU NHẬT",
+        "menu_item_description": "",
+        "base_price": "59000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2252/b%C3%A1nh-x%E1%BA%BFp-ki%E1%BB%83u-nh%E1%BA%ADt.jpg"
+    },
+    {
+        "item_id": "A12",
+        "item_name": "KHOAI TÂY CHIÊN PHÔ MAI",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2254/khoai-t%C3%A2y-chi%C3%AAn-ph%C3%B4-mai.jpg"
+    },
+    {
+        "item_id": "A2",
+        "item_name": "THỊT BÒ MỸ CUỘN MĂNG TÂY",
+        "menu_item_description": "",
+        "base_price": "119000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2240/th%E1%BB%8Bt-b%C3%B2-m%E1%BB%B9-cu%E1%BB%99n-m%C4%83ng-t%C3%A2y.jpg"
+    },
+    {
+        "item_id": "A3",
+        "item_name": "THỊT BÒ MỸ CUỘN NẤM KIM CHÂM",
+        "menu_item_description": "",
+        "base_price": "109000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2241/th%E1%BB%8Bt-b%C3%B2-m%E1%BB%B9-cu%E1%BB%99n-n%E1%BA%A5m-kim-ch%C3%A2m.jpg"
+    },
+    {
+        "item_id": "A4",
+        "item_name": "THỊT BÒ TERIYAKI VÀ KIM CHI",
+        "menu_item_description": "",
+        "base_price": "89000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2242/th%E1%BB%8Bt-b%C3%B2-teriyaki-v%C3%A0-kim-chi.jpg"
+    },
+    {
+        "item_id": "A5",
+        "item_name": "NẤM XÀO",
+        "menu_item_description": "",
+        "base_price": "79000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2243/n%E1%BA%A5m-x%C3%A0o.jpg"
+    },
+    {
+        "item_id": "A6",
+        "item_name": "TÔM XÀO MĂNG TÂY",
+        "menu_item_description": "",
+        "base_price": "109000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2244/t%C3%B4m-x%C3%A0o-m%C4%83ng-t%C3%A2y.jpg"
+    },
+    {
+        "item_id": "A7",
+        "item_name": "MỰC XÀO BƠ/ XÀO GỪNG",
+        "menu_item_description": "",
+        "base_price": "99000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2246/m%E1%BB%B1c-x%C3%A0o-b%C6%A1---g%E1%BB%ABng.jpg"
+    },
+    {
+        "item_id": "A8",
+        "item_name": "GÀ CHIÊN (5 MIẾNG)",
+        "menu_item_description": "",
+        "base_price": "69000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2247/g%C3%A0-chi%C3%AAn.jpg"
+    },
+    {
+        "item_id": "A9",
+        "item_name": "GÀ CHIÊN SỐT CHUA NGỌT",
+        "menu_item_description": "",
+        "base_price": "69000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2248/g%C3%A0-chi%C3%AAn-s%E1%BB%91t-chua-ng%E1%BB%8Dt.jpg"
+    },
+    {
+        "item_id": "B1",
+        "item_name": "BENTO SASHIMI, SUSHI & CÁ NƯỚNG CÁC LOẠI",
+        "menu_item_description": "",
+        "base_price": "295000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2316/bento-sashimi,-sushi-v%C3%A0-c%C3%A1-n%C6%B0%E1%BB%9Bng-c%C3%A1c-lo%E1%BA%A1i.jpg"
+    },
+    {
+        "item_id": "B2",
+        "item_name": "BENTO CƠM CÁ NƯỚNG CÁC LOẠI & THỊT GÀ CHIÊN GIÒN",
+        "menu_item_description": "",
+        "base_price": "170000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2317/bento-c%C6%A1m-c%C3%A1-n%C6%B0%E1%BB%9Bng-c%C3%A1c-lo%E1%BA%A1i-v%C3%A0-th%E1%BB%8Bt-g%C3%A0-chi%C3%AAn-gi%C3%B2n.jpg"
+    },
+    {
+        "item_id": "B3",
+        "item_name": "BENTO SUSHI, CÁ NƯỚNG CÁC LOẠI & UDON NÓNG",
+        "menu_item_description": "",
+        "base_price": "185000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2318/bento-sushi,-c%C3%A1-n%C6%B0%E1%BB%9Bng-c%C3%A1c-lo%E1%BA%A1i-v%C3%A0-udon-n%C3%B3ng.jpg"
+    },
+    {
+        "item_id": "B4",
+        "item_name": "BENTO CƠM THỊT BÒ TERIYAKI & THỊT GÀ CHIÊN GIÒN",
+        "menu_item_description": "",
+        "base_price": "145000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2319/bento-c%C6%A1m-th%E1%BB%8Bt-b%C3%B2-teriyaki-v%C3%A0-th%E1%BB%8Bt-g%C3%A0-chi%C3%AAn-gi%C3%B2n.jpg"
+    },
+    {
+        "item_id": "B5",
+        "item_name": "BENTO SUSHI, TEMPURA & UDON NÓNG",
+        "menu_item_description": "",
+        "base_price": "165000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2321/bento-sushi,-tempura-v%C3%A0-udon-n%C3%B3ng.jpg"
+    },
+    {
+        "item_id": "BE1",
+        "item_name": "BIA SAPPORO (330ML)",
+        "menu_item_description": "",
+        "base_price": "35000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2047/1beer-sapporo.jpg"
+    },
+    {
+        "item_id": "BE2",
+        "item_name": "BIA TIGER (330ML)",
+        "menu_item_description": "",
+        "base_price": "30000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2048/1beer-tiger.jpg"
+    },
+    {
+        "item_id": "BE3",
+        "item_name": "HEINEKEN (330ML)",
+        "menu_item_description": "",
+        "base_price": "35000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2049/1beer-heineken.jpg"
+    },
+    {
+        "item_id": "C1",
+        "item_name": "CƠM CÀ RI THỊT BÒ MỸ",
+        "menu_item_description": "",
+        "base_price": "99000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2287/c%C6%A1m-c%C3%A0-ri-th%E1%BB%8Bt-b%C3%B2-m%E1%BB%B9.jpg"
+    },
+    {
+        "item_id": "C2",
+        "item_name": "CƠM CÀ RI THỊT HEO CHIÊN XÙ",
+        "menu_item_description": "",
+        "base_price": "95000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2288/c%C6%A1m-c%C3%A0-ri-th%E1%BB%8Bt-heo-chi%C3%AAn-x%C3%B9.jpg"
+    },
+    {
+        "item_id": "D1",
+        "item_name": "HỘP CƠM LƯƠN VÀ THỊT BÒ MỸ",
+        "menu_item_description": "",
+        "base_price": "159000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2282/h%E1%BB%99p-c%C6%A1m-l%C6%B0%C6%A1n-v%C3%A0-th%E1%BB%8Bt-b%C3%B2-m%E1%BB%B9.jpg"
+    },
+    {
+        "item_id": "D2",
+        "item_name": "HỘP CƠM LƯƠN",
+        "menu_item_description": "",
+        "base_price": "199000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2283/h%E1%BB%99p-c%C6%A1m-l%C6%B0%C6%A1n.jpg"
+    },
+    {
+        "item_id": "D3",
+        "item_name": "CƠM TÔ THỊT BÒ MỸ (L)",
+        "menu_item_description": "",
+        "base_price": "139000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2284/c%C6%A1m-t%C3%B4-th%E1%BB%8Bt-b%C3%B2-m%E1%BB%B9.jpg"
+    },
+    {
+        "item_id": "D4",
+        "item_name": "CƠM TÔ THỊT BÒ MỸ VÀ PHÔ MAI (L)",
+        "menu_item_description": "",
+        "base_price": "158000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2285/c%C6%A1m-t%C3%B4-th%E1%BB%8Bt-b%C3%B2-m%E1%BB%B9-v%C3%A0-ph%C3%B4-mai(s).jpg"
+    },
+    {
+        "item_id": "D5",
+        "item_name": "CƠM TÔ THỊT HEO CHIÊN XÙ VÀ TRỨNG",
+        "menu_item_description": "",
+        "base_price": "99000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2286/c%C6%A1m-t%C3%B4-th%E1%BB%8Bt-heo-chi%C3%AAn-x%C3%B9-v%C3%A0-tr%E1%BB%A9ng.jpg"
+    },
+    {
+        "item_id": "F1",
+        "item_name": "HÀU CHIÊN XÙ (3 CON)",
+        "menu_item_description": "",
+        "base_price": "139000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2265/h%C3%A0u-chi%C3%AAn-x%C3%B9.jpg"
+    },
+    {
+        "item_id": "F2",
+        "item_name": "THỊT GÀ TẨM BỘT CHIÊN XÙ",
+        "menu_item_description": "",
+        "base_price": "79000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2266/th%E1%BB%8Bt-g%C3%A0-t%E1%BA%A9m-b%E1%BB%99t-chi%C3%AAn-x%C3%B9.jpg"
+    },
+    {
+        "item_id": "F3",
+        "item_name": "THỊT HEO CUỘN PHÔ MAI CHIÊN XÙ",
+        "menu_item_description": "",
+        "base_price": "105000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2267/th%E1%BB%8Bt-heo-cu%E1%BB%99n-ph%C3%B4-mai-chi%C3%AAn-x%C3%B9.jpg"
+    },
+    {
+        "item_id": "FJ2",
+        "item_name": "NƯỚC ÉP DƯA HẤU",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/1383/n%C6%B0%E1%BB%9Bc-%C3%A9p-d%C6%B0a-h%E1%BA%A5u.jpg"
+    },
+    {
+        "item_id": "FJ3",
+        "item_name": "NƯỚC ÉP THƠM",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/1384/n%C6%B0%E1%BB%9Bc-%C3%A9p-cam-th%C6%A1m.jpg"
+    },
+    {
+        "item_id": "FJ4",
+        "item_name": "NƯỚC ÉP CAM",
+        "menu_item_description": "",
+        "base_price": "49000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/1385/n%C6%B0%E1%BB%9Bc-%C3%A9p-cam.jpg"
+    },
+    {
+        "item_id": "FJ1",
+        "item_name": "NƯỚC ÉP CAM THƠM",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/1836/n%C6%B0%E1%BB%9Bc-%C3%A9p-cam-th%C6%A1m.jpg"
+    },
+    {
+        "item_id": "FJ5",
+        "item_name": "NƯỚC CHANH NHẬT",
+        "menu_item_description": "",
+        "base_price": "55000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2061/n%C6%B0%E1%BB%9Bc-chanh-nh%E1%BA%ADt.jpg"
+    },
+    {
+        "item_id": "FJ6",
+        "item_name": "NƯỚC CHANH",
+        "menu_item_description": "",
+        "base_price": "35000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2062/n%C6%B0%E1%BB%9Bc-chanh.jpg"
+    },
+    {
+        "item_id": "FJ7",
+        "item_name": "TRÀ NHÀI ỔI HỒNG VÀ HẠT CHIA",
+        "menu_item_description": "",
+        "base_price": "49000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2337/tr%C3%A0-nh%C3%A0i-%E1%BB%95i-h%E1%BB%93ng-h%E1%BA%A1t-chia.jpg"
+    },
+    {
+        "item_id": "FJ8",
+        "item_name": "NƯỚC ÉP THƠM ĐÀO VÀ HẠT CHIA",
+        "menu_item_description": "",
+        "base_price": "49000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2338/n%C6%B0%E1%BB%9Bc-%C3%A9p-th%C6%A1m-%C4%91%C3%A0o-v%C3%A0-h%E1%BA%A1t-chia.jpg"
+    },
+    {
+        "item_id": "G1",
+        "item_name": "TRỨNG CÁ HỒI - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "85000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2158/tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "G2",
+        "item_name": "LƯƠN NHẬT - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "69000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2159/l%C6%B0%C6%A1n-nh%E1%BA%ADt.jpg"
+    },
+    {
+        "item_id": "G3",
+        "item_name": "NHÍM BIỂN - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "159000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2160/nh%C3%ADn-bi%E1%BB%83n.jpg"
+    },
+    {
+        "item_id": "G4",
+        "item_name": "TRỨNG CÁ CHUỒN - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "55000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2161/tr%E1%BB%A9ng-c%C3%A1-chu%E1%BB%93n.jpg"
+    },
+    {
+        "item_id": "HO1",
+        "item_name": "CUỐN CÁ HỒI",
+        "menu_item_description": "",
+        "base_price": "69000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2224/cu%E1%BB%91n-c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "HO2",
+        "item_name": "CUỐN CÁ HỒI VÀ BƠ",
+        "menu_item_description": "",
+        "base_price": "69000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2227/cu%E1%BB%91n-c%C3%A1-h%E1%BB%93i-v%C3%A0-b%C6%A1.jpg"
+    },
+    {
+        "item_id": "HO3",
+        "item_name": "CUỐN BƠ",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2230/cu%E1%BB%91n-b%C6%A1.jpg"
+    },
+    {
+        "item_id": "HP1",
+        "item_name": "LẨU THỊT BÒ (1 - 2 KHÁCH)",
+        "menu_item_description": "",
+        "base_price": "149000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2289/l%E1%BA%A9u-th%E1%BB%8Bt-b%C3%B2.jpg"
+    },
+    {
+        "item_id": "HP2",
+        "item_name": "LẨU HẢI SẢN (1 - 2 KHÁCH)",
+        "menu_item_description": "",
+        "base_price": "139000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2290/l%E1%BA%A9u-h%E1%BA%A3i-s%E1%BA%A3n.jpg"
+    },
+    {
+        "item_id": "HP3",
+        "item_name": "LẨU ĐẦU CÁ HỒI & KIM CHI (1-2 KHÁCH)",
+        "menu_item_description": "",
+        "base_price": "119000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2291/l%E1%BA%A9u-%C4%91%E1%BA%A7u-c%C3%A1-h%E1%BB%93i-v%C3%A0-kim-chi.jpg"
+    },
+    {
+        "item_id": "HP4",
+        "item_name": "LẨU NẤM (1-2 KHÁCH)",
+        "menu_item_description": "",
+        "base_price": "85000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2292/l%E1%BA%A9u-n%E1%BA%A5m.jpg"
+    },
+    {
+        "item_id": "IC1",
+        "item_name": "KEM CHANH NHẬT",
+        "menu_item_description": "",
+        "base_price": "30000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2055/kem-chanh-nh%E1%BA%ADt.jpg"
+    },
+    {
+        "item_id": "IC2",
+        "item_name": "KEM TRÀ XANH",
+        "menu_item_description": "",
+        "base_price": "30000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2053/kem-tr%C3%A0-xanh.jpg"
+    },
+    {
+        "item_id": "IC3",
+        "item_name": "KEM DỪA",
+        "menu_item_description": "",
+        "base_price": "30000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2056/kem-d%E1%BB%ABa.jpg"
+    },
+    {
+        "item_id": "IC4",
+        "item_name": "KEM VANI",
+        "menu_item_description": "",
+        "base_price": "30000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2057/1kem-vani.jpg"
+    },
+    {
+        "item_id": "IC5",
+        "item_name": "KEM SÔ-CÔ-LA",
+        "menu_item_description": "",
+        "base_price": "30000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2058/kem-chocolate.jpg"
+    },
+    {
+        "item_id": "M1",
+        "item_name": "CUỐN CÁ HỒI PHÔ MAI ĐẶC BIỆT",
+        "menu_item_description": "",
+        "base_price": "139000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2184/cu%E1%BB%91n-c%C3%A1-h%E1%BB%93i-ph%C3%B4-mai-%C4%91%E1%BA%B7c-bi%E1%BB%87t.jpg"
+    },
+    {
+        "item_id": "M10",
+        "item_name": "CUỐN CÁ HỒI SỐT DYNAMITE",
+        "menu_item_description": "",
+        "base_price": "89000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2211/cu%E1%BB%91n-dynamite.jpg"
+    },
+    {
+        "item_id": "M11",
+        "item_name": "CUỐN  TEMPURA ĐẶC BIỆT (CÁ CAM)",
+        "menu_item_description": "",
+        "base_price": "105000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2217/cu%E1%BB%91n-tempura-%C4%91%E1%BA%B7c-bi%E1%BB%87t.jpg"
+    },
+    {
+        "item_id": "M12",
+        "item_name": "CUỐN TÔM TEMPURA",
+        "menu_item_description": "",
+        "base_price": "85000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2220/cu%E1%BB%91n-t%C3%B4m-tempura.jpg"
+    },
+    {
+        "item_id": "M13",
+        "item_name": "CUỐN TEMPURA - CÁ CAM",
+        "menu_item_description": "",
+        "base_price": "89000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2221/cu%E1%BB%91n-tempura.jpg"
+    },
+    {
+        "item_id": "M2",
+        "item_name": "CUỐN CÁ HỒI PHÔ MAI",
+        "menu_item_description": "",
+        "base_price": "129000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2186/cu%E1%BB%91n-c%C3%A1-h%E1%BB%93i-ph%C3%B4-mai.jpg"
+    },
+    {
+        "item_id": "M3",
+        "item_name": "CUỐN CÁ HỒI PHÔ MAI SỐT YUZU MISO",
+        "menu_item_description": "",
+        "base_price": "129000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2181/cu%E1%BB%91n-c%C3%A1-h%E1%BB%93i-s%E1%BB%91t-yuzu.jpg"
+    },
+    {
+        "item_id": "M4",
+        "item_name": "CUỐN DA CÁ HỒI",
+        "menu_item_description": "",
+        "base_price": "95000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2188/cu%E1%BB%91n-da-c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "M5",
+        "item_name": "CUỐN KIỂU CALIFORNIA CÁ HỒI (CAM)",
+        "menu_item_description": "",
+        "base_price": "129000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2194/cu%E1%BB%91n-cali-c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "M6",
+        "item_name": "CUỐN CALIFORNIA THANH CUA (CAM)",
+        "menu_item_description": "",
+        "base_price": "95000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2201/cu%E1%BB%91n-cali-thanh-cua.jpg"
+    },
+    {
+        "item_id": "M7",
+        "item_name": "CUỐN LƯƠN NHẬT VÀ PHÔ MAI",
+        "menu_item_description": "",
+        "base_price": "169000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2176/cu%E1%BB%91n-l%C6%B0%C6%A1n-nh%E1%BA%ADt-v%C3%A0-ph%C3%B4-mai.jpg"
+    },
+    {
+        "item_id": "M8",
+        "item_name": "CUỐN LƯƠN & BƠ",
+        "menu_item_description": "",
+        "base_price": "145000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2204/cu%E1%BB%91n-l%C6%B0%C6%A1n-v%C3%A0-b%C6%A1.jpg"
+    },
+    {
+        "item_id": "M9",
+        "item_name": "CUỐN LƯỜN CÁ HỒI NƯỚNG SỐT KABAYAKI VÀ BƠ",
+        "menu_item_description": "",
+        "base_price": "85000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2210/cu%E1%BB%91n-l%C6%B0%E1%BB%9Dn-c%C3%A1-h%E1%BB%93i-kabayaki-v%C3%A0-b%C6%A1.jpg"
+    },
+    {
+        "item_id": "MO2",
+        "item_name": "VITAMIN \"\"U\"\"",
+        "menu_item_description": "",
+        "base_price": "55000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2037/vitamin-u-mocktail.jpg"
+    },
+    {
+        "item_id": "MO3",
+        "item_name": "SAKURA",
+        "menu_item_description": "",
+        "base_price": "55000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2490/mocktail-02.jpg"
+    },
+    {
+        "item_id": "MO1",
+        "item_name": "YUZU DELIGHT",
+        "menu_item_description": "",
+        "base_price": "55000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2063/yuzu-delight.jpg"
+    },
+    {
+        "item_id": "N1",
+        "item_name": "LƯỜN CÁ HỒI - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "55000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2142/l%C6%B0%E1%BB%9Dn-c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "N10",
+        "item_name": "TÔM SỐNG - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "55000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2151/nigiri-t%C3%B4m-s%E1%BB%91ng.jpg"
+    },
+    {
+        "item_id": "N11",
+        "item_name": "TÔM - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "51000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2152/t%C3%B4m.jpg"
+    },
+    {
+        "item_id": "N12",
+        "item_name": "BẠCH TUỘC - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "49000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2153/b%E1%BA%A1ch-tu%E1%BB%99c.jpg"
+    },
+    {
+        "item_id": "N14",
+        "item_name": "CHẢ CUA - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2155/thanh-cua.jpg"
+    },
+    {
+        "item_id": "N15",
+        "item_name": "TRỨNG CHIÊN KIỂU NHẬT - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "29000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2156/tr%E1%BB%A9ng-chi%C3%AAn-ki%E1%BB%83u-nh%E1%BA%ADt.jpg"
+    },
+    {
+        "item_id": "N16",
+        "item_name": "DA ĐẬU HỦ CHIÊN VÀ CƠM SUSHI TRỘN RAU CỦ - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "51000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2157/da-%C4%91%E1%BA%ADu-h%E1%BB%A7-chi%C3%AAn.jpg"
+    },
+    {
+        "item_id": "N2",
+        "item_name": "CÁ HỒI TƯƠI NA UY (TROUT) - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "51000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2352/c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "N3",
+        "item_name": "CÁ CAM - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "67000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2144/c%C3%A1-cam.jpg"
+    },
+    {
+        "item_id": "N4",
+        "item_name": "CÁ NGỪ - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "49000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2145/c%C3%A1-ng%E1%BB%AB.jpg"
+    },
+    {
+        "item_id": "N5",
+        "item_name": "LƯƠN NHẬT - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "89000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2146/l%C6%B0%C6%A1n-nh%E1%BA%ADt.jpg"
+    },
+    {
+        "item_id": "N6",
+        "item_name": "LƯỜN CÁ HỒI NƯỚNG SỐT KABAYAKI - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "55000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2147/l%C6%B0%E1%BB%9Dn-c%C3%A1-h%E1%BB%93i-n%C6%B0%E1%BB%9Bng-s%E1%BB%91t-kabayaki.jpg"
+    },
+    {
+        "item_id": "N7",
+        "item_name": "CÁ TRÍCH ÉP TRỨNG - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "59000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2148/c%C3%A1-tr%C3%ADch-%C3%A9p-tr%E1%BB%A9ng.jpg"
+    },
+    {
+        "item_id": "N8",
+        "item_name": "SÒ ĐIỆP - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "79000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2149/s%C3%B2-%C4%91i%E1%BB%87p.jpg"
+    },
+    {
+        "item_id": "N9",
+        "item_name": "SÒ ĐỎ - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "59000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2150/s%C3%B2-%C4%91%E1%BB%8F.jpg"
+    },
+    {
+        "item_id": "ND1",
+        "item_name": "UDON THỊT BÒ MỸ NÓNG (L)",
+        "menu_item_description": "",
+        "base_price": "139000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2271/udon-th%E1%BB%8Bt-b%C3%B2-m%E1%BB%B9.jpg"
+    },
+    {
+        "item_id": "ND10",
+        "item_name": "UDON XÀO THỊT HEO",
+        "menu_item_description": "",
+        "base_price": "95000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2280/udon-x%C3%A0o-th%E1%BB%8Bt-heo.jpg"
+    },
+    {
+        "item_id": "ND11",
+        "item_name": "UDON XÀO NẤM",
+        "menu_item_description": "",
+        "base_price": "85000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2281/udon-x%C3%A0o-n%C3%B3ng.jpg"
+    },
+    {
+        "item_id": "ND2",
+        "item_name": "UDON CÀ RI BÒ MỸ",
+        "menu_item_description": "",
+        "base_price": "135000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2272/udon-c%C3%A0-ri-b%C3%B2-m%C4%A9.jpg"
+    },
+    {
+        "item_id": "ND3",
+        "item_name": "Mì SOBA XÀO HẢI SẢN",
+        "menu_item_description": "",
+        "base_price": "109000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2273/m%C3%AC-soba-x%C3%A0o-h%E1%BA%A3i-s%E1%BA%A3n.jpg"
+    },
+    {
+        "item_id": "ND4",
+        "item_name": "UDON NÓNG (L)",
+        "menu_item_description": "",
+        "base_price": "65000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2274/udon-n%C3%B3ng.jpg"
+    },
+    {
+        "item_id": "ND5",
+        "item_name": "UDON HẢI SẢN NÓNG (L)",
+        "menu_item_description": "",
+        "base_price": "119000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2275/udon-h%E1%BA%A3i-s%E1%BA%A3n-n%C3%B3ng.jpg"
+    },
+    {
+        "item_id": "ND6",
+        "item_name": "UDON THỊT HEO VỊ MISO (L)",
+        "menu_item_description": "",
+        "base_price": "105000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2276/udon-th%E1%BB%8Bt-heo-v%E1%BB%8B-miso.jpg"
+    },
+    {
+        "item_id": "ND7",
+        "item_name": "UDON VỊ MISO (L)",
+        "menu_item_description": "",
+        "base_price": "85000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2277/udon-v%E1%BB%8B-miso.jpg"
+    },
+    {
+        "item_id": "ND8",
+        "item_name": "UDON LẠNH (L)",
+        "menu_item_description": "",
+        "base_price": "69000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2278/udon-l%E1%BA%A1nh.jpg"
+    },
+    {
+        "item_id": "ND9",
+        "item_name": "UDON XÀO HẢI SẢN",
+        "menu_item_description": "",
+        "base_price": "109000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2279/udon-x%C3%A0o-h%E1%BA%A3i-s%E1%BA%A3n.jpg"
+    },
+    {
+        "item_id": "SA1",
+        "item_name": "SASHIMI HÀU SỐT YUZU",
+        "menu_item_description": "",
+        "base_price": "169000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2124/sashimi-h%C3%A0u-s%E1%BB%91t-yuzu.jpg"
+    },
+    {
+        "item_id": "SA10",
+        "item_name": "SÒ ĐIỆP- 6 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "119000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2132/s%C3%B2-%C4%91i%E1%BB%87p.jpg"
+    },
+    {
+        "item_id": "SA11",
+        "item_name": "CÁ TRÍCH ÉP TRỨNG - 5 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "139000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2133/c%C3%A1-tr%C3%ADch-%C3%A9p-tr%E1%BB%A9ng.jpg"
+    },
+    {
+        "item_id": "SA12",
+        "item_name": "CÁ SABA NGÂM GIẤM - 5 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "65000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2134/c%C3%A1-saba-ng%C3%A2m-gi%E1%BA%A5m.jpg"
+    },
+    {
+        "item_id": "SA14",
+        "item_name": "BẠCH TUỘC - 5 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "79000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2136/b%E1%BA%A1ch-tu%E1%BB%99c.jpg"
+    },
+    {
+        "item_id": "SA2",
+        "item_name": "CÁ HỒI - 5 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "129000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2127/c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "SA3",
+        "item_name": "LƯỜN CÁ HỒI - 5 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "139000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2128/l%C6%B0%E1%BB%9Dn-c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "SA4",
+        "item_name": "CÁ NGỪ- 5 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "117000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2126/c%C3%A1-ng%E1%BB%AB.jpg"
+    },
+    {
+        "item_id": "SA5",
+        "item_name": "CÁ CAM - 5 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "189000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2129/c%C3%A1-cam.jpg"
+    },
+    {
+        "item_id": "SA6",
+        "item_name": "TRỨNG CÁ HỒI",
+        "menu_item_description": "",
+        "base_price": "109000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2109/tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "SA7",
+        "item_name": "TRỨNG CÁ CHUỒN",
+        "menu_item_description": "",
+        "base_price": "69000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2110/tr%E1%BB%A9ng-c%C3%A1-chu%E1%BB%93n.jpg"
+    },
+    {
+        "item_id": "SA8",
+        "item_name": "NHÍM BIỂN - 2 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "215000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2130/nh%C3%ADm-bi%E1%BB%83n.jpg"
+    },
+    {
+        "item_id": "SA9",
+        "item_name": "SÒ ĐỎ - 5 MIẾNG",
+        "menu_item_description": "",
+        "base_price": "105000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2131/s%C3%B2-%C4%91%E1%BB%8F.jpg"
+    },
+    {
+        "item_id": "SC1",
+        "item_name": "SASHIMI TỔNG HỢP CAO CẤP",
+        "menu_item_description": "",
+        "base_price": "429000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2120/t%E1%BB%95ng-h%E1%BB%A3p-cao-c%E1%BA%A5p.jpg"
+    },
+    {
+        "item_id": "SC2",
+        "item_name": "SASHIMI CÁ HỒI ĐẶC BIỆT",
+        "menu_item_description": "",
+        "base_price": "209000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2121/sashimi-c%C3%A1-h%E1%BB%93i-%C4%91%E1%BA%B7c-bi%E1%BB%87t.jpg"
+    },
+    {
+        "item_id": "SC3",
+        "item_name": "SASHIMI TỔNG HỢP A",
+        "menu_item_description": "",
+        "base_price": "295000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2122/t%E1%BB%95ng-h%E1%BB%A3p-a.jpg"
+    },
+    {
+        "item_id": "SC4",
+        "item_name": "SASHIMI TỔNG HỢP B",
+        "menu_item_description": "",
+        "base_price": "385000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2123/t%E1%BB%95ng-h%E1%BB%A3p-b.jpg"
+    },
+    {
+        "item_id": "SC5",
+        "item_name": "SUSHI TỔNG HỢP C",
+        "menu_item_description": "",
+        "base_price": "185000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2488/sushi-t%E1%BB%95ng-h%E1%BB%A3p-c.jpg"
+    },
+    {
+        "item_id": "SD1",
+        "item_name": "SPRITE",
+        "menu_item_description": "",
+        "base_price": "25000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2042/1sprite.jpg"
+    },
+    {
+        "item_id": "SD2",
+        "item_name": "COCA - COLA",
+        "menu_item_description": "",
+        "base_price": "25000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2043/1cocacola.jpg"
+    },
+    {
+        "item_id": "SD3",
+        "item_name": "COCA - COLA LIGHT",
+        "menu_item_description": "",
+        "base_price": "25000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2044/1cocacola-light.jpg"
+    },
+    {
+        "item_id": "SD4",
+        "item_name": "NƯỚC SUỐI",
+        "menu_item_description": "",
+        "base_price": "20000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2045/1nuoc-khoan-lavie.jpg"
+    },
+    {
+        "item_id": "SD5",
+        "item_name": "SODA",
+        "menu_item_description": "",
+        "base_price": "25000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2046/1soda.jpg"
+    },
+    {
+        "item_id": "SE1",
+        "item_name": "SET HỘP CƠM LƯƠN VÀ THỊT BÒ MỸ",
+        "menu_item_description": "",
+        "base_price": "175000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2293/set-h%E1%BB%99p-c%C6%A1m-l%C6%B0%C6%A1n-v%C3%A0-th%E1%BB%8Bt-b%C3%B2-m%E1%BB%B9.jpg"
+    },
+    {
+        "item_id": "SE10",
+        "item_name": "SET CƠM CUỘN CÁ SABA NƯỚNG SỐT TERIYAKI",
+        "menu_item_description": "",
+        "base_price": "169000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2304/set-c%C6%A1m-cu%E1%BB%99n-c%C3%A1-saba-n%C6%B0%E1%BB%9Bng-s%E1%BB%91t-teriyaki.jpg"
+    },
+    {
+        "item_id": "SE11",
+        "item_name": "SET CƠM CUỘN CÁ SABA NƯỚNG",
+        "menu_item_description": "",
+        "base_price": "159000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2306/set-c%C6%A1m-cu%E1%BB%99n-c%C3%A1-saba-n%C6%B0%E1%BB%9Bng.jpg"
+    },
+    {
+        "item_id": "SE12",
+        "item_name": "SET CƠM CUỘN 3 LOẠI CÁ NƯỚNG",
+        "menu_item_description": "",
+        "base_price": "185000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2308/set-c%C6%A1m-cu%E1%BB%99n-3-lo%E1%BA%A1i-c%C3%A1-n%C6%B0%E1%BB%9Bng.jpg"
+    },
+    {
+        "item_id": "SE13",
+        "item_name": "SET CƠM CUỘN CÁ THU ẢO NƯỚNG",
+        "menu_item_description": "",
+        "base_price": "165000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2310/set-c%C6%A1m-cu%E1%BB%99n-c%C3%A1-thu-%E1%BA%A3o-n%C6%B0%E1%BB%9Bng.jpg"
+    },
+    {
+        "item_id": "SE14",
+        "item_name": "SET CƠM CUỘN THỊT BÒ SỐT YAKINIKU",
+        "menu_item_description": "",
+        "base_price": "185000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2312/set-c%C6%A1m-cu%E1%BB%99n-th%E1%BB%8Bt-b%C3%B2-s%E1%BB%91t-yakiniku.jpg"
+    },
+    {
+        "item_id": "SE15",
+        "item_name": "SET CƠM CUỘN THỊT GÀ TẨM BỘT CHIÊN XÙ",
+        "menu_item_description": "",
+        "base_price": "155000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2315/set-c%C6%A1m-cu%E1%BB%99n-th%E1%BB%8Bt-g%C3%A0-t%E1%BA%A9m-b%E1%BB%99t-chi%C3%AAn-x%C3%B9.jpg"
+    },
+    {
+        "item_id": "SE3",
+        "item_name": "SET HỘP CƠM LƯỜN CÁ HỒI KABAYAKI VÀ THỊT BÒ MỸ",
+        "menu_item_description": "",
+        "base_price": "175000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2295/set-h%E1%BB%99p-c%C6%A1m-l%C6%B0%E1%BB%9Dn-c%C3%A1-h%E1%BB%93i-kabayaki-v%C3%A0-th%E1%BB%8Bt-b%C3%B2-m%E1%BB%B9.jpg"
+    },
+    {
+        "item_id": "SE4",
+        "item_name": "SET SUSHI TỔNG HỢP",
+        "menu_item_description": "",
+        "base_price": "159000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2296/set-sushi-t%E1%BB%95ng-h%E1%BB%A3p.jpg"
+    },
+    {
+        "item_id": "SE5",
+        "item_name": "SET CƠM CÀ RI THỊT BÒ MỸ",
+        "menu_item_description": "",
+        "base_price": "149000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2297/set-c%C6%A1m-c%C3%A0-ri-th%E1%BB%8Bt-b%C3%B2-m%E1%BB%B9.jpg"
+    },
+    {
+        "item_id": "SE6",
+        "item_name": "SET TEMPURA & UDON NÓNG",
+        "menu_item_description": "",
+        "base_price": "125000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2298/set-tempura-v%C3%A0-udon-n%C3%B3ng.jpg"
+    },
+    {
+        "item_id": "SE7",
+        "item_name": "SET TEMPURA RAU CỦ THÂP CẨM & CUỐN BƠ",
+        "menu_item_description": "",
+        "base_price": "139000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2299/set-tempura-rau-c%E1%BB%A7-th%E1%BA%ADp-c%E1%BA%A9m-v%C3%A0-cu%E1%BB%91n-b%C6%A1.jpg"
+    },
+    {
+        "item_id": "SE8",
+        "item_name": "SET CƠM CUỘN CÁ HỒI NƯỚNG SỐT TERIYAKI",
+        "menu_item_description": "",
+        "base_price": "179000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2300/set-c%C6%A1m-cu%E1%BB%99n-c%C3%A1-h%E1%BB%93i-n%C6%B0%E1%BB%9Bng-s%E1%BB%91t-teriyaki.jpg"
+    },
+    {
+        "item_id": "SE9",
+        "item_name": "SET CƠM CUỘN CÁ HỒI NƯỚNG",
+        "menu_item_description": "",
+        "base_price": "169000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2302/set-c%C6%A1m-cu%E1%BB%99n-c%C3%A1-h%E1%BB%93i-n%C6%B0%E1%BB%9Bng.jpg"
+    },
+    {
+        "item_id": "SL1",
+        "item_name": "SALAD TOKYO DELI SASHIMI",
+        "menu_item_description": "",
+        "base_price": "135000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2232/salad-tokyo-deli-sashimi.jpg"
+    },
+    {
+        "item_id": "SL2",
+        "item_name": "SALAD CÁ HỒI",
+        "menu_item_description": "",
+        "base_price": "75000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2234/salad-c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "SL3",
+        "item_name": "SALAD MÌ UDON VÀ CÁ HỒI",
+        "menu_item_description": "",
+        "base_price": "75000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2235/salad-m%C3%AC-udon-v%C3%A0-c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "SL4",
+        "item_name": "SALAD THỊT BÒ",
+        "menu_item_description": "",
+        "base_price": "105000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2233/salad-th%E1%BB%8Bt-b%C3%B2.jpg"
+    },
+    {
+        "item_id": "SL5",
+        "item_name": "SALAD RONG BIỂN 4 LOẠI",
+        "menu_item_description": "",
+        "base_price": "109000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2489/1salad-rong-bi%E1%BB%83n-4-lo%E1%BA%A1i.jpg"
+    },
+    {
+        "item_id": "SL7",
+        "item_name": "SALAD RONG BIỂN",
+        "menu_item_description": "",
+        "base_price": "75000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2237/salad-rong-bi%E1%BB%83n.jpg"
+    },
+    {
+        "item_id": "SO1",
+        "item_name": "SODA CHANH",
+        "menu_item_description": "",
+        "base_price": "35000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2491/soda-01.jpg"
+    },
+    {
+        "item_id": "SO2",
+        "item_name": "SODA VIỆT QUẤT",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2040/soda-vi%E1%BB%87t-qu%E1%BA%A5t.jpg"
+    },
+    {
+        "item_id": "SO3",
+        "item_name": "SODA ĐÀO",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2041/soda-%C4%91%C3%A0o.jpg"
+    },
+    {
+        "item_id": "ST1",
+        "item_name": "TRỨNG HẤP KIỂU NHẬT & TRỨNG CÁ HỒI",
+        "menu_item_description": "",
+        "base_price": "75000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2103/tr%E1%BB%A9ng-h%E1%BA%A5p-tr%E1%BB%A9ng-c%C3%A1-h%E1%BB%93i.jpg"
+    },
+    {
+        "item_id": "ST10",
+        "item_name": "SỨA BIỂN TẨM GIA VỊ",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2119/s%E1%BB%A9a-bi%E1%BB%83n-t%E1%BA%A9m-gia-v%E1%BB%8B.jpg"
+    },
+    {
+        "item_id": "ST11",
+        "item_name": "BƠ",
+        "menu_item_description": "",
+        "base_price": "30000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2114/b%C6%A1.jpg"
+    },
+    {
+        "item_id": "ST12",
+        "item_name": "RONG NHO",
+        "menu_item_description": "",
+        "base_price": "35000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2115/rong-nho.jpg"
+    },
+    {
+        "item_id": "ST13",
+        "item_name": "RONG BIỂN TRỘN MÈ",
+        "menu_item_description": "",
+        "base_price": "39000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2111/starter-09.jpg"
+    },
+    {
+        "item_id": "ST2",
+        "item_name": "TRỨNG HẤP KIỂU NHẬT VÀ LƯƠN NHẬT",
+        "menu_item_description": "",
+        "base_price": "39000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2104/tr%E1%BB%A9ng-h%E1%BA%A5p-l%C6%B0%C6%A1n.jpg"
+    },
+    {
+        "item_id": "ST3",
+        "item_name": "TRỨNG HẤP KIỂU NHẬT",
+        "menu_item_description": "",
+        "base_price": "32000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2105/tr%E1%BB%A9ng-h%E1%BA%A5p-ki%E1%BB%83u-nh%E1%BA%ADt.jpg"
+    },
+    {
+        "item_id": "ST4",
+        "item_name": "SÚP MISO",
+        "menu_item_description": "",
+        "base_price": "25000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2106/s%C3%BAp-miso.jpg"
+    },
+    {
+        "item_id": "ST5",
+        "item_name": "CANH SÚP",
+        "menu_item_description": "",
+        "base_price": "25000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2107/canh-s%C3%BAp.jpg"
+    },
+    {
+        "item_id": "ST6",
+        "item_name": "CANH SÚP CHAY",
+        "menu_item_description": "",
+        "base_price": "25000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2108/canh-s%C3%BAp-chay.jpg"
+    },
+    {
+        "item_id": "ST7",
+        "item_name": "ĐẬU NÀNH NHẬT",
+        "menu_item_description": "",
+        "base_price": "39000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2113/%C4%91%E1%BA%ADu-n%C3%A0nh-nh%E1%BA%ADt.jpg"
+    },
+    {
+        "item_id": "ST8",
+        "item_name": "CÁ HỒI NGÂM TƯƠNG",
+        "menu_item_description": "",
+        "base_price": "89000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2117/c%C3%A1-h%E1%BB%93i-ng%C3%A2m-t%C6%B0%C6%A1ng.jpg"
+    },
+    {
+        "item_id": "ST9",
+        "item_name": "BẠCH TUỘC TRỘN MÙ TẠC",
+        "menu_item_description": "",
+        "base_price": "55000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2118/b%E1%BA%A1ch-tu%E1%BB%99c-tr%E1%BB%99n-m%C3%B9-t%E1%BA%A1t.jpg"
+    },
+    {
+        "item_id": "T1",
+        "item_name": "TEMPURA TÔM - 5 PC",
+        "menu_item_description": "",
+        "base_price": "139000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2268/tempura-t%C3%B4m.jpg"
+    },
+    {
+        "item_id": "T2",
+        "item_name": "TEMPURA THẬP CẨM",
+        "menu_item_description": "",
+        "base_price": "99000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2269/tempura-th%E1%BA%ADp-c%E1%BA%A9m.jpg"
+    },
+    {
+        "item_id": "T3",
+        "item_name": "TEMPURA RAU CỦ THẬP CẨM",
+        "menu_item_description": "",
+        "base_price": "65000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2270/tempura-rau-c%E1%BB%A7-th%E1%BA%ADp-c%E1%BA%A9m.jpg"
+    },
+    {
+        "item_id": "TE1",
+        "item_name": "TRÀ XANH NHẬT",
+        "menu_item_description": "",
+        "base_price": "15000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2331/tr%C3%A0-xanh-nh%E1%BA%ADt.jpg"
+    },
+    {
+        "item_id": "TE2",
+        "item_name": "TRÀ XANH GẠO RANG",
+        "menu_item_description": "",
+        "base_price": "19000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2333/tr%C3%A0-xanh-g%E1%BA%A1o-rang.jpg"
+    },
+    {
+        "item_id": "TE3",
+        "item_name": "TRÀ SỮA",
+        "menu_item_description": "",
+        "base_price": "35000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2030/tr%C3%A0-s%E1%BB%AFa.jpg"
+    },
+    {
+        "item_id": "TE4",
+        "item_name": "TRÀ SỮA MATCHA ĐÁ",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2027/tr%C3%A0-s%E1%BB%AFa-matcha.jpg"
+    },
+    {
+        "item_id": "TE6",
+        "item_name": "TRÀ ATISO",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2031/tr%C3%A0-atiso.jpg"
+    },
+    {
+        "item_id": "TE7",
+        "item_name": "TRÀ ĐÀO",
+        "menu_item_description": "",
+        "base_price": "45000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2032/tr%C3%A0-%C4%91%C3%A0o.jpg"
+    },
+    {
+        "item_id": "TE8",
+        "item_name": "TRÀ CHANH",
+        "menu_item_description": "",
+        "base_price": "35000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2524/tr%C3%A0-chanh.jpg"
+    },
+    {
+        "item_id": "TE5",
+        "item_name": "TRÀ HOA ĐẬU BIẾC CHANH NHẬT BẠC HÀ",
+        "menu_item_description": "",
+        "base_price": "55000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2060/tr%C3%A0-hoa-%C4%91%E1%BA%ADu-bi%E1%BA%BFc-chanh-nh%E1%BA%ADt-b%E1%BA%A1c-h%C3%A0.jpg"
+    },
+    {
+        "item_id": "TP1",
+        "item_name": "CÁ HỒI NƯỚNG SỐT TERIYAKI",
+        "menu_item_description": "",
+        "base_price": "109000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2255/c%C3%A1-h%E1%BB%93i-n%C6%B0%E1%BB%9Bng-s%E1%BB%91t-teriyaki.jpg"
+    },
+    {
+        "item_id": "TP2",
+        "item_name": "CÁ HỒI NƯỚNG PHÔ MAI SỐT TRỨNG CÁ TUYẾT",
+        "menu_item_description": "",
+        "base_price": "129000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2258/c%C3%A1-h%E1%BB%93i-n%C6%B0%E1%BB%9Bng-ph%C3%B4-mai-s%E1%BB%91t-tr%E1%BB%A9ng-c%C3%A1-tuy%E1%BA%BFt.jpg"
+    },
+    {
+        "item_id": "TP3",
+        "item_name": "CÁ SABA NƯỚNG SỐT TERIYAKI",
+        "menu_item_description": "",
+        "base_price": "99000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2256/c%C3%A1-saba-n%C6%B0%E1%BB%9Bng-s%E1%BB%91t-teriyaki.jpg"
+    },
+    {
+        "item_id": "TP4",
+        "item_name": "ĐẦU CÁ HỒI NƯỚNG SỐT TERIYAKI",
+        "menu_item_description": "",
+        "base_price": "95000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2257/%C4%91%E1%BA%A7u-c%C3%A1-h%E1%BB%93i-n%C6%B0%E1%BB%9Bng-s%E1%BB%91t-teriyaki.jpg"
+    },
+    {
+        "item_id": "WI1",
+        "item_name": "RƯỢU SAKE CHITA NENOHI GURA OTOKOYAMA 180ML",
+        "menu_item_description": "",
+        "base_price": "95000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2334/sake-chita.jpg"
+    },
+    {
+        "item_id": "WI2",
+        "item_name": "RƯỢU SAKE SUISHIN KOMENOKIWAMI JUNMAI SHU 180ML",
+        "menu_item_description": "",
+        "base_price": "190000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2335/sake-suishin.jpg"
+    },
+    {
+        "item_id": "WI3",
+        "item_name": "RƯỢU SAKE CLASSIC 720ML",
+        "menu_item_description": "",
+        "base_price": "590000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2064/r%E1%BB%B1u-sake-classic-720ml.jpg"
+    },
+    {
+        "item_id": "WI4",
+        "item_name": "RƯỢU SAKE PINEAPPLE CHILI 720ML",
+        "menu_item_description": "",
+        "base_price": "640000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2065/r%E1%BB%B1u-sake-pineapple-chilli.jpg"
+    },
+    {
+        "item_id": "Y1",
+        "item_name": "HÀU NƯỚNG PHÔ MAI ( 3 CON)",
+        "menu_item_description": "",
+        "base_price": "149000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2263/h%C3%A0u-n%C6%B0%E1%BB%9Bng-ph%C3%B4-mai.jpg"
+    },
+    {
+        "item_id": "Y2",
+        "item_name": "LƯƠN NHẬT NƯỚNG",
+        "menu_item_description": "",
+        "base_price": "155000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2259/l%C6%B0%C6%A1n-nh%E1%BA%ADt-n%C6%B0%E1%BB%9Bng.jpg"
+    },
+    {
+        "item_id": "Y3",
+        "item_name": "CÁ HỒI NƯỚNG",
+        "menu_item_description": "",
+        "base_price": "99000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2260/c%C3%A1-h%E1%BB%93i-n%C6%B0%E1%BB%9Bng.jpg"
+    },
+    {
+        "item_id": "Y4",
+        "item_name": "CÁ SABA NƯỚNG",
+        "menu_item_description": "",
+        "base_price": "89000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2261/c%C3%A1-saba-n%C6%B0%E1%BB%9Bng.jpg"
+    },
+    {
+        "item_id": "Y5",
+        "item_name": "CÁ THU ẢO NƯỚNG",
+        "menu_item_description": "",
+        "base_price": "95000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2262/c%C3%A1-thu-%E1%BA%A3o-n%C6%B0%E1%BB%9Bng.jpg"
+    },
+    {
+        "item_id": "Y6",
+        "item_name": "CÁ AYU NƯỚNG",
+        "menu_item_description": "",
+        "base_price": "145000",
+        "menu_item_status": "available",
+        "image_url": "https://tokyodeli.com.vn/Data/Sites/3/Product/2339/c%C3%A1-ayu-n%C6%B0%E1%BB%9Bng.jpg    "
+    }
+]

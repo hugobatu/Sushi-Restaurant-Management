@@ -92,7 +92,10 @@ const CartContext = React.createContext<CartContextType | undefined>(undefined);
 //   );
 // }
 
+
 // testing
+
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = React.useState<CartItem[]>([
     // Preloaded test items

@@ -9,7 +9,7 @@ interface MenuItem {
   id: string
   name: string
   price: number
-  image: string
+  image_url: string
 }
 
 interface MenuGridProps {
@@ -26,7 +26,7 @@ export function MenuGrid({ items }: MenuGridProps) {
           <Card key={item.id} className="overflow-hidden group">
             <CardContent className="p-0">
               <img
-                src={item.image}
+                src={item.image_url}
                 alt={item.name}
                 className="w-full aspect-square object-cover"
               />
