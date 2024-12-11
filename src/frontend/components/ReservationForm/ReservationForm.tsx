@@ -1,6 +1,6 @@
 "use client";
 
-import "./formStyles.css";
+import "./ReservationStyles.css";
 import { useState } from "react";
 
 const ReservationForm = () => {
