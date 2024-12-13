@@ -1,25 +1,27 @@
-const con = require('../configs/dbConfig');
+const { con, sql} = require('../configs/dbConfig');
 const { getUniqueUsername, hashPassword } = require('../utils/accountService');
 const { generateUsername, formatBirthDate } = require('../utils/stringUtils');
 
 exports.getBranches = async (req, res) => {
     try {
         const pool = await con;
-        const request = pool.request();
-        const result = await request.execute('sp_get_branches');
+        const result = await pool.request()
+            .query('EXEC sp_get_branches');
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
                 message: 'No branches founed',
             });
         }
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
+            message: 'Can find branches',
             data: result.recordset,
+            result: result
         });
     } catch (error) {
         console.error('Error fetching branches:', error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: 'Error fetching branches data',
             error: error.message,

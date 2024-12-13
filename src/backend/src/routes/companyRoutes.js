@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-// const { protect } = require('../../middlewares/authMiddleware');
+const { protect } = require('../../middlewares/authMiddleware');
 const companyController = require('../controllers/companyController');
 
-// router.use(protect(['admin']));
+router.use(protect(['customer']));
 
 // Quản lý chi nhánh
 router.get('/branch', companyController.getBranches);           // 1 Xem danh sách chi nhánh

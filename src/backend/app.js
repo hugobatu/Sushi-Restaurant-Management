@@ -25,8 +25,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/company', companyRoutes); // company api
 
 
-// app.post('/signup', authController.signup);
-// app.post('/login', authController.login);
+app.post('/signup', authController.signup);
+app.post('/login', authController.login);
 
 const port = process.env.PORT || 8000;
 

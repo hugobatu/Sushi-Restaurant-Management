@@ -1,45 +1,128 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const pool = require('../configs/dbConfig'); // Import the pool from dbConfig.js
+const { con, sql } = require('../configs/dbConfig');
+const dotenv = require('dotenv').config();
 
-// Signup function
+if (dotenv.error) {
+    throw new Error('Failed to load .env file');
+}
+
 exports.signup = async (req, res) => {
-    const { username, password } = req.body;
-
-    // Gán mặc định role là 'customer' (bởi vì chỉ có 1 admin, và khi thêm mới nhân viên với vai trò quản lý thì sẽ tự động cấp tài khoản)
+    const {
+        username,
+        password,
+        email,
+        phone_number,
+        name,
+        gender,
+        id_number,
+        dob,
+    } = req.body;
     const role = 'customer';
 
-    if (!username || !password) {
-        return res.status(400).json({ message: 'Please provide username and password.' });
+    if (!username || !password || (!email && !phone_number)) {
+        return res.status(400).json({ message: 'Please provide required fields.' });
     }
 
     try {
-        const [rows] = await pool.query(
-            'SELECT * FROM Account WHERE username = ?',
-            [username]
-        );
+        const pool = await con;
 
-        if (rows.length > 0) {
-            return res.status(400).json({ message: 'User already exists.' });
-        }
+        // check if customer already exists
+        const customerQuery = `
+            SELECT * FROM Customer
+            WHERE email = @identifier OR phone_number = @identifier`;
+        const customerResult = await pool.request()
+            .input('identifier', sql.NVarChar, email || phone_number)
+            .query(customerQuery);
 
-        // Hash the password
+        const isExistingCustomer = customerResult.recordset.length > 0;
+
+        // hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
+        
+        if (isExistingCustomer) {
+            const customer = customerResult.recordset[0];
+            // check if customer already has an account linked
+            if (customer.username) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: 'Customer already has an account.' 
+                });
+            }
+            // link account to the existing customer
+            const result = await pool.request()
+                .input('username', sql.VarChar(50), username)
+                .input('password', sql.NVarChar, hashedPassword)
+                .input('role', sql.NVarChar(20), role)
+                .input('status', sql.NVarChar(20), 'active')
+                .input('customer_id', sql.Int, customer.customer_id) // Use unique identifier
+                .query(`
+                    INSERT INTO Account (username, password, account_type, account_status)
+                    VALUES (@username, @password, @role, @status)
 
-        // Insert new user into the database with the 'customer' role
-        await pool.query(
-            'INSERT INTO Account (username, password, role) VALUES (?, ?, ?)',
-            [username, hashedPassword, role]
-        );
+                    UPDATE Customer
+                    SET username = @username
+                    WHERE customer_id = @customer_id
+                `);
 
-        res.status(201).json({ message: 'User registered successfully.' });
+            return res.status(201).json({
+                success: true,
+                username: username,
+                password: hashedPassword,
+                message: 'Account created and linked to existing customer.',
+                result: result
+            });
+        } else {
+            // Create a new customer
+            const customer = await pool.request()
+                .input('email', sql.NVarChar(50), email)
+                .input('phone_number', sql.NVarChar(15), phone_number)
+                .input('name', sql.NVarChar(50), name)
+                .input('gender', sql.NVarChar(10), gender)
+                .input('id_number', sql.VarChar(20), id_number)
+                .input('dob', sql.Date, dob)
+                .query(`
+                    INSERT INTO Customer (email, phone_number, customer_name, gender, id_number, birth_date)
+                    OUTPUT Inserted.customer_id
+                    VALUES (@email, @phone_number, @name, @gender, @id_number, @dob)
+                `);
+
+            const customerId = customer.recordset[0].customer_id;
+
+            // Create a new account linked to the customer
+            await pool.request()
+                .input('username', sql.VarChar(50), username)
+                .input('password', sql.NVarChar, hashedPassword)
+                .input('role', sql.NVarChar(20), role)
+                .input('status', sql.NVarChar(20), 'active')
+                .input('customer_id', sql.Int, customerId)
+                .query(`
+                    INSERT INTO Account (username, password, account_type, account_status)
+                    VALUES (@username, @password, @role, @status)
+
+                    UPDATE Customer
+                    SET username = @username
+                    WHERE customer_id = @customer_id
+                `);
+
+            return res.status(201).json({
+                success: true,
+                username: username,
+                password: hashedPassword,
+                message: 'New customer and account created successfully.',
+                result: customer
+            });
+        }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error.' });
+        console.error('Error during signup:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Server error during signup.',
+            error: error.message
+        });
     }
 };
 
-// Login function
 exports.login = async (req, res) => {
     const { username, password } = req.body;
 
@@ -48,17 +131,18 @@ exports.login = async (req, res) => {
     }
 
     try {
+        const pool = await con;
+        
         // Fetch user from the database
-        const [rows] = await pool.query(
-            'SELECT * FROM Account WHERE username = ?',
-            [username]
-        );
+        const result = await pool.request()
+            .input('username', sql.VarChar(50), username)
+            .query('SELECT * FROM Account WHERE username = @username');
 
-        if (rows.length === 0) {
+        if (result.recordset.length === 0) {
             return res.status(401).json({ message: 'Invalid credentials.' });
         }
 
-        const account = rows[0];
+        const account = result.recordset[0];
 
         // Compare password with hashed password
         const isMatch = await bcrypt.compare(password, account.password);
@@ -69,7 +153,7 @@ exports.login = async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign(
-            { id: account.id, role: account.role },
+            { username: account.username, role: account.account_type },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );

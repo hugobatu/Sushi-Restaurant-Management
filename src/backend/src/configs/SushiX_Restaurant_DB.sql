@@ -85,7 +85,7 @@ CREATE TABLE Staff (
 -- Work history
 GO
 CREATE TABLE WorkHistory(
-	staff_id VARCHAR(10) NOT NULL,
+	staff_id INT NOT NULL,
 	department_id INT NOT NULL,
 	starting_date DATE NOT NULL,
 	ending_date DATE,
@@ -151,13 +151,13 @@ CREATE TABLE ComboMenuItem (
 -- Customer
 GO
 CREATE TABLE Customer (
-	customer_id VARCHAR(10) NOT NULL,
+	customer_id INT IDENTITY(1, 1) NOT NULL,
 	customer_name NVARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL UNIQUE,
 	phone_number VARCHAR(10) NOT NULL UNIQUE,
 	gender NVARCHAR(10) NOT NULL CHECK (gender IN (N'male', N'female')),
 	birth_date DATE NOT NULL,
-	id_number VARCHAR(12) NOT NULL,
+	id_number VARCHAR(12) NOT NULL UNIQUE,
 	username VARCHAR(50) NULL,
 	PRIMARY KEY (customer_id),
 	FOREIGN KEY (username) REFERENCES Account(username)
@@ -165,10 +165,10 @@ CREATE TABLE Customer (
 -- Order
 GO
 CREATE TABLE [Order](
-	order_id VARCHAR(10) NOT NULL,
-	customer_id VARCHAR(10) NOT NULL,
+	order_id INT IDENTITY(1, 1) NOT NULL,
+	customer_id INT NOT NULL,
 	branch_id VARCHAR(10) NOT NULL,
-	staff_id VARCHAR(10) NOT NULL,
+	staff_id INT NOT NULL,
 	order_datetime DATETIME NOT NULL,
     order_status NVARCHAR(20) NOT NULL CHECK (order_status IN (N'pending', N'done')),
 	PRIMARY KEY (order_id),
@@ -179,7 +179,7 @@ CREATE TABLE [Order](
 -- Order details
 GO
 CREATE TABLE OrderDetails (
-	order_id VARCHAR(10) NOT NULL,
+	order_id INT NOT NULL,
 	item_id VARCHAR(10) NOT NULL,
     quantity INT NOT NULL CHECK (quantity > 0),
 	unit_price FLOAT NOT NULL,
@@ -190,7 +190,7 @@ CREATE TABLE OrderDetails (
 -- Direct service order
 GO
 CREATE TABLE DirectServiceOrder (
-	order_id VARCHAR(10) NOT NULL,
+	order_id INT NOT NULL,
 	table_id INT NOT NULL,
 	PRIMARY KEY (order_id, table_id),
 	FOREIGN KEY (order_id) REFERENCES [Order](order_id),
@@ -199,7 +199,7 @@ CREATE TABLE DirectServiceOrder (
 -- Delivery order
 GO
 CREATE TABLE DeliveryOrder (
-	order_id VARCHAR(10) NOT NULL,
+	order_id INT NOT NULL,
 	delivery_address NVARCHAR(255) NOT NULL,
 	delivery_fee FLOAT NOT NULL,
 	delivery_order_status NVARCHAR(20) DEFAULT N'pending' CHECK (delivery_order_status IN (N'confirmed', N'pending')),
@@ -209,7 +209,7 @@ CREATE TABLE DeliveryOrder (
 -- Reservation order
 GO
 CREATE TABLE ReservationOrder (
-	order_id VARCHAR(10) NOT NULL,
+	order_id INT NOT NULL,
 	reservation_datetime DATETIME NOT NULL,
     num_guests INT NOT NULL CHECK (num_guests > 0),
     reservation_order_status NVARCHAR(20) NOT NULL CHECK (reservation_order_status IN (N'pending', N'confirmed')),
@@ -220,7 +220,7 @@ CREATE TABLE ReservationOrder (
 GO
 CREATE TABLE Bill (
 	bill_id VARCHAR(10) NOT NULL,
-	order_id VARCHAR(10) NOT NULL,
+	order_id INT NOT NULL,
 	subtotal FLOAT NOT NULL	,
 	discount_amount FLOAT DEFAULT 0, --default is not discounted
 	tax_amount FLOAT DEFAULT 0.8, --vat dafault is 8%
@@ -260,7 +260,7 @@ CREATE TABLE Coupon (
 -- membership level
 GO
 CREATE TABLE MembershipLevel (
-	level_id VARCHAR(10) NOT NULL,
+	level_id INT IDENTITY(1, 1) NOT NULL,
 	level_name NVARCHAR(20) NOT NULL CHECK (level_name IN (N'silver', N'gold')),
 	discount_percentage FLOAT NOT NULL,
 	min_points_required INT NOT NULL,
@@ -271,9 +271,9 @@ CREATE TABLE MembershipLevel (
 -- Membership
 GO
 CREATE TABLE Membership(
-	card_id VARCHAR(10) NOT NULL,
-	level_id VARCHAR(10) NOT NULL,
-	customer_id VARCHAR(10) NOT NULL,
+	card_id INT IDENTITY(1, 1) NOT NULL,
+	level_id INT NOT NULL,
+	customer_id INT NOT NULL,
 	bill_id VARCHAR(10)  NULL,
 	issued_date DATE NOT NULL,
 	valid_until DATE NOT NULL,
@@ -286,7 +286,7 @@ CREATE TABLE Membership(
 );
 -- online connection
 CREATE TABLE OnlineConnection (
-    connection_id VARCHAR(10) NOT NULL,
+    connection_id INT IDENTITY(1, 1) NOT NULL,
     username VARCHAR(50) NOT NULL,
     start_datetime DATETIME NOT NULL,
     end_datetime DATETIME DEFAULT NULL,
@@ -297,10 +297,10 @@ CREATE TABLE OnlineConnection (
 GO
 CREATE TABLE CustomerRating (
     rating_id INT IDENTITY(1,1) NOT NULL, --auto increment
-	customer_id VARCHAR(10) NOT NULL,
+	customer_id INT NOT NULL,
 	branch_id VARCHAR(10) NOT NULL,
 	bill_id VARCHAR(10) NOT NULL,
-	staff_id VARCHAR(10) NOT NULL,
+	staff_id INT NOT NULL,
 	service_manner_rating TINYINT CHECK(service_manner_rating > 0 AND service_manner_rating <= 10),
 	branch_rating TINYINT CHECK(branch_rating > 0 AND branch_rating <= 10),
 	food_quality_rating TINYINT CHECK(food_quality_rating > 0 AND food_quality_rating <= 10),
@@ -324,5 +324,8 @@ SELECT
     create_date AS CreationDate, 
     modify_date AS LastModifiedDate
 FROM sys.objects
-WHERE type = 'P' -- 'P' indicates stored procedures
+WHERE type = 'P' -- procedures
 ORDER BY name;
+
+select * from Customer
+select * from Account

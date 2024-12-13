@@ -3,7 +3,7 @@ USE SushiXRestaurant
 
 -- 1. add a new region
 GO
-CREATE OR ALTER PROCEDURE sp_add_new_region
+CREATE OR ALTER PROCEDURE sp_add_region
     @region_name NVARCHAR(50)
 AS
 BEGIN
@@ -58,7 +58,7 @@ END
 GO
 -- auto add table to branch
 GO
-CREATE OR ALTER PROCEDURE sp_add_default_tables
+CREATE OR ALTER PROCEDURE sp_add_table
     @branch_id VARCHAR(10),
     @num_tables INT = 10,
     @capacity INT = 4
@@ -149,7 +149,7 @@ BEGIN
 
         -- insert the new branch
         INSERT INTO Branch (
-            branch_id, region_id, branch_name, branch_address, 
+            branch_id, region_id, branch_name, branch_address,
             opening_time, closing_time, phone_number, 
             has_bike_parking_lot, has_car_parking_lot
         )
@@ -164,7 +164,7 @@ BEGIN
 		SELECT @new_branch_id, item_id, 1
 		FROM MenuItem
 		-- auto add table
-		EXEC sp_add_default_tables @new_branch_id, @num_tables = 20, @capacity = 4
+		EXEC sp_add_table @new_branch_id, @num_tables = 20, @capacity = 4
 		INSERT INTO Department(branch_id, department_name, base_salary) VALUES
 		(@new_branch_id, 'Chef', 20000000),
 		(@new_branch_id, 'Manager', 18000000),
@@ -235,7 +235,7 @@ BEGIN
 END;
 -- 4. get all branch information
 GO
-CREATE OR ALTER PROC sp_get_branches
+CREATE OR ALTER PROC sp_get_branches_data
     @pageNumber INT,
     @pageSize INT
 AS
@@ -593,7 +593,7 @@ BEGIN
     END CATCH
 END;
 
--- 9. fetch staff data
+-- 9. fetch staff data using name
 GO
 CREATE OR ALTER PROC sp_get_staff_info
     @staff_name NVARCHAR(50) = NULL,

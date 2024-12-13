@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
-const sql = require('mssql');
 const dotenv = require('dotenv').config();
+const sql = require('mssql');
 
 if (dotenv.error) {
     throw new Error('Failed to load .env file');
@@ -27,7 +27,7 @@ const config = {
         enableArithAbort: true,
         instancename: "SQLEXPRESS"
     },
-    port: process.env.PORT
+    port: process.env.DB_PORT
 };
 
 const con = new sql.ConnectionPool(config)
@@ -41,4 +41,4 @@ const con = new sql.ConnectionPool(config)
         throw err;
     });
 
-module.exports = { sequelize, con };
+module.exports = { sequelize, con, sql };
