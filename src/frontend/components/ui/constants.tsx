@@ -1,0 +1,40 @@
+import { AdminSideNavItem } from './admin-item';
+
+export const SIDENAV_ITEMS: AdminSideNavItem[] = [
+  {
+    title: 'Dashboard',
+    path: '/a/dashboard',
+  },
+  {
+    title: 'Staffs',
+    path: '/a/staffs',
+  },
+  {
+    title: 'Menu',
+    path: '/a/menu',
+  },
+  {
+    title: 'Reservations',
+    path: '/a/reservations',
+  },
+  {
+    title: 'Customers',
+    path: '/a/customers',
+  },
+  {
+    title: 'Orders',
+    path: '/a/orders',
+  },
+  {
+    title: 'Dine in',
+    path: '/a/orders/dine-in',
+  },
+  {
+    title: 'Delivery',
+    path: '/a/orders/delivery',
+  },
+  {
+    title: 'Invoice',
+    path: '/a/invoice',
+  },
+];
