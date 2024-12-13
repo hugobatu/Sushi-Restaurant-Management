@@ -3,38 +3,38 @@ import { AdminSideNavItem } from './admin-item';
 export const SIDENAV_ITEMS: AdminSideNavItem[] = [
   {
     title: 'Dashboard',
-    path: '/dashboard',
+    path: '/a/dashboard',
   },
   {
     title: 'Staffs',
-    path: '/staffs',
+    path: '/a/staffs',
   },
   {
     title: 'Menu',
-    path: '/menu',
+    path: '/a/menu',
   },
   {
     title: 'Reservations',
-    path: '/reservations',
+    path: '/a/reservations',
   },
   {
     title: 'Customers',
-    path: '/customers',
+    path: '/a/customers',
   },
   {
     title: 'Orders',
-    path: '/orders',
+    path: '/a/orders',
   },
   {
     title: 'Dine in',
-    path: '/orders/dine-in',
+    path: '/a/orders/dine-in',
   },
   {
     title: 'Delivery',
-    path: '/orders/delivery',
+    path: '/a/orders/delivery',
   },
   {
     title: 'Invoice',
-    path: '/invoice',
+    path: '/a/invoice',
   },
 ];

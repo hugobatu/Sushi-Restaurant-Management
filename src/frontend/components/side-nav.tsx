@@ -8,9 +8,9 @@ import { usePathname } from 'next/navigation';
 import { SIDENAV_ITEMS } from './ui/constants';
 import { AdminSideNavItem } from './ui/admin-item';
 
-const SideNav = () => {
+export function SideNav() {
   return (
-    <div className="md:w-60 pt-20 bg-zinc-100 h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex">
+    <div className="md:w-60 pt-10 bg-zinc-100 h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex">
       <div className="flex flex-col space-y-6 w-full">
         <div className="flex flex-col space-y-2  md:px-6 ">
           {SIDENAV_ITEMS.map((item, idx) => {
@@ -22,7 +22,6 @@ const SideNav = () => {
   );
 };
 
-export default SideNav;
 
 const MenuItem = ({ item }: { item: AdminSideNavItem }) => {
   const pathname = usePathname();
