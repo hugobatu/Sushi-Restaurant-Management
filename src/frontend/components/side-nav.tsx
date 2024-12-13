@@ -5,9 +5,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { SIDENAV_ITEMS } from '../constants';
-import { SideNavItem } from '../types';
-import { Icon } from '@iconify/react';
+import { SIDENAV_ITEMS } from './ui/constants';
+import { AdminSideNavItem } from './ui/admin-item';
 
 const SideNav = () => {
   return (
@@ -25,7 +24,7 @@ const SideNav = () => {
 
 export default SideNav;
 
-const MenuItem = ({ item }: { item: SideNavItem }) => {
+const MenuItem = ({ item }: { item: AdminSideNavItem }) => {
   const pathname = usePathname();
   const [subMenuOpen, setSubMenuOpen] = useState(false);
   const toggleSubMenu = () => {
@@ -45,10 +44,6 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
             <div className="flex flex-row space-x-4 items-center">
               {item.icon}
               <span className="font-semibold text-xl  flex">{item.title}</span>
-            </div>
-
-            <div className={`${subMenuOpen ? 'rotate-180' : ''} flex`}>
-              <Icon icon="lucide:chevron-down" width="24" height="24" />
             </div>
           </button>
 
