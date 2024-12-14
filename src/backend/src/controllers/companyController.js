@@ -6,7 +6,7 @@ exports.getBranches = async (req, res) => {
     try {
         const pool = await con;
         const result = await pool.request()
-            .query('EXEC sp_get_branches');
+            .query('EXEC sp_get_branches_data 1, 10');
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
@@ -15,7 +15,7 @@ exports.getBranches = async (req, res) => {
         }
         return res.status(200).json({
             success: true,
-            message: 'Can find branches',
+            message: 'Branches found',
             data: result.recordset,
             result: result
         });
@@ -28,73 +28,58 @@ exports.getBranches = async (req, res) => {
         });
     }
 };
-// exports.addBranch = async (req, res) => {
-//     const {
-//         branch_id,
-//         branch_name,
-//         region_id,
-//         branch_address,
-//         opening_time,
-//         closing_time,
-//         phone_number,
-//         has_bike_parking_lot,
-//         has_car_parking_lot,
-//     } = req.body;
+exports.addBranch = async (req, res) => {
+    const {
+        region_id,
+        branch_name,
+        branch_address,
+        opening_time,
+        closing_time,
+        phone_number,
+        has_bike_parking_lot,
+        has_car_parking_lot,
+    } = req.body;
 
-//     console.log("Branch details received:", {
-//         branch_id,
-//         branch_name,
-//         region_id,
-//         branch_address,
-//         opening_time,
-//         closing_time,
-//         phone_number,
-//         has_bike_parking_lot,
-//         has_car_parking_lot,
-//     });
+    console.log("Branch details received:", {
+        region_id,
+        branch_name,
+        branch_address,
+        opening_time,
+        closing_time,
+        phone_number,
+        has_bike_parking_lot,
+        has_car_parking_lot,
+    });
 
-//     try {
-//         // Thực hiện truy vấn INSERT
-//         const [result] = await con.execute(
-//             `INSERT INTO Branch (
-//                 branch_id, 
-//                 branch_name, 
-//                 region_id, 
-//                 branch_address, 
-//                 opening_time, 
-//                 closing_time, 
-//                 phone_number, 
-//                 has_bike_parking_lot, 
-//                 has_car_parking_lot
-//             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-//             [
-//                 branch_id,
-//                 branch_name,
-//                 region_id,
-//                 branch_address,
-//                 opening_time,
-//                 closing_time,
-//                 phone_number,
-//                 has_bike_parking_lot,
-//                 has_car_parking_lot,
-//             ]
-//         );
-
-//         res.status(200).json({
-//             success: true,
-//             message: "Branch added successfully",
-//             result: result,
-//         });
-//     } 
-//     catch (error) {
-//         console.error("Error inserting branch:", error);
-//         res.status(500).json({
-//             success: false,
-//             message: "Error adding branch",
-//             error: error.message,
-//         });
-//     }
-// };
+    try {
+        // Thực hiện truy vấn INSERT
+        const pool = await con;
+        const [result] = await pool.request()
+            .input('region_id', sql.VarChar(10), region_id)
+            .input('branch_name', sql.NVarChar(50), branch_name)
+            .input('branch_address', sql.NVarChar(50), branch_address)
+            .input('opening_time', sql.Time, opening_time)
+            .input('closing_time', sql.Time, closing_time)
+            .input('phone_number', sql.VarChar(10), phone_number)
+            .input('has_bike_parking_lot', sql.Bit, has_bike_parking_lot)
+            .input('has_car_parking_lot', sql.Bit, has_car_parking_lot)
+            .query(`EXEC sp_add_branch @region_id, @branch_name, @branch_address, 
+                @opening_time, @closing_time, @phone_number, @has_bike_parkinglot, @has_car_parking_lot`)
+        res.status(200).json({
+            success: true,
+            message: "Branch added successfully",
+            result: result,
+        });
+    } 
+    catch (error) {
+        console.error("Error inserting branch:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error adding branch",
+            error: error.message,
+        });
+    }
+};
 // exports.deleteBranch = async (req, res) => {
 //     const {branch_id} = req.params;
 //     console.log(`Deleting branch with ID: ${branch_id}`);

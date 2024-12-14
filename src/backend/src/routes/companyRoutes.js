@@ -7,7 +7,7 @@ router.use(protect(['customer']));
 
 // Quản lý chi nhánh
 router.get('/branch', companyController.getBranches);           // 1 Xem danh sách chi nhánh
-// router.post('/branch/add', companyController.addBranch);              // 2 Thêm chi nhánh
+router.post('/branch/add', companyController.addBranch);              // 2 Thêm chi nhánh
 // router.delete('/branch/delete/:branch_id', companyController.deleteBranch);     // 3 Xóa chi nhánh
 // router.put('/branch/update/:branch_id', companyController.updateBranch);        // 4 Cập nhật thông tin chi nhánh
 

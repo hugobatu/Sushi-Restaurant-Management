@@ -786,3 +786,7 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
+
+
+SELECT * FROM Account
+SELECT * FROM Customer
