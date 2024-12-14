@@ -1,4 +1,5 @@
 import { AdminSideNavItem } from './admin-item';
+import { House } from 'lucide-react'
 
 export const SIDENAV_ITEMS: AdminSideNavItem[] = [
   {

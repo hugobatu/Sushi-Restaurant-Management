@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 
-export default function MenuPage() {
+export default function AdminPage() {
   redirect("/a/dashboard")
 }
 
