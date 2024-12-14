@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SiteHeader } from "@/components/site-header"
-import { PromotionCard } from "@/components/promotion-card"
+import { SiteHeader } from "@/components/HomePage/site-header"
+import { PromotionCard } from "@/components/Promotions/promotion-card"
 
 const promotions = [
   {

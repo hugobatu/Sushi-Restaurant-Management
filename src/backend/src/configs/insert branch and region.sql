@@ -11,11 +11,11 @@ select * from Staff
 select * from WorkHistory
 
 -- Thêm một khu vực mới
-EXEC sp_add_new_region N'Thành Phố Hồ Chí Minh'
-EXEC sp_add_new_region N'Đà Lạt'
-EXEC sp_add_new_region N'Khánh Hòa'
-EXEC sp_add_new_region N'Đà Nẵng'
-EXEC sp_add_new_region N'hà nội'
+EXEC sp_add_region N'Thành Phố Hồ Chí Minh'
+EXEC sp_add_region N'Đà Lạt'
+EXEC sp_add_region N'Khánh Hòa'
+EXEC sp_add_region N'Đà Nẵng'
+EXEC sp_add_region N'hà nội'
 
 -- Gọi stored procedure để thêm chi nhánh vào bảng Branch
 EXEC sp_add_new_branch

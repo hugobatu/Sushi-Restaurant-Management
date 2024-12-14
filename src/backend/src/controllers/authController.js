@@ -16,7 +16,7 @@ exports.signup = async (req, res) => {
         name,
         gender,
         id_number,
-        dob,
+        birth_date,
     } = req.body;
     const role = 'customer';
 
@@ -30,9 +30,11 @@ exports.signup = async (req, res) => {
         // check if customer already exists
         const customerQuery = `
             SELECT * FROM Customer
-            WHERE email = @identifier OR phone_number = @identifier`;
+            WHERE email = @email OR phone_number = @phone_number OR id_number = @id_number`;
         const customerResult = await pool.request()
-            .input('identifier', sql.NVarChar, email || phone_number)
+            .input('email', sql.VarChar(50), email)
+            .input('phone_number', sql.VarChar(10), phone_number)
+            .input('id_number', sql.VarChar(12), id_number)
             .query(customerQuery);
 
         const isExistingCustomer = customerResult.recordset.length > 0;
@@ -43,10 +45,10 @@ exports.signup = async (req, res) => {
         if (isExistingCustomer) {
             const customer = customerResult.recordset[0];
             // check if customer already has an account linked
-            if (customer.username) {
+            if (customer.username != null) {
                 return res.status(400).json({ 
                     success: false, 
-                    message: 'Customer already has an account.' 
+                    message: 'Customer already has an account.'
                 });
             }
             // link account to the existing customer
@@ -67,30 +69,28 @@ exports.signup = async (req, res) => {
 
             return res.status(201).json({
                 success: true,
-                username: username,
-                password: hashedPassword,
+                username: username, 
                 message: 'Account created and linked to existing customer.',
                 result: result
             });
         } else {
-            // Create a new customer
             const customer = await pool.request()
                 .input('email', sql.NVarChar(50), email)
                 .input('phone_number', sql.NVarChar(15), phone_number)
                 .input('name', sql.NVarChar(50), name)
                 .input('gender', sql.NVarChar(10), gender)
                 .input('id_number', sql.VarChar(20), id_number)
-                .input('dob', sql.Date, dob)
+                .input('birth_date', sql.Date, birth_date)
                 .query(`
                     INSERT INTO Customer (email, phone_number, customer_name, gender, id_number, birth_date)
                     OUTPUT Inserted.customer_id
-                    VALUES (@email, @phone_number, @name, @gender, @id_number, @dob)
+                    VALUES (@email, @phone_number, @name, @gender, @id_number, @birth_date)
                 `);
 
             const customerId = customer.recordset[0].customer_id;
-
-            // Create a new account linked to the customer
-            await pool.request()
+                        
+            // create a new account linked to the customer
+            const result = await pool.request()
                 .input('username', sql.VarChar(50), username)
                 .input('password', sql.NVarChar, hashedPassword)
                 .input('role', sql.NVarChar(20), role)
@@ -104,13 +104,13 @@ exports.signup = async (req, res) => {
                     SET username = @username
                     WHERE customer_id = @customer_id
                 `);
-
+            
             return res.status(201).json({
                 success: true,
                 username: username,
                 password: hashedPassword,
                 message: 'New customer and account created successfully.',
-                result: customer
+                result: result
             });
         }
     } catch (error) {

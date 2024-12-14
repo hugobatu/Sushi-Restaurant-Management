@@ -1,6 +1,6 @@
 import React from "react";
 import { useCart } from "@/contexts/cart-context";
-import ProductItem from "./ui/product-item";
+import ProductItem from "../ui/product-item";
 
 const ProductList = () => {
   const { items, addItem, removeItem, toggleItem, updateQuantity } = useCart();

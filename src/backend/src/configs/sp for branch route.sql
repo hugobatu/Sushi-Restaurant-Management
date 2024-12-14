@@ -44,12 +44,13 @@ EXEC sp_get_all_branches;
 
 
 
-SELECT * FROM MenuCategory;
-SELECT * FROM BranchMenuItem;
-SELECT * FROM MenuItemCategory;
+--SELECT * FROM MenuCategory;
+--SELECT * FROM BranchMenuItem;
+--SELECT * FROM MenuItemCategory;
 
 -- START
 -- 4.1 Thêm menu theo khu vực (branch), món này phải có trong MenuItem trước rồi mới được add vào branch
+GO
 CREATE OR ALTER PROCEDURE sp_add_menu_branch
     @p_branch_id VARCHAR(10),
     @p_item_id VARCHAR(10),
@@ -107,21 +108,21 @@ BEGIN
     END CATCH
 END;
 
-SELECT * FROM MenuItem;
+--SELECT * FROM MenuItem;
 
-EXEC sp_add_menu_branch 'B002', 'ND14', 'ND'
+--EXEC sp_add_menu_branch 'B002', 'ND14', 'ND'
 
 -- Khi cần xóa một món gì đó ra khỏi MenuItem thì xóa nguyên chuỗi như bên dưới:
 -- DEBUG	
-SELECT * FROM MenuItemCategory
-SELECT * FROM BranchMenuItem;
-SELECT * FROM MenuItem;
+--SELECT * FROM MenuItemCategory
+--SELECT * FROM BranchMenuItem;
+--SELECT * FROM MenuItem;
 
-SELECT * FROM MenuItem WHERE menu_item_status = N'unavailable';
+--SELECT * FROM MenuItem WHERE menu_item_status = N'unavailable';
 /* ============ */
 
 -- 4.2 Xóa menu theo khu vực (branch)
-
+GO
 CREATE OR ALTER PROCEDURE sp_delete_menu_branch
     @p_branch_id VARCHAR(10),
     @p_item_id VARCHAR(10)
@@ -138,7 +139,7 @@ BEGIN
         -- 2. Kiểm tra item_id có tồn tại trong MenuItem không
         IF NOT EXISTS (
             SELECT 1 
-            FROM MenuItem 
+            FROM MenuItem
             WHERE branch_id = @p_branch_id AND item_id = @p_item_id
         )
         BEGIN
@@ -159,25 +160,26 @@ BEGIN
     END CATCH
 END;
 
--- nháp thử
--- 4.1
-EXEC sp_add_menu_branch 'B002','Y6','Y';
+---- nháp thử
+---- 4.1
+--EXEC sp_add_menu_branch 'B002','Y6','Y';
 
--- 4.2
-EXEC sp_delete_menu_branch 'B002', 'Y6';
+---- 4.2
+--EXEC sp_delete_menu_branch 'B002', 'Y6';
 
--- 4.3
-sp_change_status_branch 'B002', 'ND13', 1;
-SELECT * FROM BranchMenuItem WHERE branch_id = 'B002';
-SELECT * FROM MenuItem;
-SELECT * FROM MenuItemCategory 
+---- 4.3
+--sp_change_status_branch 'B002', 'ND13', 1;
+--SELECT * FROM BranchMenuItem WHERE branch_id = 'B002';
+--SELECT * FROM MenuItem;
+--SELECT * FROM MenuItemCategory 
 
-SELECT * 
-FROM MenuItem 
-WHERE item_id LIKE N'ND%';
+--SELECT * 
+--FROM MenuItem 
+--WHERE item_id LIKE N'ND%';
 
 -- 4.3 Chỉnh sửa thông tin menu theo khu vực (branch) (đang phục vụ, tạm ngưng)
-SELECT * FROM BranchMenuItem;
+--SELECT * FROM BranchMenuItem;
+GO
 CREATE OR ALTER PROCEDURE sp_change_status_branch
     @p_branch_id VARCHAR(10),
     @p_item_id VARCHAR(10),
@@ -233,8 +235,8 @@ END;
 
 -- 4.4 Thêm món ăn vào trong MenuItem
 
-SELECT * FROM MenuItem;
-
+--SELECT * FROM MenuItem;
+GO
 CREATE OR ALTER PROCEDURE sp_add_menu
     @p_item_name NVARCHAR(50),
     @p_description NVARCHAR(255),
@@ -290,11 +292,12 @@ BEGIN
     END CATCH
 END;
 
-EXEC sp_add_menu N'UDON XÀO XÁO XAO', NULL, 22000, 0, 'ND', NULL;
+--EXEC sp_add_menu N'UDON XÀO XÁO XAO', NULL, 22000, 0, 'ND', NULL;
 
-SELECT * FROM MenuItem;
+--SELECT * FROM MenuItem;
 	
 -- 4.5 Xóa món ăn xóa khỏi MenuItem -> xóa khỏi BranchMenuItem
+GO
 CREATE OR ALTER PROCEDURE sp_delete_MenuItem
     @p_item_id VARCHAR(10)
 AS
@@ -330,6 +333,7 @@ EXEC sp_delete_MenuItem 'ND14';
 
 
 -- 4.6 Thêm combo món ăn
+GO
 CREATE OR ALTER PROCEDURE sp_add_combo
     @p_combo_name NVARCHAR(50),
     @p_combo_description NVARCHAR(255),
@@ -417,13 +421,13 @@ CREATE TABLE ComboMenuItem
 );
 */
 
-EXEC sp_add_combo N'Combo Lẩu 3 Món', N'LẨU LẨU LẨU', 'HP1, HO2, IC1';
+--EXEC sp_add_combo N'Combo Lẩu 3 Món', N'LẨU LẨU LẨU', 'HP1, HO2, IC1';
 
-SELECT * FROM Combo;
-SELECT * FROM ComboMenuItem;
+--SELECT * FROM Combo;
+--SELECT * FROM ComboMenuItem;
 
 -- 4.7 Xóa combo
-
+GO
 CREATE OR ALTER PROCEDURE sp_delete_combo
     @p_combo_id VARCHAR(10)
 AS
@@ -451,4 +455,44 @@ BEGIN
     END CATCH
 END;
 
-EXEC sp_delete_combo 'SC1';
+--EXEC sp_delete_combo 'SC1';
+
+-- 4.8 thêm khách hàng
+GO
+CREATE OR ALTER PROC sp_add_customer
+	@customer_name NVARCHAR(50),
+	@email VARCHAR(50),
+	@phone_number VARCHAR(10),
+	@gender NVARCHAR(10),
+	@birth_date DATE,
+	@id_number VARCHAR(12)
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+		IF EXISTS (
+			SELECT 1
+			FROM Customer
+			WHERE customer_name = @customer_name OR email = @email OR id_number = @id_number
+		)
+		BEGIN
+			RAISERROR('This customer has existed', 16, 1)
+		END
+
+        DECLARE @new_customer_id INT = SCOPE_IDENTITY();
+		INSERT INTO Customer(customer_id, customer_name, email, phone_number, gender, birth_date)
+		VALUES (@new_customer_id, @customer_name, @email, @phone_number, @gender, @birth_date)
+		COMMIT TRAN
+		PRINT 'Add new customer successfully with' + CAST(@new_customer_id AS NVARCHAR)
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRAN
+		
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+	END CATCH
+END
