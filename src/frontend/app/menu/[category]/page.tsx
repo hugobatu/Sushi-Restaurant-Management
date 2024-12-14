@@ -1,6 +1,6 @@
-import { MenuSidebar } from "@/components/menu-sidebar";
-import { MenuGrid } from "@/components/menu-grid";
-import { SiteHeader } from "@/components/site-header"
+import { MenuSidebar } from "@/components/Menu/menu-sidebar";
+import { MenuGrid } from "@/components/Menu/menu-grid";
+import { SiteHeader } from "@/components/HomePage/site-header"
 import fs from "fs";
 import path from "path";
 

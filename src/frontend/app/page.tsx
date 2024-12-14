@@ -1,5 +1,5 @@
-import { HeroSection } from "@/components/hero-section"
-import { SiteHeader } from "@/components/site-header"
+import { HeroSection } from "@/components/HomePage/hero-section"
+import { SiteHeader } from "@/components/HomePage/site-header"
 
 export default function Home() {
   return (
@@ -12,3 +12,5 @@ export default function Home() {
   )
 }
 
+
+// DAY LA HOME DAU TIEN

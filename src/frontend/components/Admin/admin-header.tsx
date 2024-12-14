@@ -5,8 +5,8 @@ import React from 'react';
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
 
-import useScroll from '../hooks/use-scroll';
-import { cn } from '../lib/utils';
+import useScroll from '../../hooks/use-scroll';
+import { cn } from '../../lib/utils';
 
 export function AdminHeader() {
   const scrolled = useScroll(5);

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-
+import Link from "next/link"
 export function HeroSection() {
   return (
     <div className="relative overflow-hidden bg-[#FFF5F5]">
@@ -22,19 +22,14 @@ export function HeroSection() {
             </p>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Button className="bg-red-600 hover:bg-red-700 text-lg h-12 px-8">
-                Order Now
+                ĐẶT HÀNG NGAY
               </Button>
-              <Button variant="outline" className="text-lg h-12 px-8">
-                View Menu
-              </Button>
+
+              <Link href="/menu" legacyBehavior passHref>
+              <Button variant="outline" className="text-lg h-12 px-8">XEM MENU</Button>
+              </Link>
+
             </div>
-          </div>
-          <div className="relative">
-            <img
-              alt="Sushi Selection"
-              className="aspect-[4/3] object-cover rounded-lg"
-              src="/placeholder.svg?height=400&width=600"
-            />
           </div>
         </div>
       </div>
