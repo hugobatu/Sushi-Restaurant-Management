@@ -113,13 +113,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       quantity: 1,
       checked: true,
     },
-    {
-      id: "ST3",
-      name: "TRỨNG HẤP KIỂU NHẬT",
-      price: 32000,
-      quantity: 1,
-      checked: false, // Not selected by default
-    },
+    // {
+    //   id: "ST3",
+    //   name: "TRỨNG HẤP KIỂU NHẬT",
+    //   price: 32000,
+    //   quantity: 1,
+    //   checked: false, // Not selected by default
+    // },
   ]);
 
   const addItem = React.useCallback((item: Omit<CartItem, "quantity" | "checked">) => {
