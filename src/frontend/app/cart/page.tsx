@@ -40,7 +40,7 @@ const TestCart = () => {
                   className="mr-2"
                 />
                 <img
-                src={`/starter/${item.id}.jpg`}
+                src={item.image_url} // URL từ dữ liệu mẫu
                 alt={item.name}
                 width={60}
                 height={60}
