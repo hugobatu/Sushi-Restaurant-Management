@@ -2,12 +2,16 @@
 
 import "./LoginStyles.css";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -17,10 +21,33 @@ const LoginForm = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login form submitted:", formData);
-    // TODO: Send form data to the API or handle authentication logic
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage("Login successful!");
+        localStorage.setItem("token", data.token); // Store JWT token
+        router.push("D:\Sushi-Restaurant-Management\src\frontend\app\page.tsx"); // Redirect to the dashboard
+      } else {
+        setMessage(data.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      setMessage("An error occurred. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,9 +84,11 @@ const LoginForm = () => {
           />
         </div>
 
-        <button type="submit" className="submit-button">
-          Đăng Nhập
+        <button type="submit" className="submit-button" disabled={loading}>
+          {loading ? "Logging in..." : "Đăng Nhập"}
         </button>
+
+        {message && <p className="form-message">{message}</p>}
       </form>
     </div>
   );
