@@ -24,7 +24,7 @@ export const SIDENAV_ITEMS: AdminSideNavItem[] = [
   },
   {
     title: 'Orders',
-    path: '/a/orders',
+    path: '/#',
   },
   {
     title: 'Dine in',

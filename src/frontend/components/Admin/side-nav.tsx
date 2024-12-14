@@ -4,9 +4,57 @@ import React, { useState } from 'react';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-import { SIDENAV_ITEMS } from './constants';
 import { AdminSideNavItem } from './admin-item';
+import { House, Users, BookOpen, User, CalendarCheck, List, Utensils, Truck, NotepadText } from 'lucide-react';
+
+export const SIDENAV_ITEMS: AdminSideNavItem[] = [
+  {
+    title: 'Dashboard',
+    path: '/a/dashboard',
+    icon: <House size={24} />,
+  },
+  {
+    title: 'Staffs',
+    path: '/a/staffs',
+    icon: <Users size={24} />,
+  },
+  {
+    title: 'Menu',
+    path: '/a/menu',
+    icon: <BookOpen size={24} />,
+  },
+  {
+    title: 'Customers',
+    path: '/a/customers',
+    icon: <User size={24} />,
+  },
+  {
+    title: 'Reservations',
+    path: '/a/reservations',
+    icon: <CalendarCheck size={24} />,
+  },
+  {
+    title: 'Orders',
+    path: '#',
+    icon: <List size={24} />,
+  },
+  {
+    title: 'Dine in',
+    path: '/a/orders/dine-in',
+    icon: <Utensils size={24} />,
+  },
+  {
+    title: 'Delivery',
+    path: '/a/orders/delivery',
+    icon: <Truck size={24} />,
+  },
+  {
+    title: 'Invoice',
+    path: '/a/invoice',
+    icon: <NotepadText size={24} />,
+  },
+];
+
 
 export function SideNav() {
   return (
