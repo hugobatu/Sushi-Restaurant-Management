@@ -38,7 +38,7 @@ const StaffsPage = () => {
             </div>
           </div>
           <table className="border-collapse border border-black rounded-lg">
-            <thead className="text-xs text-black bg-white">
+            <thead className="text-xs text-black bg-red-300">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Staff's name
@@ -73,7 +73,7 @@ const StaffsPage = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="text-xs text-black bg-white">
+              <tr className="odd:bg-white even:bg-gray-200 text-xs text-black">
                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   Nguyen Nguyen
                 </th>
@@ -96,13 +96,36 @@ const StaffsPage = () => {
                   Department name
                 </td>
                 <td className="px-6 py-4">
-                  <Button variant="outline" className="text-xs bg-white hover:bg-white border-blue-500 hover:border-blue-700 text-blue-500 hover:text-blue-700">View & edit</Button>
-                  <Button variant="outline" className="ml-2 text-xs bg-white hover:bg-white border-red-500 hover:border-red-700 text-red-500 hover:text-red-70">Delete</Button>
+                  <Button variant="outline" className="text-xs bg-white hover:bg-gray-200 border-blue-500 hover:border-blue-700 text-blue-500 hover:text-blue-700">View & edit</Button>
+                  <Button variant="outline" className="ml-2 text-xs bg-white hover:bg-gray-200 border-red-500 hover:border-red-700 text-red-500 hover:text-red-70">Delete</Button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+        <div className="hs-dropdown relative inline-flex">
+  <button id="hs-dropdown-default" type="button" className="hs-dropdown-toggle py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-700 dark:focus:bg-neutral-700" aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
+    Actions
+    <svg className="hs-dropdown-open:rotate-180 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
+
+  <div className="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg mt-2 dark:bg-neutral-800 dark:border dark:border-neutral-700 dark:divide-neutral-700 after:h-4 after:absolute after:-bottom-4 after:start-0 after:w-full before:h-4 before:absolute before:-top-4 before:start-0 before:w-full" role="menu" aria-orientation="vertical" aria-labelledby="hs-dropdown-default">
+    <div className="p-1 space-y-0.5">
+      <a className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#">
+        Newsletter
+      </a>
+      <a className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#">
+        Purchases
+      </a>
+      <a className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#">
+        Downloads
+      </a>
+      <a className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:hover:text-neutral-300 dark:focus:bg-neutral-700" href="#">
+        Team Account
+      </a>
+    </div>
+  </div>
+</div>
       </div>
     </>
   );
