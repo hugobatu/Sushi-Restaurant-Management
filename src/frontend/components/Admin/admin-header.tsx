@@ -4,15 +4,9 @@ import React from 'react';
 
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
-<<<<<<< HEAD:src/frontend/components/admin-header.tsx
-import { Button } from "@/components/ui/button"
-import useScroll from '../hooks/use-scroll';
-import { cn } from '../lib/utils';
-=======
-
+import { Button } from "@/components/ui/button";
 import useScroll from '../../hooks/use-scroll';
 import { cn } from '../../lib/utils';
->>>>>>> d318395fe872dee77d9ffd729ccd74f5cff82575:src/frontend/components/Admin/admin-header.tsx
 
 export function AdminHeader() {
   const scrolled = useScroll(5);

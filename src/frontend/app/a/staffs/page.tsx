@@ -1,6 +1,7 @@
 import React from 'react';
 import { AdminHeader } from "@/components/Admin/admin-header"
-import { SideNav } from "@/components/side-nav"
+import { SideNav } from "@/components/Admin/side-nav"
+import { Button } from "@/components/ui/button"
 
 const StaffsPage = () => {
   return (
@@ -8,7 +9,6 @@ const StaffsPage = () => {
       <AdminHeader />
       <SideNav />
       <div className="ml-64 mt-4">
-        <span className="font-bold text-4xl">Staffs</span>
         <div className="w-full text-sm text-left rtl:text-right text-black">
           <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
             <div>
@@ -30,7 +30,7 @@ const StaffsPage = () => {
                 </div>
             </div>
             <label htmlFor="table-search" className="sr-only">Search</label>
-            <div className="relative">
+            <div className="relative right-10 rtl:right-auto">
               <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
                 <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
               </div>
@@ -84,19 +84,20 @@ const StaffsPage = () => {
                   Male
                 </td>
                 <td className="px-6 py-4">
-                14/2/2019
+                  14/2/2019
                 </td>
                 <td className="px-6 py-4">
-                14/2/2019
+                  Staff status
                 </td>
                 <td className="px-6 py-4">
-                14/2/2019
+                  Branch name
                 </td>
                 <td className="px-6 py-4">
-                14/2/2019
+                  Department name
                 </td>
                 <td className="px-6 py-4">
-                14/2/2019
+                  <Button variant="outline" className="text-xs bg-white hover:bg-white border-blue-500 hover:border-blue-700 text-blue-500 hover:text-blue-700">View & edit</Button>
+                  <Button variant="outline" className="ml-2 text-xs bg-white hover:bg-white border-red-500 hover:border-red-700 text-red-500 hover:text-red-70">Delete</Button>
                 </td>
               </tr>
             </tbody>

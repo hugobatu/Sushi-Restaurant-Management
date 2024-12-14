@@ -5,8 +5,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { SIDENAV_ITEMS } from './ui/constants';
-import { AdminSideNavItem } from './ui/admin-item';
+import { SIDENAV_ITEMS } from './constants';
+import { AdminSideNavItem } from './admin-item';
 
 export function SideNav() {
   return (

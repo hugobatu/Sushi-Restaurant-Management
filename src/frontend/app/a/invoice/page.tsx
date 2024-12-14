@@ -1,6 +1,6 @@
 import React from 'react';
 import { AdminHeader } from "@/components/Admin/admin-header"
-import { SideNav } from "@/components/side-nav"
+import { SideNav } from "@/components/Admin/side-nav"
 
 const InvoicePage = () => {
   return (
