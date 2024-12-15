@@ -18,7 +18,7 @@ EXEC sp_add_region N'Nha Trang'
 EXEC sp_add_region N'Đà Nẵng'
 EXEC sp_add_region N'Hà Nội'
 
--- Gọi stored procedure để thêm chi nhánh vào bảng Branch
+-- Gọi stored procedure để thêm nhân viên chi nhánh vào bảng Branch
 EXEC sp_add_new_branch
     @region_id = 'TPHCM', 
     @branch_name = N'Tekashimaya quận 1', 
@@ -49,17 +49,10 @@ EXEC sp_add_new_branch
     @has_bike_parking_lot = 0, 
     @has_car_parking_lot = 1;
 
+-- chỉnh sửa thông tin chi nhánh
 EXEC sp_update_branch_status 'B001', 'closed', 1, 1
 
-
-
-
-EXEC sp_add_staff 
-    'B001',
-    @department_name = 'manager',
-    @staff_name = 'Jane Smith',
-	@birth_date = '2004/05/25',
-    @gender = 'male'
+-- thêm nhân viên bằng api viết trong ORM
 
 -- Staff 2
 EXEC sp_add_staff 'B002', 'manager', N'Lebron James', '2004/05/25', 'MaLe';
@@ -70,7 +63,7 @@ EXEC sp_add_staff
     @department_name = 'Cleaner', 
     @staff_name = 'Lucy Brown',
 	@birth_date = '2004/05/25',
-    @phone_number = '0123456783',
+    @phone_number = '0112233445',
 	@gender = 'female'
 
 -- testing firing
