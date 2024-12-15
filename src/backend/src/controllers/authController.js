@@ -143,7 +143,12 @@ exports.login = async (req, res) => {
         }
 
         const account = result.recordset[0];
-
+        if (account.account_status === 'inactive'){
+            return res.status(401).json({
+                success: false,
+                message: 'This account is not active anymore.'
+            })
+        }
         // Compare password with hashed password
         const isMatch = await bcrypt.compare(password, account.password);
 

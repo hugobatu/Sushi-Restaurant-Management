@@ -138,8 +138,8 @@ BEGIN
 
         -- 2. Kiểm tra item_id có tồn tại trong MenuItem không
         IF NOT EXISTS (
-            SELECT 1 
-            FROM MenuItem
+            SELECT 1
+            FROM BranchMenuItem
             WHERE branch_id = @p_branch_id AND item_id = @p_item_id
         )
         BEGIN
