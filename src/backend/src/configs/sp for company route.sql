@@ -462,7 +462,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_update_staff_salary
     @staff_id INT = NULL,              -- Staff ID (optional)
     @department_id VARCHAR(10) = NULL, -- Department ID (optional)
-    @increase_rate FLOAT = 0.1         -- Increase rate (default is 10%)
+    @increase_rate DECIMAL(5, 2)	   -- Increase rate (default is 10%)
 AS
 BEGIN
     BEGIN TRY
@@ -731,6 +731,7 @@ BEGIN
         ORDER BY StaffRating DESC, TotalRatings DESC
         OFFSET @offset ROWS
         FETCH NEXT @page_size ROWS ONLY;
+
     END TRY
     BEGIN CATCH
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
@@ -744,23 +745,23 @@ GO
 -- 12. fetch revenue by month, quarter, year of a branch
 GO
 CREATE OR ALTER PROCEDURE sp_get_branch_revenue_stats
-    @startDate DATE,
-    @endDate DATE,
-    @branchId INT = NULL,  -- null for all branch
-    @groupBy NVARCHAR(10)  -- 'day', 'month', 'quarter', 'year'
+    @start_date DATE,
+    @end_date DATE,
+    @branch_id INT = NULL,  -- null for all branch
+    @group_by NVARCHAR(10)  -- 'day', 'month', 'quarter', 'year'
 AS
 BEGIN
     BEGIN TRY
         DECLARE @dateFormat NVARCHAR(20);
 
         -- date format
-        IF @groupBy = 'day'
+        IF @group_by = 'day'
             SET @dateFormat = 'yyyy-MM-dd';
-        ELSE IF @groupBy = 'month'
+        ELSE IF @group_by = 'month'
             SET @dateFormat = 'yyyy-MM';
-        ELSE IF @groupBy = 'quarter'
+        ELSE IF @group_by = 'quarter'
             SET @dateFormat = 'yyyy-qq';
-        ELSE IF @groupBy = 'year'
+        ELSE IF @group_by = 'year'
             SET @dateFormat = 'yyyy';
         ELSE
             RAISERROR('Invalid groupBy parameter. Use "day", "month", "quarter", or "year".', 16, 1);
@@ -773,8 +774,8 @@ BEGIN
         FROM OrderDetails OD
         JOIN Orders O ON OD.order_id = O.order_id
         JOIN Branch B ON O.branch_id = B.branch_id
-        WHERE O.order_date BETWEEN @startDate AND @endDate
-            AND (@branchId IS NULL OR B.branch_id = @branchId)
+        WHERE O.order_date BETWEEN @start_date AND @end_date
+            AND (@branch_id IS NULL OR B.branch_id = @branch_id)
         GROUP BY B.branch_name, FORMAT(O.order_date, @dateFormat)
         ORDER BY Period;
 
@@ -790,9 +791,9 @@ END;
 -- 13. sales stats by each menu item
 GO
 CREATE OR ALTER PROCEDURE sp_get_menu_sales_stats
-    @startDate DATE,
-    @endDate DATE,
-    @branchId INT = NULL,  -- null for all
+    @start_date DATE,
+    @end_date DATE,
+    @branch_id INT = NULL,  -- null for all
     @regionId INT = NULL   -- null for all
 AS
 BEGIN
@@ -806,8 +807,8 @@ BEGIN
         JOIN Orders O ON OD.order_id = O.order_id
         JOIN MenuItems MI ON OD.menu_item_id = MI.menu_item_id
         JOIN Branch B ON O.branch_id = B.branch_id
-        WHERE O.order_date BETWEEN @startDate AND @endDate
-            AND (@branchId IS NULL OR B.branch_id = @branchId)
+        WHERE O.order_date BETWEEN @start_date AND @end_date
+            AND (@branch_id IS NULL OR B.branch_id = @branch_id)
             AND (@regionId IS NULL OR B.region_id = @regionId)
         GROUP BY MI.menu_item_name
         ORDER BY TotalRevenue DESC;
@@ -821,8 +822,8 @@ BEGIN
         JOIN Orders O ON OD.order_id = O.order_id
         JOIN MenuItems MI ON OD.menu_item_id = MI.menu_item_id
         JOIN Branch B ON O.branch_id = B.branch_id
-        WHERE O.order_date BETWEEN @startDate AND @endDate
-            AND (@branchId IS NULL OR B.branch_id = @branchId)
+        WHERE O.order_date BETWEEN @start_date AND @end_date
+            AND (@branch_id IS NULL OR B.branch_id = @branch_id)
             AND (@regionId IS NULL OR B.region_id = @regionId)
         GROUP BY MI.menu_item_name
         ORDER BY TotalRevenue ASC;

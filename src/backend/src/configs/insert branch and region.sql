@@ -54,24 +54,14 @@ EXEC sp_update_branch_status 'B001', 'closed', 1, 1
 
 -- thêm nhân viên bằng api viết trong ORM
 
--- Staff 2
-EXEC sp_add_staff 'B002', 'manager', N'Lebron James', '2004/05/25', 'MaLe';
-
--- Staff 3
-EXEC sp_add_staff 
-    'B002',
-    @department_name = 'Cleaner', 
-    @staff_name = 'Lucy Brown',
-	@birth_date = '2004/05/25',
-    @phone_number = '0112233445',
-	@gender = 'female'
 
 -- testing firing
-EXEC sp_fire_staff 5
+EXEC sp_fire_staff 9
 SELECT * FROM Staff
 SELECT * FROM WorkHistory
 SELECT * FROM Department	
 -- testing transfering
 EXEC sp_transfer_staff 5, 'b002', 'chef'
-
+-- testing update salary
+EXEC sp_update_staff_salary 19, 0.1
 -- fetch branch rating

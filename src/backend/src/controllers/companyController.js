@@ -363,13 +363,6 @@ exports.updateStaffSalary = async (req, res) => {
             .input('staff_id', sql.Int, staff_id)
             .input('increase_rate', sql.Float, increase_rate)
             .query(`EXEC sp_update_staff_salary @staff_id, @increase_rate`)
-        if (!result.recordset || result.recordset.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'No data found.',
-                error: result
-            });
-        }
         return res.status(200).json({
             success: true,
             message: "Update staff salary successfully",
@@ -397,13 +390,6 @@ exports.transferStaff = async (req, res) => {
             .input('new_branch_id', sql.VarChar(10), new_branch_id)
             .input('new_department_name', sql.NVarChar(50), new_department_name)
             .query(`EXEC sp_transfer_staff @staff_id, @new_branch_id, @new_department_name`);
-        if (!result.recordset || result.recordset.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'No data found.',
-                error: result
-            });
-        }
         return res.status(200).json({
             success: true,
             message: "Transfer staff successfully",
