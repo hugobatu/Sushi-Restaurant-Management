@@ -16,10 +16,10 @@ router.get('/branch', companyController.getBranches);               // 4. lấy 
 
 // // Quản lý nhân viên
 router.post('/staff/add', companyController.addStaff);              // 5. thêm nhân viên
-router.delete('/staff/:id', companyController.fireStaff);           // 6. Sa thải nhân viên
-router.put('/staff/:id', companyController.updateStaffSalary);      // 7. tăng lương nhân viên
-router.get('/staff', companyController.transferStaff);              // 8. chuyển nhân viên sang chi nhánh khác
-router.put('/staff/:id', companyController.getStaffByName);         // 9. tìm nhân viên dựa theo tên (có thể có nhiều kết quả)
+router.put('/staff/fire', companyController.fireStaff);              // 6. Sa thải nhân viên
+router.put('/staff/update', companyController.updateStaffSalary);         // 7. tăng lương nhân viên
+router.get('/staff/transfer', companyController.transferStaff);              // 8. chuyển nhân viên sang chi nhánh khác
+router.put('/staff/getdata', companyController.getStaffByName);            // 9. tìm nhân viên dựa theo tên (có thể có nhiều kết quả)
 
 // // Doanh thu và đánh giá
 router.get('/ratings/branches', companyController.getBranchRating); // 10. xem đánh giá chi nhánh

@@ -243,7 +243,7 @@ exports.addStaff = async (req, res) => {
         if (account_type != 'security' && account_type != 'chef') {
             const formatted_birth_date = await formatBirthDate(birth_date);
             const hashedPassword = await hashPassword(formatted_birth_date); // format dob from yyyy-mm-dd to dd-mm-yyyy
-            
+
             // 4. Insert into Account
             await request
                 .input('password', sql.NVarChar(MAX), hashedPassword)
@@ -318,14 +318,14 @@ exports.addStaff = async (req, res) => {
         } catch (rollbackError) {
             console.error("Rollback failed:", rollbackError.message);
         }
-    
+
         console.error("Error adding staff:", error.message);
         res.status(500).json({
             success: false,
             message: "An error occurred while adding the staff.",
             error: error.message,
         });
-    }    
+    }
 };
 // 6.
 exports.fireStaff = async (req, res) => {
@@ -346,11 +346,10 @@ exports.fireStaff = async (req, res) => {
         console.error(error);
         res.status(500).json({
             success: false,
-            message: "An error occurred while adding the staff.",
+            message: "An error occurred while firing the staff.",
             error: error.message,
         });
     }
-    res.json({ message: `Xóa nhân viên với ID: ${req.params.id}` });
 };
 // 7.
 exports.updateStaffSalary = async (req, res) => {
@@ -362,8 +361,15 @@ exports.updateStaffSalary = async (req, res) => {
         const pool = await con;
         const result = await pool.request()
             .input('staff_id', sql.Int, staff_id)
-            .input('increase_rate', sql.Float)
+            .input('increase_rate', sql.Float, increase_rate)
             .query(`EXEC sp_update_staff_salary @staff_id, @increase_rate`)
+        if (!result.recordset || result.recordset.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No data found.',
+                error: result
+            });
+        }
         return res.status(200).json({
             success: true,
             message: "Update staff salary successfully",
@@ -372,7 +378,7 @@ exports.updateStaffSalary = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: "Cannot update staff salary",
+            message: "Error occur when updating staff salary",
             error: error.message
         });
     }
@@ -391,6 +397,13 @@ exports.transferStaff = async (req, res) => {
             .input('new_branch_id', sql.VarChar(10), new_branch_id)
             .input('new_department_name', sql.NVarChar(50), new_department_name)
             .query(`EXEC sp_transfer_staff @staff_id, @new_branch_id, @new_department_name`);
+        if (!result.recordset || result.recordset.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No data found.',
+                error: result
+            });
+        }
         return res.status(200).json({
             success: true,
             message: "Transfer staff successfully",
