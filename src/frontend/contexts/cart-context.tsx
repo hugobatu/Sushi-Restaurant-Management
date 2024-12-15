@@ -96,7 +96,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const toggleItem = React.useCallback((id: string, checked: boolean) => {
     setItems((currentItems) =>
       currentItems.map((item) =>
-        item.id === id ? { ...item, checked } : item
+        item.id === id ? { ...item, checked: true } : item
       )
     );
   }, []);

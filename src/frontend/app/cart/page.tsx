@@ -98,6 +98,9 @@ const TestCart = () => {
             if (totalAmount === 0) {
               alert('Giỏ hàng của bạn đang trống. Vui lòng kiểm tra lại.');
             } else {
+              const checkedItems = items.filter(item => item.checked);
+              localStorage.setItem('totalAmount', JSON.stringify(totalAmount));
+              localStorage.setItem('checkedItems', JSON.stringify(checkedItems));
               window.location.href = '/reservation';
             }
           }}
