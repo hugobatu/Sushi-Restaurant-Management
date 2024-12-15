@@ -96,7 +96,7 @@ const TestCart = () => {
           className="px-4 py-2 bg-orange-600 text-white rounded"
           onClick={() => {
             if (totalAmount === 0) {
-              alert('Giỏ hàng của bạn đang trống. Vui lòng kiểm tra lại.');
+              alert('Giỏ hàng của bạn chưa chọn sản phẩm. Vui lòng kiểm tra lại.');
             } else {
               const checkedItems = items.filter(item => item.checked);
               localStorage.setItem('totalAmount', JSON.stringify(totalAmount));
