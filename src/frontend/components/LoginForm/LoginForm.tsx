@@ -34,11 +34,26 @@ const LoginForm = () => {
       });
 
       const data = await response.json();
-
+      console.log("Login Response:", data); 
+      console.log("data role: ",data.role);
+      console.log("data username:", data.username);
       if (response.ok) {
         setMessage("Login successful!");
         localStorage.setItem("token", data.token); // Store JWT token
-        router.push("D:\Sushi-Restaurant-Management\src\frontend\app\page.tsx"); // Redirect to the dashboard
+        console.log("Generated token: ", data.token);
+
+
+        if (data.role === "customer") {
+          router.push("/customer"); // Redirect to the guest page
+        } else if(data.role === "admin") {
+          router.push("/a"); // Redirect to the dashboard
+        }
+          else if(data.role === "manager") {
+            router.push("/manager");
+          }
+          else if(data.role === "staff"){
+            router.push("/staff");
+          }
       } else {
         setMessage(data.message || "Login failed. Please try again.");
       }
