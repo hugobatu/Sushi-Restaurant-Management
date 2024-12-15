@@ -1,31 +1,41 @@
 "use client";
 
+import { useEffect, useState } from "react"; // Import React hooks
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react"; // Replace with the icon library you use
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/cart-context";
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 
-export function SiteHeader() {
+export function StaffHeader() {
   const { itemCount } = useCart();
+  const [username, setUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Decode the token to get the username
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
+        setUsername(decodedToken.username); // Set username from decoded token
+      } catch (error) {
+        console.error("Failed to decode token:", error);
+        setUsername(null); // Clear username on error
+      }
+    }
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
       <div className="flex h-16 items-center w-full px-10">
         {/* Logo */}
         <Link href="/" className="mr-auto">
-          <img
-            src="/logo.png"
-            alt="Tokyo Deli"
-            className="h-40 w-50" // Adjust logo size
-          />
+          <img src="/logo.png" alt="Tokyo Deli" className="h-40 w-50" />
         </Link>
 
         {/* Navigation Menu */}
@@ -79,7 +89,7 @@ export function SiteHeader() {
         {/* Action Buttons */}
         <div className="ml-auto flex items-center space-x-4">
           {/* Cart Button */}
-          {/* <Link href="/cart" legacyBehavior passHref>
+          <Link href="/cart" legacyBehavior passHref>
             <a className="relative inline-flex items-center">
               <Button variant="ghost" size="icon">
                 <ShoppingCart className="h-5 w-5" />
@@ -90,21 +100,20 @@ export function SiteHeader() {
                 </span>
               )}
             </a>
-          </Link> */}
-
-          {/* Registration and Login */}
-          <Link href="/registration" legacyBehavior passHref>
-            <Button className="bg-red-600 hover:bg-red-700">ĐĂNG KÝ</Button>
-          </Link>
-          <Link href="/login" legacyBehavior passHref>
-            <Button className="bg-red-600 hover:bg-red-700">ĐĂNG NHẬP</Button>
           </Link>
 
           {/* Order Now Button */}
-          {/* <Link href="/cart" legacyBehavior passHref>
+          <Link href="/cart" legacyBehavior passHref>
             <Button className="bg-red-600 hover:bg-red-700">ĐẶT HÀNG NGAY</Button>
-          </Link> */}
+          </Link>
 
+          {/* User Section */}
+          <div className="flex items-center space-x-2">
+            <span className="text-sm font-medium">Xin chào,</span>
+            <span className="text-sm font-bold">
+              {username ? username : "Staff"}
+            </span>
+          </div>
         </div>
       </div>
     </header>

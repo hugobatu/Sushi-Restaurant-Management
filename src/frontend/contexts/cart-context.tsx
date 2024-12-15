@@ -44,19 +44,40 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const addItem = React.useCallback((item: Omit<CartItem, "quantity" | "checked">) => {
+  // const addItem = React.useCallback((item: Omit<CartItem, "quantity" | "checked">) => {
+  //   setItems((currentItems) => {
+  //     const existingItem = currentItems.find((i) => i.id === item.id);
+  //     const updatedItems = existingItem
+  //       ? currentItems.map((i) =>
+  //           i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+  //         )
+  //       : [...currentItems, { ...item, quantity: 1, checked: false }];
+      
+  //     syncCartToLocalStorage(updatedItems);
+  //     return updatedItems;
+  //   });
+  // }, []);
+
+  const addItem = React.useCallback(
+  (item: Omit<CartItem, "quantity" | "checked">, quantity: number = 1) => {
     setItems((currentItems) => {
       const existingItem = currentItems.find((i) => i.id === item.id);
+
       const updatedItems = existingItem
         ? currentItems.map((i) =>
-            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+            i.id === item.id
+              ? { ...i, quantity: i.quantity + quantity } // Increment by the specified quantity
+              : i
           )
-        : [...currentItems, { ...item, quantity: 1, checked: false }];
-      
+        : [...currentItems, { ...item, quantity, checked: false }]; // Add new item with specified quantity
+
       syncCartToLocalStorage(updatedItems);
       return updatedItems;
     });
-  }, []);
+  },
+  []
+);
+
   
 
   const removeItem = React.useCallback((id: string) => {
@@ -75,7 +96,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const toggleItem = React.useCallback((id: string, checked: boolean) => {
     setItems((currentItems) =>
       currentItems.map((item) =>
-        item.id === id ? { ...item, checked } : item
+        item.id === id ? { ...item, checked: true } : item
       )
     );
   }, []);
