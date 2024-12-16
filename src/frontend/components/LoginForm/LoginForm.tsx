@@ -46,7 +46,7 @@ const LoginForm = () => {
         if (data.role === "customer") {
           router.push("/customer"); // Redirect to the guest page
         } else if(data.role === "admin") {
-          router.push("/a"); // Redirect to the dashboard
+          router.push("/admin"); // Redirect to the dashboard
         }
           else if(data.role === "manager") {
             router.push("/manager");
