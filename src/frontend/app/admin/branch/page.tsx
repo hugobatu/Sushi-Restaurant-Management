@@ -6,6 +6,7 @@ import { SideNav } from "@/components/Admin/side-nav";
 
 const BranchPage = () => {
   interface Branch {
+    region_id: string;
     branch_id: string;
     branch_name: string;
     branch_address: string;
@@ -40,26 +41,29 @@ const BranchPage = () => {
   const [totalBranches, setTotalBranches] = useState(0);
   const [message, setMessage] = useState("");
 
+  // Fetch branch data
   const fetchBranches = async () => {
     try {
-      const response = await fetch("http://localhost:8000/company/getBranches", {
+      const response = await fetch("http://localhost:8000/company/branch", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(pagination),
       });
       const data = await response.json();
       if (data.success) {
         setBranches(data.data);
         setTotalBranches(data.pagination.total || 0);
+        setMessage("Branches fetched successfully!");
       } else {
         setBranches([]);
-        setMessage(data.message);
+        setMessage(data.message || "Error fetching branches.");
       }
     } catch (error) {
       console.error("Error fetching branches:", error);
+      setMessage("Error occurred while fetching branches.");
     }
   };
 
+  // Add a new branch
   const addBranch = async () => {
     try {
       const response = await fetch("http://localhost:8000/company/branch/add", {
@@ -70,15 +74,17 @@ const BranchPage = () => {
       const data = await response.json();
       if (data.success) {
         setMessage("Branch added successfully!");
-        fetchBranches();
+        fetchBranches(); // Refresh branch list
       } else {
         setMessage(data.message || "Error adding branch.");
       }
     } catch (error) {
       console.error("Error adding branch:", error);
+      setMessage("Error adding branch.");
     }
   };
 
+  // Update branch
   const updateBranch = async () => {
     try {
       const response = await fetch("http://localhost:8000/company/branch/update", {
@@ -89,15 +95,17 @@ const BranchPage = () => {
       const data = await response.json();
       if (data.success) {
         setMessage("Branch updated successfully!");
-        fetchBranches();
+        fetchBranches(); // Refresh branch list
       } else {
         setMessage(data.message || "Error updating branch.");
       }
     } catch (error) {
       console.error("Error updating branch:", error);
+      setMessage("Error updating branch.");
     }
   };
 
+  // Pagination handlers
   const handleNextPage = () => {
     setPagination((prev) => ({ ...prev, page_number: prev.page_number + 1 }));
   };
@@ -109,6 +117,7 @@ const BranchPage = () => {
     }));
   };
 
+  // Fetch branches on page load or pagination change
   useEffect(() => {
     fetchBranches();
   }, [pagination]);
@@ -120,6 +129,7 @@ const BranchPage = () => {
       <div className="ml-60 p-6">
         <h1 className="font-bold text-4xl mb-6">Branch Management</h1>
 
+        {/* Add New Branch Form */}
         <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Add New Branch</h2>
           <form
@@ -221,13 +231,14 @@ const BranchPage = () => {
             </div>
             <button
               type="submit"
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
               Add Branch
             </button>
           </form>
         </div>
 
+        {/* Update Branch Form */}
         <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Update Branch</h2>
           <form
@@ -301,18 +312,27 @@ const BranchPage = () => {
             </div>
             <button
               type="submit"
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
               Update Branch
             </button>
           </form>
         </div>
 
+        {/* Branch List */}
         <div className="border p-4 rounded-lg">
           <h2 className="font-bold text-xl mb-4">Branch List</h2>
+            <button
+            onClick={fetchBranches}
+            className="mb-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            >
+            Reload Branches
+            </button>
           <table className="w-full border-collapse border">
             <thead>
               <tr>
+                <th className="border p-2">Region ID</th>
+                <th className="border p-2">Branch ID</th>
                 <th className="border p-2">Branch Name</th>
                 <th className="border p-2">Address</th>
                 <th className="border p-2">Phone</th>
@@ -320,37 +340,45 @@ const BranchPage = () => {
               </tr>
             </thead>
             <tbody>
-              {branches.map((branch) => (
-                <tr key={branch.branch_id}>
-                  <td className="border p-2">{branch.branch_name}</td>
-                  <td className="border p-2">{branch.branch_address}</td>
-                  <td className="border p-2">{branch.phone_number}</td>
-                  <td className="border p-2">{branch.branch_status}</td>
+              {branches.length > 0 ? (
+                branches.map((branch) => (
+                  <tr key={branch.branch_id}>
+                    <td className="border p-2">{branch.region_id}</td>
+                    <td className="border p-2">{branch.branch_id}</td>
+                    <td className="border p-2">{branch.branch_name}</td>
+                    <td className="border p-2">{branch.branch_address}</td>
+                    <td className="border p-2">{branch.phone_number}</td>
+                    <td className="border p-2">{branch.branch_status}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4} className="border p-2 text-center">
+                    No branches available.
+                  </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
           <div className="mt-4 flex justify-between">
             <button
               onClick={handlePrevPage}
-              className="px-4 py-2 bg-gray-300 rounded"
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
               disabled={pagination.page_number === 1}
             >
               Previous
             </button>
-            <span>
-              Page {pagination.page_number} of{" "}
-              {Math.ceil(totalBranches / pagination.page_size)}
-            </span>
+
             <button
               onClick={handleNextPage}
-              className="px-4 py-2 bg-gray-300 rounded"
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
               disabled={branches.length < pagination.page_size}
             >
               Next
             </button>
           </div>
         </div>
+
         {message && (
           <div className="mt-4 text-center text-red-500 font-bold">{message}</div>
         )}

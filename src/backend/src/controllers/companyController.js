@@ -121,10 +121,7 @@ exports.updateBranch = async (req, res) => {
 }
 // 4.
 exports.getBranches = async (req, res) => {
-    const {
-        page_number,
-        page_size
-    } = req.body
+    const { page_number = 1, page_size = 5 } = req.body; // Default values
     try {
         const pool = await con;
         const result = await pool.request()
