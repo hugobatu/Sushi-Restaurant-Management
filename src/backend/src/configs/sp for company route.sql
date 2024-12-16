@@ -111,6 +111,7 @@ BEGIN
     END CATCH
 END;
 GO
+
 -- 2. add a new branch
 GO
 CREATE OR ALTER PROC sp_add_new_branch
@@ -191,7 +192,9 @@ BEGIN
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
+
 -- 3. update branch status (working/closed/maintenance)
+
 GO
 CREATE OR ALTER PROC sp_update_branch_status
     @branch_id VARCHAR(10),
@@ -272,6 +275,7 @@ BEGIN
     OFFSET @offset ROWS
     FETCH NEXT @page_size ROWS ONLY;
 END
+
 -- 5. add a new staff (ORM)
 /*GO
 CREATE OR ALTER PROCEDURE sp_add_staff

@@ -11,7 +11,7 @@ router.post('/region/add', companyController.addRegion);            // 1. thêm 
 // Quản lý chi nhánh
 router.post('/branch/add', companyController.addBranch);            // 2. thêm chi nhánh
 router.put('/branch/update', companyController.updateBranch);       // 3. cập nhật thông tin chi nhánh
-router.get('/branch', companyController.getBranches);               // 4. lấy danh sách các chi nhánh
+router.get('/branch/getBranches', companyController.getBranches);               // 4. lấy danh sách các chi nhánh
 
 
 // // Quản lý nhân viên

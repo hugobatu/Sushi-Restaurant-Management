@@ -24,23 +24,30 @@ const BranchPage = () => {
     has_bike_parking_lot: false,
     has_car_parking_lot: false,
   });
+
+  const [updateBranchData, setUpdateBranchData] = useState({
+    branch_id: "",
+    new_status: "",
+    has_bike_parking_lot: false,
+    has_car_parking_lot: false,
+  });
+
   const [pagination, setPagination] = useState({
     page_number: 1,
     page_size: 5,
   });
+
   const [totalBranches, setTotalBranches] = useState(0);
   const [message, setMessage] = useState("");
 
-  // Fetch branch data
   const fetchBranches = async () => {
     try {
-      const response = await fetch("http://localhost:8000/company/branch", {
-        method: "POST",
+      const response = await fetch("http://localhost:8000/company/getBranches", {
+        method: "GET",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(pagination),
       });
       const data = await response.json();
-
       if (data.success) {
         setBranches(data.data);
         setTotalBranches(data.pagination.total || 0);
@@ -53,7 +60,6 @@ const BranchPage = () => {
     }
   };
 
-  // Add a new branch
   const addBranch = async () => {
     try {
       const response = await fetch("http://localhost:8000/company/branch/add", {
@@ -62,10 +68,9 @@ const BranchPage = () => {
         body: JSON.stringify(newBranch),
       });
       const data = await response.json();
-
       if (data.success) {
         setMessage("Branch added successfully!");
-        fetchBranches(); // Refresh branch list
+        fetchBranches();
       } else {
         setMessage(data.message || "Error adding branch.");
       }
@@ -74,19 +79,17 @@ const BranchPage = () => {
     }
   };
 
-  // Update branch information
-  const updateBranch = async (branch_id: string, new_status: string) => {
+  const updateBranch = async () => {
     try {
       const response = await fetch("http://localhost:8000/company/branch/update", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ branch_id, new_status }),
+        body: JSON.stringify(updateBranchData),
       });
       const data = await response.json();
-
       if (data.success) {
         setMessage("Branch updated successfully!");
-        fetchBranches(); // Refresh branch list
+        fetchBranches();
       } else {
         setMessage(data.message || "Error updating branch.");
       }
@@ -95,7 +98,6 @@ const BranchPage = () => {
     }
   };
 
-  // Pagination handlers
   const handleNextPage = () => {
     setPagination((prev) => ({ ...prev, page_number: prev.page_number + 1 }));
   };
@@ -107,7 +109,6 @@ const BranchPage = () => {
     }));
   };
 
-  // Fetch branches on pagination or page load
   useEffect(() => {
     fetchBranches();
   }, [pagination]);
@@ -119,7 +120,6 @@ const BranchPage = () => {
       <div className="ml-60 p-6">
         <h1 className="font-bold text-4xl mb-6">Branch Management</h1>
 
-        {/* Add New Branch Form */}
         <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Add New Branch</h2>
           <form
@@ -228,7 +228,86 @@ const BranchPage = () => {
           </form>
         </div>
 
-        {/* Branch List */}
+        <div className="border p-4 rounded-lg bg-gray-100 mb-6">
+          <h2 className="font-bold text-xl mb-4">Update Branch</h2>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              updateBranch();
+            }}
+          >
+            <div className="grid grid-cols-2 gap-4">
+              <input
+                type="text"
+                placeholder="Branch ID"
+                value={updateBranchData.branch_id}
+                onChange={(e) =>
+                  setUpdateBranchData({
+                    ...updateBranchData,
+                    branch_id: e.target.value,
+                  })
+                }
+                className="p-2 border rounded"
+                required
+              />
+              <select
+                value={updateBranchData.new_status}
+                onChange={(e) =>
+                  setUpdateBranchData({
+                    ...updateBranchData,
+                    new_status: e.target.value,
+                  })
+                }
+                className="p-2 border rounded"
+                required
+              >
+                <option value="">Select Status</option>
+                <option value="working">Working</option>
+                <option value="closed">Closed</option>
+                <option value="maintenance">Maintenance</option>
+              </select>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={updateBranchData.has_bike_parking_lot}
+                    onChange={(e) =>
+                      setUpdateBranchData({
+                        ...updateBranchData,
+                        has_bike_parking_lot: e.target.checked,
+                      })
+                    }
+                  />{" "}
+                  Bike Parking
+                </label>
+              </div>
+              <div>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={updateBranchData.has_car_parking_lot}
+                    onChange={(e) =>
+                      setUpdateBranchData({
+                        ...updateBranchData,
+                        has_car_parking_lot: e.target.checked,
+                      })
+                    }
+                  />{" "}
+                  Car Parking
+                </label>
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              Update Branch
+            </button>
+          </form>
+        </div>
+
         <div className="border p-4 rounded-lg">
           <h2 className="font-bold text-xl mb-4">Branch List</h2>
           <table className="w-full border-collapse border">
@@ -238,7 +317,6 @@ const BranchPage = () => {
                 <th className="border p-2">Address</th>
                 <th className="border p-2">Phone</th>
                 <th className="border p-2">Status</th>
-                <th className="border p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -248,26 +326,10 @@ const BranchPage = () => {
                   <td className="border p-2">{branch.branch_address}</td>
                   <td className="border p-2">{branch.phone_number}</td>
                   <td className="border p-2">{branch.branch_status}</td>
-                  <td className="border p-2">
-                    <button
-                      className="px-2 py-1 bg-green-500 text-white rounded mr-2"
-                      onClick={() => updateBranch(branch.branch_id, "working")}
-                    >
-                      Set Working
-                    </button>
-                    <button
-                      className="px-2 py-1 bg-red-500 text-white rounded"
-                      onClick={() => updateBranch(branch.branch_id, "closed")}
-                    >
-                      Set Closed
-                    </button>
-                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-
-          {/* Pagination */}
           <div className="mt-4 flex justify-between">
             <button
               onClick={handlePrevPage}
@@ -289,8 +351,6 @@ const BranchPage = () => {
             </button>
           </div>
         </div>
-
-        {/* Display Messages */}
         {message && (
           <div className="mt-4 text-center text-red-500 font-bold">{message}</div>
         )}
