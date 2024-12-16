@@ -19,6 +19,9 @@ router.post('/staff/add', companyController.addStaff);              // 5. thêm 
 router.put('/staff/fire', companyController.fireStaff);              // 6. Sa thải nhân viên
 router.put('/staff/update', companyController.updateStaffSalary);         // 7. tăng lương nhân viên
 router.get('/staff/transfer', companyController.transferStaff);              // 8. chuyển nhân viên sang chi nhánh khác
+
+// lam tu 1 toi 8 truoc
+
 router.put('/staff/getdata', companyController.getStaffByName);            // 9. tìm nhân viên dựa theo tên (có thể có nhiều kết quả)
 
 // // Doanh thu và đánh giá

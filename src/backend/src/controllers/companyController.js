@@ -28,6 +28,7 @@ exports.addRegion = async (req, res) => {
         });
     }
 };
+
 // 2.
 exports.addBranch = async (req, res) => {
     const {
@@ -153,6 +154,7 @@ exports.getBranches = async (req, res) => {
         });
     }
 };
+
 // 5.
 exports.addStaff = async (req, res) => {
     const {
