@@ -4,23 +4,23 @@ import { House } from 'lucide-react'
 export const SIDENAV_ITEMS: AdminSideNavItem[] = [
   {
     title: 'Dashboard',
-    path: '/a/dashboard',
+    path: '/admin/dashboard',
   },
   {
     title: 'Staffs',
-    path: '/a/staffs',
+    path: '/admin/staffs',
   },
   {
     title: 'Menu',
-    path: '/a/menu',
+    path: '/admin/menu',
   },
   {
     title: 'Reservations',
-    path: '/a/reservations',
+    path: '/admin/reservations',
   },
   {
     title: 'Customers',
-    path: '/a/customers',
+    path: '/admin/customers',
   },
   {
     title: 'Orders',
@@ -28,14 +28,14 @@ export const SIDENAV_ITEMS: AdminSideNavItem[] = [
   },
   {
     title: 'Dine in',
-    path: '/a/orders/dine-in',
+    path: '/admin/orders/dine-in',
   },
   {
     title: 'Delivery',
-    path: '/a/orders/delivery',
+    path: '/admin/orders/delivery',
   },
   {
     title: 'Invoice',
-    path: '/a/invoice',
+    path: '/admin/invoice',
   },
 ];

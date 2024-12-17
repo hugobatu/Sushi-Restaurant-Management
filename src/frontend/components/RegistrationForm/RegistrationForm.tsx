@@ -23,7 +23,7 @@ const RegistrationForm = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    console.log(`Field changed: ${name}, Value: ${value}`);
+    
 
     setFormData((prevState) => ({
       ...prevState,
@@ -46,7 +46,7 @@ const RegistrationForm = () => {
     console.log("Form submitted with data:", formData);
 
     try {
-      const response = await fetch("/api/auth/signup", {
+      const response = await fetch("http://localhost:8000/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -175,9 +175,8 @@ const RegistrationForm = () => {
             required
           >
             <option value="">Select Gender</option>
-            <option value="Nam">Nam</option>
-            <option value="Nữ">Nữ</option>
-            <option value="Other">Other</option>
+            <option value="male">male</option>
+            <option value="female">female</option>
           </select>
         </div>
 

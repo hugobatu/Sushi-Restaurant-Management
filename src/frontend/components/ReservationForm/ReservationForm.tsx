@@ -26,6 +26,7 @@ const ReservationForm = () => {
     e.preventDefault();
     console.log("Form data submitted:", formData);
     // TODO: Send the form data to the API or process it further
+    
   };
 
   return (

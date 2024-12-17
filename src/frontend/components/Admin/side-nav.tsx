@@ -5,32 +5,42 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AdminSideNavItem } from './admin-item';
-import { House, Users, BookOpen, User, CalendarCheck, List, Utensils, Truck, NotepadText } from 'lucide-react';
+import { House, Users, BookOpen, User, CalendarCheck, List, Utensils, Truck, NotepadText, MapPin, Building } from 'lucide-react';
 
 export const SIDENAV_ITEMS: AdminSideNavItem[] = [
   {
     title: 'Dashboard',
-    path: '/a/dashboard',
+    path: '/admin/dashboard',
     icon: <House size={24} />,
   },
   {
+    title: 'Region',
+    path: '/admin/region',
+    icon: <MapPin size={24} />,
+  },
+  {
+    title: 'Branch',
+    path: '/admin/branch',
+    icon: <Building size={24} />,
+  },
+  {
     title: 'Staffs',
-    path: '/a/staffs',
+    path: '/admin/staffs',
     icon: <Users size={24} />,
   },
   {
     title: 'Menu',
-    path: '/a/menu',
+    path: '/admin/menu',
     icon: <BookOpen size={24} />,
   },
   {
     title: 'Customers',
-    path: '/a/customers',
+    path: '/admin/customers',
     icon: <User size={24} />,
   },
   {
     title: 'Reservations',
-    path: '/a/reservations',
+    path: '/admin/reservations',
     icon: <CalendarCheck size={24} />,
   },
   {
@@ -40,17 +50,17 @@ export const SIDENAV_ITEMS: AdminSideNavItem[] = [
   },
   {
     title: 'Dine in',
-    path: '/a/orders/dine-in',
+    path: '/admin/orders/dine-in',
     icon: <Utensils size={24} />,
   },
   {
     title: 'Delivery',
-    path: '/a/orders/delivery',
+    path: '/admin/orders/delivery',
     icon: <Truck size={24} />,
   },
   {
     title: 'Invoice',
-    path: '/a/invoice',
+    path: '/admin/invoice',
     icon: <NotepadText size={24} />,
   },
 ];

@@ -13,4 +13,4 @@ export default function Home() {
 }
 
 
-// DAY LA HOME DAU TIEN
+// DAY LA HOME DAU TIEN dành cho khi người đó chưa đăng ký, đăng nhập

@@ -15,9 +15,9 @@ USE SushiXRestaurant;
 CREATE TABLE Account (
     username VARCHAR(50) NOT NULL,
     [password] NVARCHAR(MAX) NOT NULL,
-    account_type NVARCHAR(20) NOT NULL CHECK (account_type IN ('admin', 'manager', 'customer')),
+    account_type NVARCHAR(20) NOT NULL CHECK (account_type IN ('admin', 'manager', 'customer', 'staff')),
     account_status NVARCHAR(20) NOT NULL CHECK (account_status IN ('active', 'inactive')),
-    day_created DATETIME2 NOT NULL DEFAULT GETDATE(),
+    day_created DATETIME NOT NULL DEFAULT GETDATE(),
     PRIMARY KEY (username)
 );
 
@@ -28,7 +28,7 @@ CREATE TABLE Region (
 	region_name NVARCHAR(50) NOT NULL,
 	PRIMARY KEY (region_id)
 );
--- region
+-- branch
 GO
 CREATE TABLE Branch (
 	branch_id VARCHAR(10) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE Department (
     department_id INT IDENTITY(1, 1) NOT NULL,
     branch_id VARCHAR(10) NOT NULL,
     department_name NVARCHAR(50) NOT NULL 
-        CHECK (department_name IN ('Manager', 'Staff', 'Security', 'Chef')), -- Constraint on valid department names
+        CHECK (department_name IN ('manager', 'staff', 'security', 'chef')), -- Constraint on valid department names
     base_salary FLOAT NOT NULL,
     PRIMARY KEY (department_id),
     FOREIGN KEY (branch_id) REFERENCES Branch(branch_id)  -- Foreign key constraint
@@ -68,10 +68,11 @@ CREATE TABLE Department (
 -- Staff
 GO
 CREATE TABLE Staff (
-	staff_id INT IDENTITY(1, 1) NOT NULL,
+	staff_id INT IDENTITY(1, 1) NOT NULL UNIQUE,
     department_id INT NOT NULL,
 	staff_name NVARCHAR(50) NOT NULL,
 	birth_date DATE NOT NULL,
+	phone_number VARCHAR(10) NOT NULL UNIQUE,
 	gender NVARCHAR(10) NOT NULL CHECK (gender IN (N'male', N'female')),
 	salary FLOAT NOT NULL,
 	join_date DATE NOT NULL,

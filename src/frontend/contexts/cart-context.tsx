@@ -5,9 +5,10 @@ import * as React from "react";
 interface CartItem {
   id: string;
   name: string;
-  price: number; // Đổi kiểu dữ liệu từ string thành number để dễ tính toán
+  price: number;
+  image_url: string;
   quantity: number;
-  checked: boolean; // Trạng thái checkbox
+  checked: boolean;
 }
 
 interface CartContextType {
@@ -15,137 +16,87 @@ interface CartContextType {
   addItem: (item: Omit<CartItem, "quantity" | "checked">) => void;
   removeItem: (id: string) => void;
   clearCart: () => void;
-  toggleItem: (id: string, checked: boolean) => void; // Hàm toggle checkbox
-  updateQuantity: (id: string, quantity: number) => void; // Cập nhật số lượng
+  toggleItem: (id: string, checked: boolean) => void;
+  updateQuantity: (id: string, quantity: number) => void;
   itemCount: number;
-  totalAmount: number; // Tổng tiền
+  totalAmount: number;
 }
 
 const CartContext = React.createContext<CartContextType | undefined>(undefined);
 
-
-
-// export function CartProvider({ children }: { children: React.ReactNode }) {
-//   const [items, setItems] = React.useState<CartItem[]>([]);
-
-//   const addItem = React.useCallback((item: Omit<CartItem, "quantity" | "checked">) => {
-//     setItems((currentItems) => {
-//       const existingItem = currentItems.find((i) => i.id === item.id);
-//       if (existingItem) {
-//         return currentItems.map((i) =>
-//           i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-//         );
-//       }
-//       return [...currentItems, { ...item, quantity: 1, checked: false }];
-//     });
-//   }, []);
-
-//   const removeItem = React.useCallback((id: string) => {
-//     setItems((currentItems) => currentItems.filter((item) => item.id !== id));
-//   }, []);
-
-//   const clearCart = React.useCallback(() => {
-//     setItems([]);
-//   }, []);
-
-//   const toggleItem = React.useCallback((id: string, checked: boolean) => {
-//     setItems((currentItems) =>
-//       currentItems.map((item) =>
-//         item.id === id ? { ...item, checked } : item
-//       )
-//     );
-//   }, []);
-
-//   const updateQuantity = React.useCallback((id: string, quantity: number) => {
-//     setItems((currentItems) =>
-//       currentItems.map((item) =>
-//         item.id === id ? { ...item, quantity: Math.max(quantity, 1) } : item
-//       )
-//     );
-//   }, []);
-
-//   const itemCount = React.useMemo(() => {
-//     return items.reduce((total, item) => total + item.quantity, 0);
-//   }, [items]);
-
-//   const totalAmount = React.useMemo(() => {
-//     return items
-//       .filter((item) => item.checked) // Chỉ tính các item được chọn
-//       .reduce((total, item) => total + item.price * item.quantity, 0);
-//   }, [items]);
-
-//   return (
-//     <CartContext.Provider
-//       value={{
-//         items,
-//         addItem,
-//         removeItem,
-//         clearCart,
-//         toggleItem,
-//         updateQuantity,
-//         itemCount,
-//         totalAmount,
-//       }}
-//     >
-//       {children}
-//     </CartContext.Provider>
-//   );
-// }
-
-
-// testing
-
-
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = React.useState<CartItem[]>([
-    // Preloaded test items
-    {
-      id: "ST1",
-      name: "TRỨNG HẤP KIỂU NHẬT & TRỨNG CÁ HỒI",
-      price: 75000,
-      quantity: 1,
-      checked: true, // Default to selected
-    },
-    {
-      id: "ST2",
-      name: "TRỨNG HẤP KIỂU NHẬT VÀ LƯƠN NHẬT",
-      price: 39000,
-      quantity: 1,
-      checked: true,
-    },
-    {
-      id: "ST3",
-      name: "TRỨNG HẤP KIỂU NHẬT",
-      price: 32000,
-      quantity: 1,
-      checked: false, // Not selected by default
-    },
-  ]);
+  const [items, setItems] = React.useState<CartItem[]>([]);
+  
+  React.useEffect(() => {
+    // Only run on the client side
+    const loadCartFromLocalStorage = () => {
+      const savedCart = localStorage.getItem("cart");
+      return savedCart ? JSON.parse(savedCart) : [];
+    };
 
-  const addItem = React.useCallback((item: Omit<CartItem, "quantity" | "checked">) => {
-    setItems((currentItems) => {
-      const existingItem = currentItems.find((i) => i.id === item.id);
-      if (existingItem) {
-        return currentItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      }
-      return [...currentItems, { ...item, quantity: 1, checked: false }];
-    });
+    const savedItems = loadCartFromLocalStorage();
+    setItems(savedItems);
   }, []);
 
+  const syncCartToLocalStorage = (cart: CartItem[]) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  };
+
+  // const addItem = React.useCallback((item: Omit<CartItem, "quantity" | "checked">) => {
+  //   setItems((currentItems) => {
+  //     const existingItem = currentItems.find((i) => i.id === item.id);
+  //     const updatedItems = existingItem
+  //       ? currentItems.map((i) =>
+  //           i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+  //         )
+  //       : [...currentItems, { ...item, quantity: 1, checked: false }];
+      
+  //     syncCartToLocalStorage(updatedItems);
+  //     return updatedItems;
+  //   });
+  // }, []);
+
+  const addItem = React.useCallback(
+  (item: Omit<CartItem, "quantity" | "checked">, quantity: number = 1) => {
+    setItems((currentItems) => {
+      const existingItem = currentItems.find((i) => i.id === item.id);
+
+      const updatedItems = existingItem
+        ? currentItems.map((i) =>
+            i.id === item.id
+              ? { ...i, quantity: i.quantity + quantity } // Increment by the specified quantity
+              : i
+          )
+        : [...currentItems, { ...item, quantity, checked: false }]; // Add new item with specified quantity
+
+      syncCartToLocalStorage(updatedItems);
+      return updatedItems;
+    });
+  },
+  []
+);
+
+  
+
   const removeItem = React.useCallback((id: string) => {
-    setItems((currentItems) => currentItems.filter((item) => item.id !== id));
+    setItems((currentItems) => {
+      const updatedItems = currentItems.filter((item) => item.id !== id);
+      syncCartToLocalStorage(updatedItems);
+      return updatedItems;
+    });
   }, []);
 
   const clearCart = React.useCallback(() => {
     setItems([]);
+    syncCartToLocalStorage([]);
   }, []);
 
   const toggleItem = React.useCallback((id: string, checked: boolean) => {
     setItems((currentItems) =>
       currentItems.map((item) =>
-        item.id === id ? { ...item, checked } : item
+        item.id === id ? { ...item, checked: true } : item
       )
     );
   }, []);
@@ -164,7 +115,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const totalAmount = React.useMemo(() => {
     return items
-      .filter((item) => item.checked) // Only include selected items
+      .filter((item) => item.checked) // Filter selected items (those that are checked)
       .reduce((total, item) => total + item.price * item.quantity, 0);
   }, [items]);
 
@@ -193,5 +144,3 @@ export function useCart() {
   }
   return context;
 }
-
-

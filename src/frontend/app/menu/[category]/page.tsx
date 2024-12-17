@@ -1,6 +1,6 @@
 import { MenuSidebar } from "@/components/Menu/menu-sidebar";
 import { MenuGrid } from "@/components/Menu/menu-grid";
-import { SiteHeader } from "@/components/HomePage/site-header"
+import { CustomerHeader } from "@/components/CustomerPage/customer-header"
 import fs from "fs";
 import path from "path";
 
@@ -96,7 +96,7 @@ export default function CategoryPage({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <SiteHeader/>
+      <CustomerHeader/>
       <div className="flex flex-1">
         <MenuSidebar />
         <MenuGrid items={items} />

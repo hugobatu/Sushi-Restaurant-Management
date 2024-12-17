@@ -40,7 +40,7 @@ const TestCart = () => {
                   className="mr-2"
                 />
                 <img
-                src={`/starter/${item.id}.jpg`}
+                src={item.image_url} // URL từ dữ liệu mẫu
                 alt={item.name}
                 width={60}
                 height={60}
@@ -90,6 +90,24 @@ const TestCart = () => {
       {/* Total Amount */}
       <div className="text-right mt-6 text-lg font-semibold">
         Tổng cộng: <span className="text-orange-600">{totalAmount.toLocaleString()} đ</span>
+      {/* Create a button to redirect to reservation Page */}
+      <div className="text-right mt-6 text-lg font-semibold">
+        <button
+          className="px-4 py-2 bg-orange-600 text-white rounded"
+          onClick={() => {
+            if (totalAmount === 0) {
+              alert('Giỏ hàng của bạn chưa chọn sản phẩm. Vui lòng kiểm tra lại.');
+            } else {
+              const checkedItems = items.filter(item => item.checked);
+              localStorage.setItem('totalAmount', JSON.stringify(totalAmount));
+              localStorage.setItem('checkedItems', JSON.stringify(checkedItems));
+              window.location.href = '/reservation';
+            }
+          }}
+        >
+          Đặt chỗ
+        </button>
+      </div>
       </div>
     </div>
   );

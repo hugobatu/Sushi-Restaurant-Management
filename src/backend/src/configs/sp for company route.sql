@@ -19,12 +19,10 @@ BEGIN
             RAISERROR('Region already exists in the database.', 16, 1);
         END
 
-        -- generate region_id from the initials of the region_name
         DECLARE @new_region_id VARCHAR(10);
         SELECT @new_region_id = STRING_AGG(LEFT(value, 1), '')
         FROM STRING_SPLIT(@region_name, ' ');
 
-        -- check in case another region id has existed
         IF EXISTS (
             SELECT 1
             FROM Region
@@ -34,7 +32,6 @@ BEGIN
             RAISERROR('Region ID already exists in the database.', 16, 1);
         END
 
-        -- insert the new region
         INSERT INTO Region (region_id, region_name)
         VALUES (UPPER(@new_region_id), UPPER(@region_name));
 
@@ -47,7 +44,7 @@ BEGIN
 		BEGIN
 			ROLLBACK TRAN;
 		END
-        -- handle error
+
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
         DECLARE @ErrorState INT = ERROR_STATE();
@@ -106,7 +103,6 @@ BEGIN
         IF @@TRANCOUNT > 0
             ROLLBACK TRAN;
 
-        -- Handle the error
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
         DECLARE @ErrorState INT = ERROR_STATE();
@@ -115,6 +111,7 @@ BEGIN
     END CATCH
 END;
 GO
+
 -- 2. add a new branch
 GO
 CREATE OR ALTER PROC sp_add_new_branch
@@ -128,9 +125,18 @@ CREATE OR ALTER PROC sp_add_new_branch
     @has_car_parking_lot BIT
 AS
 BEGIN
-    BEGIN TRY		
+    BEGIN TRY
 		BEGIN TRAN
         -- check if region exists
+		IF EXISTS (
+			SELECT 1
+			FROM Branch
+			WHERE branch_name = @branch_name
+		)
+		BEGIN
+            RAISERROR('Region does not exist', 16, 1);
+        END
+		-- check if the branch already exists
         IF NOT EXISTS (
             SELECT 1
             FROM Region
@@ -139,7 +145,7 @@ BEGIN
         BEGIN
             RAISERROR('Region does not exist', 16, 1);
         END
-		
+
         -- generate new branch id
         DECLARE @new_branch_id VARCHAR(10);
         SELECT @new_branch_id = 'B' + RIGHT(
@@ -154,7 +160,7 @@ BEGIN
             has_bike_parking_lot, has_car_parking_lot
         )
         VALUES (
-            @new_branch_id, UPPER(@region_id), UPPER(@branch_name), @branch_address, 
+            @new_branch_id, UPPER(@region_id), UPPER(@branch_name), UPPER(@branch_address), 
             @opening_time, @closing_time, @phone_number,
             @has_bike_parking_lot, @has_car_parking_lot
         );
@@ -164,12 +170,12 @@ BEGIN
 		SELECT @new_branch_id, item_id, 1
 		FROM MenuItem
 		-- auto add table
-		EXEC sp_add_table @new_branch_id, @num_tables = 20, @capacity = 4
+		EXEC sp_add_table @new_branch_id, @num_tables = 30, @capacity = 4
 		INSERT INTO Department(branch_id, department_name, base_salary) VALUES
-		(@new_branch_id, 'Chef', 20000000),
-		(@new_branch_id, 'Manager', 18000000),
-		(@new_branch_id, 'Staff', 15000000),
-		(@new_branch_id, 'Security', 12000000)
+		(@new_branch_id, 'chef', 20000000),
+		(@new_branch_id, 'manager', 18000000),
+		(@new_branch_id, 'staff', 15000000),
+		(@new_branch_id, 'security', 12000000)
 		COMMIT TRAN
 		-- auto add Department
         PRINT 'Branch added successfully with ID: ' + @new_branch_id;
@@ -179,7 +185,6 @@ BEGIN
 		BEGIN
 			ROLLBACK TRAN;
 		END
-        -- handle and re-raise the error
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
         DECLARE @ErrorState INT = ERROR_STATE();
@@ -187,11 +192,15 @@ BEGIN
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
+
 -- 3. update branch status (working/closed/maintenance)
+
 GO
 CREATE OR ALTER PROC sp_update_branch_status
     @branch_id VARCHAR(10),
-    @new_status NVARCHAR(50)
+    @new_status NVARCHAR(50),
+	@has_bike_parking_lot BIT,
+	@has_car_parking_lot BIT
 AS
 BEGIN
     BEGIN TRY
@@ -210,10 +219,26 @@ BEGIN
         BEGIN
             RAISERROR('Invalid branch status provided.', 16, 1);
         END;
-
+		
+		IF EXISTS (
+			SELECT 1
+			FROM Branch
+			WHERE branch_id = @branch_id AND branch_status = LOWER(@new_status)
+		)
+		BEGIN
+			RAISERROR('Branch are already in this status', 16, 1);
+		END
         -- update the branch status
         UPDATE Branch
         SET branch_status = @new_status
+        WHERE branch_id = UPPER(@branch_id);
+		-- update has bike parking lot
+		UPDATE Branch
+        SET has_bike_parking_lot = @has_bike_parking_lot
+        WHERE branch_id = UPPER(@branch_id);
+		-- update has car parking lot
+		UPDATE Branch
+        SET has_car_parking_lot = @has_car_parking_lot
         WHERE branch_id = UPPER(@branch_id);
 
 		COMMIT TRAN
@@ -225,7 +250,7 @@ BEGIN
 		BEGIN
 			ROLLBACK TRAN;
 		END
-		-- bugs
+
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
         DECLARE @ErrorState INT = ERROR_STATE();
@@ -236,28 +261,29 @@ END;
 -- 4. get all branch information
 GO
 CREATE OR ALTER PROC sp_get_branches_data
-    @pageNumber INT,
-    @pageSize INT
+    @page_number INT,
+    @page_size INT
 AS
 BEGIN
     DECLARE @offset INT;
 
-    SET @offset = (@pageNumber - 1) * @pageSize;
+    SET @offset = (@page_number - 1) * @page_size;
 
     SELECT *
     FROM Branch
     ORDER BY branch_id
     OFFSET @offset ROWS
-    FETCH NEXT @pageSize ROWS ONLY;
+    FETCH NEXT @page_size ROWS ONLY;
 END
 
--- 5. add a new staff
-GO
+-- 5. add a new staff (ORM)
+/*GO
 CREATE OR ALTER PROCEDURE sp_add_staff
     @branch_id VARCHAR(10),
     @department_name NVARCHAR(50),
     @staff_name NVARCHAR(50),
     @birth_date DATE,
+	@phone_number VARCHAR(10),
     @gender NVARCHAR(10),
     @join_date DATE,
     @staff_status NVARCHAR(20) = N'active', -- default is 'active'
@@ -268,28 +294,55 @@ BEGIN
         BEGIN TRAN;
 
         -- Check if branch exists
-        IF NOT EXISTS (SELECT 1 FROM Branch WHERE branch_id = UPPER(@branch_id))
+        IF NOT EXISTS (
+			SELECT 1 
+			FROM Branch 
+			WHERE branch_id = UPPER(@branch_id)
+		)
         BEGIN
             RAISERROR('Branch does not exist.', 16, 1);
             RETURN;
         END;
 
         -- Check if department exists
-        IF NOT EXISTS (SELECT 1 
-                       FROM Department 
-                       WHERE department_name = UPPER(@department_name) 
-                         AND branch_id = @branch_id)
+        IF NOT EXISTS (
+			SELECT 1 
+			FROM Department 
+			WHERE department_name = UPPER(@department_name) AND branch_id = @branch_id)
         BEGIN
             RAISERROR('Department does not exist.', 16, 1);
             RETURN;
         END;
 
+		-- Check if the branch has manager already or not
+		IF (@department_name = 'manager')
+			BEGIN
+			IF EXISTS (
+				SELECT 1
+				FROM Staff S
+				JOIN Department D
+				ON D.department_id = S.department_id
+				WHERE D.department_name = @department_name AND D.branch_id = @branch_id
+			)
+			BEGIN
+				RAISERROR('There is only one manager in each branch', 16, 1)
+			END
+		END
         -- Validate gender
         IF LOWER(@gender) NOT IN (N'male', N'female')
         BEGIN
             RAISERROR('Invalid gender value. Use "male" or "female".', 16, 1);
             RETURN;
         END;
+
+		IF EXISTS (
+			SELECT 1
+			FROM Staff
+			WHERE phone_number = @phone_number
+		)
+		BEGIN
+			RAISERROR('This phone number is already used', 16, 1)
+		END
 
         -- Get base salary based on department
         DECLARE @salary FLOAT;
@@ -305,33 +358,18 @@ BEGIN
         WHERE DP.department_name = @department_name
           AND DP.branch_id = @branch_id;
 
-        ---- If the staff is a manager, generate and insert an account
-        --IF UPPER(@department_name) = 'MANAGER'
-        --BEGIN
-        --    -- Generate staff initials
-        --    DECLARE @staff_initials VARCHAR(10);
-        --    SELECT @staff_initials = STRING_AGG(LEFT(value, 1), '')
-        --    FROM STRING_SPLIT(UPPER(@staff_name), ' ');
+        -- If the staff is a manager, generate and insert an account
 
-        --    -- Handle duplicates
-        --    DECLARE @existing_count INT = (
-        --        SELECT COUNT(*)
-        --        FROM Account
-        --        WHERE username LIKE @staff_initials + '%'
-        --    );
+		
+		SET @username = @phone_number;
+        ELSE
+            SET @username = @staff_initials + CAST(@existing_count + 1 AS VARCHAR);
 
-        --    -- unique username
-        --    IF @existing_count = 0
-        --        SET @username = @staff_initials;
-        --    ELSE
-        --        SET @username = @staff_initials + CAST(@existing_count + 1 AS VARCHAR);
+        -- Insert into Account table
+        INSERT INTO Account (username, account_type, account_status)
+        VALUES (@username, 'manager', 'active');
 
-        --    -- Insert into Account table
-        --    INSERT INTO Account (username, account_type, account_status)
-        --    VALUES (@username, 'manager', 'active');
-        --END;
-
-        -- Insert new staff record
+        -- Insert new staff data
         INSERT INTO Staff (department_id, staff_name, birth_date, gender, salary, join_date, staff_status, username)
         VALUES (@department_id, UPPER(@staff_name), @birth_date, LOWER(@gender), @salary, @join_date, LOWER(@staff_status), @username);
 
@@ -357,53 +395,59 @@ BEGIN
 
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH;
-END;
+END; */
 
 -- 6. sa thải nhân viên
 GO
 CREATE OR ALTER PROCEDURE sp_fire_staff
-    @staff_id INT -- Assuming staff_id is INT, change to VARCHAR(10) if necessary
+    @staff_id INT -- Assuming staff_id is INT
 AS
 BEGIN
     BEGIN TRY
         BEGIN TRAN;
 
-        -- 1. Check existence
-        IF NOT EXISTS (
-            SELECT 1 
-            FROM Staff
-            WHERE staff_id = @staff_id
-        )
+        -- Check if the staff exists and is already fired
+        DECLARE @staff_status NVARCHAR(50);
+
+        SELECT @staff_status = staff_status
+        FROM Staff
+        WHERE staff_id = @staff_id;
+
+        IF @staff_status IS NULL
         BEGIN
             RAISERROR(N'This staff does not exist.', 16, 1);
             RETURN;
         END;
 
-        -- 2. Check if the staff has already been fired
-        IF EXISTS (
-            SELECT 1
-            FROM Staff
-            WHERE staff_id = @staff_id AND staff_status = N'resigned'
-        )
+        IF @staff_status = N'resigned'
         BEGIN
             RAISERROR(N'This staff has already been fired.', 16, 1);
             RETURN;
         END;
 
-        -- 3. Update staff status to 'resigned'
+        -- Update staff status to 'resigned'
         UPDATE Staff
         SET staff_status = N'resigned'
         WHERE staff_id = @staff_id;
 
-        -- 4. Update the latest work history record
+        -- Update the latest work history record
         UPDATE WorkHistory
         SET ending_date = GETDATE()
-        WHERE staff_id = @staff_id 
+        WHERE staff_id = @staff_id
           AND ending_date IS NULL;
+
+        -- Deactivate the associated account
+        UPDATE Account
+        SET account_status = 'inactive'
+        WHERE username = (
+            SELECT username
+            FROM Staff
+            WHERE staff_id = @staff_id
+        );
 
         COMMIT TRAN;
 
-        PRINT N'Firing successfully completed.';
+        PRINT N'Staff has been successfully fired.';
     END TRY
     BEGIN CATCH
         IF (@@TRANCOUNT > 0)
@@ -413,17 +457,16 @@ BEGIN
         DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
         DECLARE @ErrorState INT = ERROR_STATE();
 
-        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH;
 END;
 
-
--- 7. update salary for staff or deparment
+-- 7. update salary for staff or deparment	
 GO
 CREATE OR ALTER PROCEDURE sp_update_staff_salary
     @staff_id INT = NULL,              -- Staff ID (optional)
     @department_id VARCHAR(10) = NULL, -- Department ID (optional)
-    @increase_rate FLOAT = 0.1         -- Increase rate (default is 10%)
+    @increase_rate DECIMAL(5, 2)	   -- Increase rate (default is 10%)
 AS
 BEGIN
     BEGIN TRY
@@ -522,7 +565,7 @@ BEGIN
             WHERE branch_id = @new_branch_id
         )
         BEGIN
-            RAISERROR(N'Chi nhánh mới không tồn tại.', 16, 1);
+            RAISERROR(N'New staff is unriel.', 16, 1);
         END;
 
 		-- check existence of new department
@@ -532,9 +575,20 @@ BEGIN
             WHERE department_name = @new_department_name AND branch_id = @new_branch_id
         )
         BEGIN
-            RAISERROR(N'Phòng ban mới không tồn tại trong chi nhánh mới.', 16, 1);
+            RAISERROR(N'New department is unriel.', 16, 1);
         END;
 		
+		IF EXISTS (
+			SELECT 1
+			FROM Staff S
+			JOIN Department D
+			ON D.department_id = S.department_id
+			WHERE D.department_name = @new_department_name AND D.branch_id = @new_branch_id AND D.department_name = 'manager'
+		)
+		BEGIN
+            RAISERROR(N'There must be only one manager in each branch.', 16, 1);
+        END;
+
 		 -- Get the current department and branch of the staff
         DECLARE @current_department_id INT;
         DECLARE @current_branch_id VARCHAR(10);
@@ -597,21 +651,21 @@ END;
 GO
 CREATE OR ALTER PROC sp_get_staff_info
     @staff_name NVARCHAR(50) = NULL,
-    @pageNumber INT,
-    @pageSize INT
+    @page_number INT,
+    @page_size INT
 AS
 BEGIN
     BEGIN TRY
         DECLARE @offset INT;
 
-        SET @offset = (@pageNumber - 1) * @pageSize;
+        SET @offset = (@page_number - 1) * @page_size;
 
         SELECT *
         FROM Staff
         WHERE staff_name = @staff_name
         ORDER BY staff_id
         OFFSET @offset ROWS
-        FETCH NEXT @pageSize ROWS ONLY;
+        FETCH NEXT @page_size ROWS ONLY;
     END TRY
     BEGIN CATCH
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
@@ -625,14 +679,14 @@ GO
 -- 10. fetch branch rating:
 GO
 CREATE OR ALTER PROCEDURE sp_get_branch_ratings
-    @pageNumber INT,
-    @pageSize INT
+    @page_number INT,
+    @page_size INT
 AS
 BEGIN
     BEGIN TRY
         DECLARE @offset INT;
 
-        SET @offset = (@pageNumber - 1) * @pageSize;
+        SET @offset = (@page_number - 1) * @page_size;
 
         SELECT
             B.branch_name,
@@ -648,7 +702,7 @@ BEGIN
         GROUP BY B.branch_id, B.branch_name
         ORDER BY BranchRating DESC, TotalRatings DESC
         OFFSET @offset ROWS
-        FETCH NEXT @pageSize ROWS ONLY;
+        FETCH NEXT @page_size ROWS ONLY;
     END TRY
     BEGIN CATCH
         -- Handle errors
@@ -663,13 +717,13 @@ END
 -- 11. fetch staff rating
 GO
 CREATE OR ALTER PROCEDURE sp_get_staff_ratings
-    @pageNumber INT,
-    @pageSize INT
+    @page_number INT,
+    @page_size INT
 AS
 BEGIN
     BEGIN TRY
         DECLARE @offset INT;
-		SET @offset = (@pageNumber - 1) * @pageSize;
+		SET @offset = (@page_number - 1) * @page_size;
 
         SELECT
             S.staff_name,
@@ -680,7 +734,8 @@ BEGIN
         GROUP BY S.staff_id, S.staff_name
         ORDER BY StaffRating DESC, TotalRatings DESC
         OFFSET @offset ROWS
-        FETCH NEXT @pageSize ROWS ONLY;
+        FETCH NEXT @page_size ROWS ONLY;
+
     END TRY
     BEGIN CATCH
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
@@ -694,23 +749,23 @@ GO
 -- 12. fetch revenue by month, quarter, year of a branch
 GO
 CREATE OR ALTER PROCEDURE sp_get_branch_revenue_stats
-    @startDate DATETIME,
-    @endDate DATETIME,
-    @branchId INT = NULL,  -- null for all branch
-    @groupBy NVARCHAR(10)  -- 'day', 'month', 'quarter', 'year'
+    @start_date DATE,
+    @end_date DATE,
+    @branch_id INT = NULL,  -- null for all branch
+    @group_by NVARCHAR(10)  -- 'day', 'month', 'quarter', 'year'
 AS
 BEGIN
     BEGIN TRY
         DECLARE @dateFormat NVARCHAR(20);
 
         -- date format
-        IF @groupBy = 'day'
+        IF @group_by = 'day'
             SET @dateFormat = 'yyyy-MM-dd';
-        ELSE IF @groupBy = 'month'
+        ELSE IF @group_by = 'month'
             SET @dateFormat = 'yyyy-MM';
-        ELSE IF @groupBy = 'quarter'
+        ELSE IF @group_by = 'quarter'
             SET @dateFormat = 'yyyy-qq';
-        ELSE IF @groupBy = 'year'
+        ELSE IF @group_by = 'year'
             SET @dateFormat = 'yyyy';
         ELSE
             RAISERROR('Invalid groupBy parameter. Use "day", "month", "quarter", or "year".', 16, 1);
@@ -723,8 +778,8 @@ BEGIN
         FROM OrderDetails OD
         JOIN Orders O ON OD.order_id = O.order_id
         JOIN Branch B ON O.branch_id = B.branch_id
-        WHERE O.order_date BETWEEN @startDate AND @endDate
-            AND (@branchId IS NULL OR B.branch_id = @branchId)
+        WHERE O.order_date BETWEEN @start_date AND @end_date
+            AND (@branch_id IS NULL OR B.branch_id = @branch_id)
         GROUP BY B.branch_name, FORMAT(O.order_date, @dateFormat)
         ORDER BY Period;
 
@@ -740,9 +795,9 @@ END;
 -- 13. sales stats by each menu item
 GO
 CREATE OR ALTER PROCEDURE sp_get_menu_sales_stats
-    @startDate DATETIME,
-    @endDate DATETIME,
-    @branchId INT = NULL,  -- null for all
+    @start_date DATE,
+    @end_date DATE,
+    @branch_id INT = NULL,  -- null for all
     @regionId INT = NULL   -- null for all
 AS
 BEGIN
@@ -756,8 +811,8 @@ BEGIN
         JOIN Orders O ON OD.order_id = O.order_id
         JOIN MenuItems MI ON OD.menu_item_id = MI.menu_item_id
         JOIN Branch B ON O.branch_id = B.branch_id
-        WHERE O.order_date BETWEEN @startDate AND @endDate
-            AND (@branchId IS NULL OR B.branch_id = @branchId)
+        WHERE O.order_date BETWEEN @start_date AND @end_date
+            AND (@branch_id IS NULL OR B.branch_id = @branch_id)
             AND (@regionId IS NULL OR B.region_id = @regionId)
         GROUP BY MI.menu_item_name
         ORDER BY TotalRevenue DESC;
@@ -771,8 +826,8 @@ BEGIN
         JOIN Orders O ON OD.order_id = O.order_id
         JOIN MenuItems MI ON OD.menu_item_id = MI.menu_item_id
         JOIN Branch B ON O.branch_id = B.branch_id
-        WHERE O.order_date BETWEEN @startDate AND @endDate
-            AND (@branchId IS NULL OR B.branch_id = @branchId)
+        WHERE O.order_date BETWEEN @start_date AND @end_date
+            AND (@branch_id IS NULL OR B.branch_id = @branch_id)
             AND (@regionId IS NULL OR B.region_id = @regionId)
         GROUP BY MI.menu_item_name
         ORDER BY TotalRevenue ASC;
@@ -786,7 +841,3 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
-
-
-SELECT * FROM Account
-SELECT * FROM Customer

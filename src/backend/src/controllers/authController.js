@@ -143,7 +143,12 @@ exports.login = async (req, res) => {
         }
 
         const account = result.recordset[0];
-
+        if (account.account_status === 'inactive'){
+            return res.status(401).json({
+                success: false,
+                message: 'This account is not active anymore.'
+            })
+        }
         // Compare password with hashed password
         const isMatch = await bcrypt.compare(password, account.password);
 
@@ -152,13 +157,22 @@ exports.login = async (req, res) => {
         }
 
         // Generate JWT token
+        // từ đây để làm tiếp phần phân quyền cho bên FE (trong discord)
         const token = jwt.sign(
             { username: account.username, role: account.account_type },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );
 
-        res.status(200).json({ token, message: 'Login successful.' });
+        console.log("Generated token: ", token);
+        console.log("Role: ", token.role);
+
+        res.status(200).json({
+            token,
+            role: account.account_type, // Ensure role is sent here
+            username: account.username,
+            message: 'Login successful.',
+          });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error.' });
