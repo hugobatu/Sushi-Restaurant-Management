@@ -11,6 +11,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import Cookies from "js-cookie";
 
 export function CustomerHeader() {
   const { itemCount } = useCart();
@@ -110,16 +111,22 @@ export function CustomerHeader() {
             {/* User Section */}
             <div className="flex items-center space-x-4">
             <span className="text-lg italic">{username ? username : "Khách hàng"}</span>
+
             <Button
               className="bg-black hover:bg-gray-800"
               onClick={() => {
-              localStorage.removeItem("token");
-              setUsername(null);
-              window.location.href = "/";
+                // Remove token and cookies
+                localStorage.removeItem("token");
+                Cookies.remove("username"); // Remove username cookie
+                Cookies.remove("role"); // Remove role cookie
+                Cookies.remove("token"); // Remove token cookie
+                setUsername(null);
+                window.location.href = "/";
               }}
             >
               ĐĂNG XUẤT
             </Button>
+
             </div>
 
         </div>

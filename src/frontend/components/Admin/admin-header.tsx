@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
@@ -11,6 +11,7 @@ import { cn } from '../../lib/utils';
 export function AdminHeader() {
   const scrolled = useScroll(5);
   const selectedLayout = useSelectedLayoutSegment();
+  const [username, setUsername] = useState<string | null>(null);
 
   return (
     <div className="sticky inset-x-0 top-0 z-30 h-12 w-full bg-black">
@@ -24,10 +25,19 @@ export function AdminHeader() {
         </div>
         <div className="relative h-full w-full">
           <div className="absolute right-20 top-1">
-            <Button className="bg-black hover:bg-gray-800 text-white">Log out</Button>
+          <Button
+              className="bg-black hover:bg-gray-800"
+              onClick={() => {
+              localStorage.removeItem("token");
+              setUsername(null);
+              window.location.href = "/";
+              }}
+            >
+              ĐĂNG XUẤT
+            </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
   );
 };
