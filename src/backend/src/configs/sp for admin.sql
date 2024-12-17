@@ -111,7 +111,6 @@ BEGIN
     END CATCH
 END;
 GO
-
 -- 2. add a new branch
 GO
 CREATE OR ALTER PROC sp_add_new_branch
@@ -192,9 +191,7 @@ BEGIN
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
-
 -- 3. update branch status (working/closed/maintenance)
-
 GO
 CREATE OR ALTER PROC sp_update_branch_status
     @branch_id VARCHAR(10),
@@ -275,7 +272,6 @@ BEGIN
     OFFSET @offset ROWS
     FETCH NEXT @page_size ROWS ONLY;
 END
-
 -- 5. add a new staff (ORM)
 /*GO
 CREATE OR ALTER PROCEDURE sp_add_staff
@@ -465,8 +461,7 @@ END;
 GO
 CREATE OR ALTER PROCEDURE sp_update_staff_salary
     @staff_id INT = NULL,              -- Staff ID (optional)
-    @department_id VARCHAR(10) = NULL, -- Department ID (optional)
-    @increase_rate DECIMAL(5, 2)	   -- Increase rate (default is 10%)
+    @increase_rate FLOAT	   -- Increase rate (default is 10%)
 AS
 BEGIN
     BEGIN TRY
@@ -498,26 +493,6 @@ BEGIN
             UPDATE Staff
             SET salary = salary * (1 + @increase_rate)
             WHERE staff_id = @staff_id;
-        END
-
-        -- Update salary for all staff in a department
-        IF @department_id IS NOT NULL
-        BEGIN
-            -- Check if the department exists
-            IF NOT EXISTS (
-                SELECT 1 
-                FROM Department 
-                WHERE department_id = @department_id
-            )
-            BEGIN
-                RAISERROR(N'This department does not exist.', 16, 1);
-                RETURN;
-            END
-
-            -- Update salary for active staff in the department
-            UPDATE Staff
-            SET salary = salary * (1 + @increase_rate)
-            WHERE department_id = @department_id AND staff_status = N'active';
         END
 
         -- Commit transaction
@@ -565,7 +540,7 @@ BEGIN
             WHERE branch_id = @new_branch_id
         )
         BEGIN
-            RAISERROR(N'New staff is unriel.', 16, 1);
+            RAISERROR(N'This branch is unriel.', 16, 1);
         END;
 
 		-- check existence of new department

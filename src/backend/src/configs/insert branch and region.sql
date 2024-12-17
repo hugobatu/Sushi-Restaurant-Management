@@ -18,6 +18,13 @@ EXEC sp_add_region N'Nha Trang'
 EXEC sp_add_region N'Đà Nẵng'
 EXEC sp_add_region N'Hà Nội'
 
+-- Kiểm tra menu của chi nhánh B002
+SELECT * FROM BranchMenuItem WHERE branch_id = 'B002'
+
+-- Kiểm tra nhân viên của chi nhánh B002
+SELECT * FROM Staff JOIN Department ON Department.department_id = Staff.department_id AND Department.branch_id = 'B001'
+SELECT * FROM Staff JOIN Department ON Department.department_id = Staff.department_id AND Department.branch_id = 'B002'
+
 -- Gọi stored procedure để thêm nhân viên chi nhánh vào bảng Branch
 EXEC sp_add_new_branch
     @region_id = 'TPHCM', 

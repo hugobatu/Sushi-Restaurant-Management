@@ -28,7 +28,6 @@ exports.addRegion = async (req, res) => {
         });
     }
 };
-
 // 2.
 exports.addBranch = async (req, res) => {
     const {
@@ -121,7 +120,10 @@ exports.updateBranch = async (req, res) => {
 }
 // 4.
 exports.getBranches = async (req, res) => {
-    const { page_number = 1, page_size = 5 } = req.body; // Default values
+    const {
+        page_number,
+        page_size
+    } = req.body
     try {
         const pool = await con;
         const result = await pool.request()
@@ -151,7 +153,6 @@ exports.getBranches = async (req, res) => {
         });
     }
 };
-
 // 5.
 exports.addStaff = async (req, res) => {
     const {
@@ -383,6 +384,7 @@ exports.transferStaff = async (req, res) => {
         new_department_name
     } = req.body;
     try {
+        console.log(new_branch_id);
         const pool = await con;
         const result = await pool.request()
             .input('staff_id', sql.Int, staff_id)
@@ -415,7 +417,7 @@ exports.getStaffByName = async (req, res) => {
             .input('staff_name', sql.NVarChar(50), staff_name)
             .input('page_number', sql.Int, page_number)
             .input('page_size', sql.Int, page_size)
-            .query('EXEC get_staff_info @staff_name, @page_number, @page_size')
+            .query('EXEC sp_get_staff_info @staff_name, @page_number, @page_size')
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
@@ -443,14 +445,14 @@ exports.getBranchRating = async (req, res) => {
     const {
         page_number,
         page_size
-    } = req.query;
+    } = req.body;
     try {
         const pool = await con;
 
         const result = await pool.request()
             .input('page_number', sql.Int, page_number)
             .input('page_size', sql.Int, page_size)
-            .execute('sp_get_branch_ratings @page_number, @page_size');
+            .query(`EXEC sp_get_branch_ratings @page_number, @page_size`);
 
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
@@ -467,7 +469,7 @@ exports.getBranchRating = async (req, res) => {
             },
         });
     } catch (error) {
-        console.error('Error fetching branch ratings', error.message);
+        console.error('Error fetching branch ratings:', error.message);
 
         res.status(500).json({
             success: false,
@@ -483,10 +485,11 @@ exports.getStaffRating = async (req, res) => {
         page_size
     } = req.body;
     try {
+        const pool = await con;
         const result = await pool.request()
             .input('page_number', sql.Int, page_number)
             .input('page_size', sql.Int, page_size)
-            .execute('sp_get_staff_ratings @page_number, @page_size');
+            .execute('sp_get_staff_ratings');
 
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
@@ -517,14 +520,17 @@ exports.getSales = async (req, res) => {
     const {
         start_date,
         end_date,
+        branch_id,
         group_by // day, month, quarter, year
     } = req.body;
     try {
+        const pool = await con;
         const result = await pool.request()
             .input('start_date', sql.Date, start_date)
             .input('end_date', sql.Date, end_date)
+            .input('branch_id', sql.VarChar(10), branch_id)
             .input('group_by', sql.NVarChar(10), group_by)
-            .execute('sp_get_branch_revenue_stats @start_date, @end_date, @group_by');
+            .execute('sp_get_branch_revenue_stats');
 
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
