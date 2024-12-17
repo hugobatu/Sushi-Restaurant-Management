@@ -533,15 +533,6 @@ BEGIN
         BEGIN
             RAISERROR(N'This staff is unriel or has resigned.', 16, 1);
         END;
-		-- check existence of new branch
-        IF NOT EXISTS (
-            SELECT 1 
-            FROM Branch 
-            WHERE branch_id = @new_branch_id
-        )
-        BEGIN
-            RAISERROR(N'This branch is unriel.', 16, 1);
-        END;
 
 		-- check existence of new department
         IF NOT EXISTS (
@@ -550,7 +541,7 @@ BEGIN
             WHERE department_name = @new_department_name AND branch_id = @new_branch_id
         )
         BEGIN
-            RAISERROR(N'New department is unriel.', 16, 1);
+            RAISERROR(N'New department or branch is unriel.', 16, 1);
         END;
 		
 		IF EXISTS (
@@ -608,7 +599,7 @@ BEGIN
 
         COMMIT TRAN;
 
-        PRINT N'Chuyển công tác thành công cho nhân viên ID: ' + CAST(@staff_id AS INT);
+        PRINT N'Chuyển công tác thành công cho nhân viên ID: ' + CAST(@staff_id AS VARCHAR(10));
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0
@@ -688,7 +679,7 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END
-
+EXEC sp_get_branch_ratings 1, 10
 -- 11. fetch staff rating
 GO
 CREATE OR ALTER PROCEDURE sp_get_staff_ratings
@@ -726,7 +717,7 @@ GO
 CREATE OR ALTER PROCEDURE sp_get_branch_revenue_stats
     @start_date DATE,
     @end_date DATE,
-    @branch_id INT = NULL,  -- null for all branch
+    @branch_id VARCHAR(10) = NULL,  -- null for all branch
     @group_by NVARCHAR(10)  -- 'day', 'month', 'quarter', 'year'
 AS
 BEGIN
@@ -747,15 +738,15 @@ BEGIN
 
         SELECT 
             B.branch_name,
-            FORMAT(O.order_date, @dateFormat) AS Period,
-            SUM(OD.quantity * OD.price) AS TotalRevenue,
+            FORMAT(O.order_datetime, @dateFormat) AS Period,
+            SUM(OD.quantity * OD.unit_price) AS TotalRevenue,
             COUNT(O.order_id) AS TotalOrders
         FROM OrderDetails OD
-        JOIN Orders O ON OD.order_id = O.order_id
+        JOIN [Order] O ON OD.order_id = O.order_id
         JOIN Branch B ON O.branch_id = B.branch_id
-        WHERE O.order_date BETWEEN @start_date AND @end_date
+        WHERE O.order_datetime BETWEEN @start_date AND @end_date
             AND (@branch_id IS NULL OR B.branch_id = @branch_id)
-        GROUP BY B.branch_name, FORMAT(O.order_date, @dateFormat)
+        GROUP BY B.branch_name, FORMAT(O.order_datetime, @dateFormat)
         ORDER BY Period;
 
     END TRY
@@ -772,23 +763,23 @@ GO
 CREATE OR ALTER PROCEDURE sp_get_menu_sales_stats
     @start_date DATE,
     @end_date DATE,
-    @branch_id INT = NULL,  -- null for all
-    @regionId INT = NULL   -- null for all
+    @branch_id VARCHAR(10) = NULL,  -- null for all
+    @region_id VARCHAR(10) = NULL   -- null for all
 AS
 BEGIN
     BEGIN TRY
         -- top 1 sale
         SELECT TOP 1
-            MI.menu_item_name,
-            SUM(OD.quantity * OD.price) AS TotalRevenue,
+            MI.item_name,
+            SUM(OD.quantity * OD.unit_price) AS TotalRevenue,
             SUM(OD.quantity) AS TotalQuantitySold
         FROM OrderDetails OD
-        JOIN Orders O ON OD.order_id = O.order_id
-        JOIN MenuItems MI ON OD.menu_item_id = MI.menu_item_id
+        JOIN [Order] O ON OD.order_id = O.order_id
+        JOIN MenuItem MI ON OD.menu_item_id = MI.menu_item_id
         JOIN Branch B ON O.branch_id = B.branch_id
-        WHERE O.order_date BETWEEN @start_date AND @end_date
+        WHERE O.order_datetime BETWEEN @start_date AND @end_date
             AND (@branch_id IS NULL OR B.branch_id = @branch_id)
-            AND (@regionId IS NULL OR B.region_id = @regionId)
+            AND (@region_id IS NULL OR B.region_id = @region_id)
         GROUP BY MI.menu_item_name
         ORDER BY TotalRevenue DESC;
 
@@ -798,12 +789,12 @@ BEGIN
             SUM(OD.quantity * OD.price) AS TotalRevenue,
             SUM(OD.quantity) AS TotalQuantitySold
         FROM OrderDetails OD
-        JOIN Orders O ON OD.order_id = O.order_id
+        JOIN [Order] O ON OD.order_id = O.order_id
         JOIN MenuItems MI ON OD.menu_item_id = MI.menu_item_id
         JOIN Branch B ON O.branch_id = B.branch_id
-        WHERE O.order_date BETWEEN @start_date AND @end_date
+        WHERE O.order_datetime BETWEEN @start_date AND @end_date
             AND (@branch_id IS NULL OR B.branch_id = @branch_id)
-            AND (@regionId IS NULL OR B.region_id = @regionId)
+            AND (@region_id IS NULL OR B.region_id = @region_id)
         GROUP BY MI.menu_item_name
         ORDER BY TotalRevenue ASC;
 
