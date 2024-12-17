@@ -12,6 +12,8 @@ const BranchPage = () => {
     branch_address: string;
     phone_number: string;
     branch_status: string;
+    has_bike_parking_lot: boolean;
+    has_car_parking_lot: boolean;
   }
 
   const [branches, setBranches] = useState<Branch[]>([]);
@@ -337,6 +339,8 @@ const BranchPage = () => {
                 <th className="border p-2">Address</th>
                 <th className="border p-2">Phone</th>
                 <th className="border p-2">Status</th>
+                <th className="border p-2">Bike Parking Lot</th>
+                <th className="border p-2">Car Parking Lot</th>
               </tr>
             </thead>
             <tbody>
@@ -349,6 +353,9 @@ const BranchPage = () => {
                     <td className="border p-2">{branch.branch_address}</td>
                     <td className="border p-2">{branch.phone_number}</td>
                     <td className="border p-2">{branch.branch_status}</td>
+                    <td className="border p-2">{branch.has_bike_parking_lot ? "Yes" : "No"}</td>
+                    <td className="border p-2">{branch.has_car_parking_lot ? "Yes" : "No"}</td>
+
                   </tr>
                 ))
               ) : (
