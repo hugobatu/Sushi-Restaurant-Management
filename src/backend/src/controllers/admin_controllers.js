@@ -118,11 +118,11 @@ exports.updateBranch = async (req, res) => {
         });
     }
 }
-// 4.
+// 4. sửa số trong get
 exports.getBranches = async (req, res) => {
     const {
-        page_number,
-        page_size
+        page_number = 1,
+        page_size = 1000
     } = req.body
     try {
         const pool = await con;
