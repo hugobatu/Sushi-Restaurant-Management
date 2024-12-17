@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AdminSideNavItem } from './admin-item';
-import { House, Users, BookOpen, User, CalendarCheck, List, Utensils, Truck, NotepadText, MapPin, Building } from 'lucide-react';
+import { House, Users, BookOpen, User, CalendarCheck, List, Utensils, Truck, NotepadText, MapPin, Building, Star } from 'lucide-react';
 
 export const SIDENAV_ITEMS: AdminSideNavItem[] = [
   {
@@ -27,6 +27,11 @@ export const SIDENAV_ITEMS: AdminSideNavItem[] = [
     title: 'Staffs',
     path: '/admin/staffs',
     icon: <Users size={24} />,
+  },
+  {
+    title: 'Rating',
+    path: '/admin/rating',
+    icon: <Star size={24} />
   },
   {
     title: 'Menu',

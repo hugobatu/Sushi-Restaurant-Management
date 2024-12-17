@@ -440,11 +440,12 @@ exports.getStaffByName = async (req, res) => {
         });
     }
 };
+
 // 10.
 exports.getBranchRating = async (req, res) => {
     const {
-        page_number,
-        page_size
+        page_number = 1,
+        page_size = 1000
     } = req.body;
     try {
         const pool = await con;
@@ -481,8 +482,8 @@ exports.getBranchRating = async (req, res) => {
 // 11.
 exports.getStaffRating = async (req, res) => {
     const {
-        page_number,
-        page_size
+        page_number = 1,
+        page_size = 1000
     } = req.body;
     try {
         const pool = await con;
