@@ -1,8 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
 const cors = require('cors');
-const authController = require('./src/controllers/authController');
-const companyRoutes = require('./src/routes/companyRoutes');
+const authController = require('./src/controllers/auth_controllers');
+const admin_routes = require('./src/routes/admin_routes');
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.post('/signup', authController.signup);
 app.post('/login', authController.login);
-app.use('/company', companyRoutes); // Company API
+app.use('/company', admin_routes); // Company API
 
 // Server Initialization
 const port = process.env.PORT || 8000;

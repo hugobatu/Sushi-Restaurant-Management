@@ -41,13 +41,13 @@ exports.signup = async (req, res) => {
 
         // hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
         if (isExistingCustomer) {
             const customer = customerResult.recordset[0];
             // check if customer already has an account linked
             if (customer.username != null) {
-                return res.status(400).json({ 
-                    success: false, 
+                return res.status(400).json({
+                    success: false,
                     message: 'Customer already has an account.'
                 });
             }
@@ -69,7 +69,7 @@ exports.signup = async (req, res) => {
 
             return res.status(201).json({
                 success: true,
-                username: username, 
+                username: username,
                 message: 'Account created and linked to existing customer.',
                 result: result
             });
@@ -88,7 +88,7 @@ exports.signup = async (req, res) => {
                 `);
 
             const customerId = customer.recordset[0].customer_id;
-                        
+
             // create a new account linked to the customer
             const result = await pool.request()
                 .input('username', sql.VarChar(50), username)
@@ -104,7 +104,7 @@ exports.signup = async (req, res) => {
                     SET username = @username
                     WHERE customer_id = @customer_id
                 `);
-            
+
             return res.status(201).json({
                 success: true,
                 username: username,
@@ -132,7 +132,7 @@ exports.login = async (req, res) => {
 
     try {
         const pool = await con;
-        
+
         // Fetch user from the database
         const result = await pool.request()
             .input('username', sql.VarChar(50), username)
@@ -143,12 +143,15 @@ exports.login = async (req, res) => {
         }
 
         const account = result.recordset[0];
-        if (account.account_status === 'inactive'){
+
+        // Check account status
+        if (account.account_status === 'inactive') {
             return res.status(401).json({
                 success: false,
-                message: 'This account is not active anymore.'
-            })
+                message: 'This account is not active anymore.',
+            });
         }
+
         // Compare password with hashed password
         const isMatch = await bcrypt.compare(password, account.password);
 
@@ -156,25 +159,52 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid credentials.' });
         }
 
+        // Get user ID based on account type
+        let userId = null;
+        if (account.account_type === 'customer') {
+            const userResult = await pool.request()
+                .input('username', sql.VarChar(50), username)
+                .query(`
+                    SELECT customer_id
+                    FROM Customer
+                    WHERE username = @username;
+                `);
+            userId = userResult.recordset[0]?.customer_id || null;
+        } else if (account.account_type === 'manager') {
+            const userResult = await pool.request()
+                .input('username', sql.VarChar(50), username)
+                .query(`
+                    SELECT staff_id
+                    FROM Staff
+                    WHERE username = @username;
+                `);
+            userId = userResult.recordset[0]?.staff_id || null;
+        }
+
+        // If user ID is not found, throw an error
+        if (!userId) {
+            console.log('This is admin account');
+        }
+
         // Generate JWT token
-        // từ đây để làm tiếp phần phân quyền cho bên FE (trong discord)
         const token = jwt.sign(
-            { username: account.username, role: account.account_type },
+            { username: account.username, role: account.account_type, user_id: userId },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );
 
-        console.log("Generated token: ", token);
-        console.log("Role: ", token.role);
+        console.log('Generated token:', token);
 
         res.status(200).json({
+            success: true,
             token,
-            role: account.account_type, // Ensure role is sent here
+            role: account.account_type,
+            user_id: userId,
             username: account.username,
             message: 'Login successful.',
-          });
+        });
     } catch (error) {
-        console.error(error);
+        console.error('Error during login:', error);
         res.status(500).json({ message: 'Server error.' });
     }
 };
