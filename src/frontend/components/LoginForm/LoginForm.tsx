@@ -152,6 +152,7 @@ const LoginForm = () => {
       console.log("Login Response:", data); 
       console.log("data role: ", data.role);
       console.log("data username:", data.username);
+      console.log("user_id: ",data.user_id);
 
       if (response.ok) {
         setMessage("Login successful!");
@@ -162,7 +163,8 @@ const LoginForm = () => {
         Cookies.set("username", data.username, { expires: 7 }); // Expires in 7 days
         Cookies.set("role", data.role, { expires: 7 });
         Cookies.set("token", data.token, { expires: 7 });
-
+        Cookies.set("user_id", data.user_id, { expires: 7 });
+        
         // Redirect based on role
         if (data.role === "customer") {
           router.push("/customer");

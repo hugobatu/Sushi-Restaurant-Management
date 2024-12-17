@@ -117,7 +117,12 @@ export function CustomerHeader() {
               onClick={() => {
                 // Remove token and cookies
                 localStorage.removeItem("token");
+                localStorage.removeItem("cart");
+                localStorage.removeItem("checkedItems");
+                localStorage.removeItem("totalAmount");
+
                 Cookies.remove("username"); // Remove username cookie
+                Cookies.remove("usser_id");
                 Cookies.remove("role"); // Remove role cookie
                 Cookies.remove("token"); // Remove token cookie
                 setUsername(null);

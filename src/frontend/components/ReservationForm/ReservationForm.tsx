@@ -224,6 +224,7 @@ const ReservationForm = () => {
             const role = cookies.split('; ').find(row => row.startsWith('role='))?.split('=')[1];
             const token = cookies.split('; ').find(row => row.startsWith('token='))?.split('=')[1];
             const username = cookies.split('; ').find(row => row.startsWith('username='))?.split('=')[1];
+            const user_id = cookies.split('; ').find(row => row.startsWith('user_id='))?.split('=')[1];
 
             const checkedItems = JSON.parse(localStorage.getItem('checkedItems') || '[]');
             const formattedCheckedItems = checkedItems.map((item: { id: string, name: string, price: number, quantity: number }) => `ID: ${item.id}, Name: ${item.name}, Price: ${item.price}, Quantity: ${item.quantity}`).join('\n');
@@ -233,10 +234,11 @@ const ReservationForm = () => {
             console.log("Role:", role);
             console.log("Token:", token);
             console.log("User Name:", username);
+            console.log("user_id: ", user_id);
             console.log("Checked Items:", formattedCheckedItems);
             console.log("Total Amount:", totalAmount);
 
-            alert(`Form Data:\nUsername: ${username}\nRole: ${role}\nGuests: ${formData.guests}\nDate: ${formData.date}\nTime: ${formData.time}\nToken: ${token}\nChecked Items:\n${formattedCheckedItems}\nTotal Amount: ${totalAmount}`);
+            alert(`Form Data:\nUsername: ${username}\nuser_id: ${user_id}\nRole: ${role}\nGuests: ${formData.guests}\nDate: ${formData.date}\nTime: ${formData.time}\nToken: ${token}\nChecked Items:\n${formattedCheckedItems}\nTotal Amount: ${totalAmount}`);
           }}
         >
           Gửi

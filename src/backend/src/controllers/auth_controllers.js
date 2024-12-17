@@ -194,6 +194,7 @@ exports.login = async (req, res) => {
         );
 
         console.log('Generated token:', token);
+        console.log('User ID:', userId);
 
         res.status(200).json({
             success: true,
