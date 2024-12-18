@@ -11,6 +11,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import Cookies from "js-cookie";
 
 export function StaffHeader() {
   const { itemCount } = useCart();
@@ -109,10 +110,29 @@ export function StaffHeader() {
 
           {/* User Section */}
           <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium">Xin chào,</span>
             <span className="text-sm font-bold">
               {username ? username : "Staff"}
             </span>
+
+            <Button
+              className="bg-black hover:bg-gray-800"
+              onClick={() => {
+                // Remove token and cookies
+                localStorage.removeItem("token");
+                localStorage.removeItem("cart");
+                localStorage.removeItem("checkedItems");
+                localStorage.removeItem("totalAmount");
+
+                Cookies.remove("username"); // Remove username cookie
+                Cookies.remove("usser_id");
+                Cookies.remove("role"); // Remove role cookie
+                Cookies.remove("token"); // Remove token cookie
+                setUsername(null);
+                window.location.href = "/";
+              }}
+            >
+              ĐĂNG XUẤT
+            </Button>
           </div>
         </div>
       </div>

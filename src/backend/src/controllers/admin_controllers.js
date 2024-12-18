@@ -118,11 +118,11 @@ exports.updateBranch = async (req, res) => {
         });
     }
 }
-// 4.
+// 4. sửa số trong get
 exports.getBranches = async (req, res) => {
     const {
-        page_number,
-        page_size
+        page_number = 1,
+        page_size = 1000
     } = req.body
     try {
         const pool = await con;
@@ -440,11 +440,12 @@ exports.getStaffByName = async (req, res) => {
         });
     }
 };
+
 // 10.
 exports.getBranchRating = async (req, res) => {
     const {
-        page_number,
-        page_size
+        page_number = 1,
+        page_size = 1000
     } = req.body;
     try {
         const pool = await con;
@@ -481,8 +482,8 @@ exports.getBranchRating = async (req, res) => {
 // 11.
 exports.getStaffRating = async (req, res) => {
     const {
-        page_number,
-        page_size
+        page_number = 1,
+        page_size = 1000
     } = req.body;
     try {
         const pool = await con;
@@ -526,8 +527,8 @@ exports.getSales = async (req, res) => {
     try {
         const pool = await con;
         const result = await pool.request()
-            .input('start_date', sql.Date, start_date)
-            .input('end_date', sql.Date, end_date)
+            .input('start_date', sql.VarChar(10), start_date)
+            .input('end_date', sql.VarChar(10), end_date)
             .input('branch_id', sql.VarChar(10), branch_id)
             .input('group_by', sql.NVarChar(10), group_by)
             .execute('sp_get_branch_revenue_stats');
@@ -561,12 +562,17 @@ exports.getItemSalesStats = async (req, res) => {
     const {
         start_date,
         end_date,
+        branch_id,
+        region_id
     } = req.body;
     try {
+        const pool = await con;
         const result = await pool.request()
             .input('start_date', sql.Date, start_date)
             .input('end_date', sql.Date, end_date)
-            .execute('sp_get_branch_revenue_stats @start_date, @end_date');
+            .input('branch_id', sql.VarChar(10), branch_id)
+            .input('region_id', sql.VarChar(10), region_id)
+            .execute('sp_get_menu_sales_stats');
 
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
