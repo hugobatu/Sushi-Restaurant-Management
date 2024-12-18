@@ -9,11 +9,6 @@ import { House, Users, BookOpen, User, CalendarCheck, List, Utensils, Truck, Not
 
 export const SIDENAV_ITEMS: AdminSideNavItem[] = [
   {
-    title: 'Dashboard',
-    path: '/admin/dashboard',
-    icon: <House size={24} />,
-  },
-  {
     title: 'Region',
     path: '/admin/region',
     icon: <MapPin size={24} />,
@@ -49,8 +44,8 @@ export const SIDENAV_ITEMS: AdminSideNavItem[] = [
     icon: <List size={24} />,
   },
   {
-    title: 'Dine in',
-    path: '/admin/orders/dine-in',
+    title: 'Direct service',
+    path: '/admin/orders/direct-service',
     icon: <Utensils size={24} />,
   },
   {
