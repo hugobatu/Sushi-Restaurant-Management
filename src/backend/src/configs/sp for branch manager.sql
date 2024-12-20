@@ -245,7 +245,6 @@ BEGIN
 END;
 
 -- 4.4 Thêm món ăn vào trong MenuItem
-
 --SELECT * FROM MenuItem;
 GO
 CREATE OR ALTER PROCEDURE sp_add_menu_item

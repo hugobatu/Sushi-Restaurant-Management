@@ -1,216 +1,126 @@
-const db = require('../configs/dbConfig');  // Import the db connection
+const { VarChar } = require('msnodesqlv8');
+const { sql, con } = require('../configs/dbConfig');  // Import the db connection
 
-// Get menu by itemId
-// Fetch all menu items for a specific branch
-exports.getMenuByBranch = async (req, res) => {
-    const { branchId } = req.params; // Extract branchId from params
-    console.log("Received branchId:", branchId); // Debug log
+// 9. xem danh sách nhân viên theo tên
+exports.getStaffDataByName = async (req, res) => {
+    const { staff_name, user_id } = req.body;
+
+    // Validate required fields
+    if (!staff_name || !user_id) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields.",
+        });
+    }
 
     try {
-        const [rows] = await db.execute(
-            `SELECT * FROM MenuItem mi 
-            JOIN BranchMenuItem bmi ON mi.item_id = bmi.item_id 
-            WHERE bmi.branch_id = ? AND mi.menu_item_status = "Available"`,
-            [branchId.trim()] // Use the trimmed branchId
-        );
+        const pool = await con;
 
-        if (!rows || rows.length === 0) {
-            return res.status(404).json({ success: false, message: 'No menu items found' });
+        // Step 1: Fetch branch_id based on user_id
+        const branchResult = await pool.request()
+            .input('user_id', sql.Int, user_id)
+            .query(`
+                SELECT Department.branch_id
+                FROM Department
+                JOIN Staff ON Staff.department_id = Department.department_id
+                WHERE Staff.staff_id = @user_id;
+            `);
+
+        if (!branchResult.recordset || branchResult.recordset.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Branch not found for the given user.",
+            });
         }
 
-        res.status(200).json({ success: true, data: rows });
-    } catch (error) {
-        console.error("Error fetching menu items:", error); // Log the error
-        res.status(500).json({ success: false, message: error.message });
-    }
-};
+        const branch_id = branchResult.recordset[0].branch_id;
 
+        // Step 2: Fetch staff data by name and branch_id
+        const result = await pool.request()
+            .input('staff_name', sql.NVarChar(50), `%${staff_name}%`) // Use LIKE for partial matching
+            .input('branch_id', sql.VarChar(10), branch_id)
+            .query(`
+                SELECT *
+                FROM Staff
+                WHERE branch_id = @branch_id AND staff_name LIKE @staff_name;
+            `);
 
-// Add menu item
-exports.addMenuItem = async (req, res) => {
-    const { branchId } = req.params;
-    const { name, price, category } = req.body;
-
-    try {
-        const [result] = await db.execute(
-            'INSERT INTO MenuItem (branch_id, name, price, category) VALUES (?, ?, ?, ?)',
-            [branchId, name, price, category]
-        );
-
-        res.status(201).json({ success: true, message: 'Menu item added successfully', data: { id: result.insertId } });
-
-    } catch (error) {
-        console.error("Error adding menu item:", error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-};
-
-// Update menu item
-exports.updateMenuItem = async (req, res) => {
-    const { branchId, itemId } = req.params;
-    const { name, price, category } = req.body;
-
-    try {
-        await db.execute(
-            'UPDATE MenuItem SET name = ?, price = ?, category = ? WHERE id = ? AND branch_id = ?',
-            [name, price, category, itemId, branchId]
-        );
-
-        res.status(200).json({ success: true, message: 'Menu item updated successfully' });
-
-    } catch (error) {
-        console.error("Error updating menu item:", error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-};
-
-// Delete menu item
-exports.deleteMenuItem = async (req, res) => {
-    const { branchId, itemId } = req.params;
-
-    try {
-        await db.execute(
-            'DELETE FROM MenuItem WHERE id = ? AND branch_id = ?',
-            [itemId, branchId]
-        );
-
-        res.status(200).json({ success: true, message: 'Menu item deleted successfully' });
-
-    } catch (error) {
-        console.error("Error deleting menu item:", error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-};
-
-// Add menu category
-exports.addMenuCategory = async (req, res) => {
-    const { branchId } = req.params;
-    const { name } = req.body;
-
-    try {
-        const [result] = await db.execute(
-            'INSERT INTO MenuCategory (branch_id, name) VALUES (?, ?)',
-            [branchId, name]
-        );
-
-        res.status(201).json({ success: true, message: 'Menu category added successfully', data: { id: result.insertId } });
-
-    } catch (error) {
-        console.error("Error adding menu category:", error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-};
-
-// Update menu category
-exports.updateMenuCategory = async (req, res) => {
-    const { branchId, categoryId } = req.params;
-    const { name } = req.body;
-
-    try {
-        await db.execute(
-            'UPDATE MenuCategory SET name = ? WHERE id = ? AND branch_id = ?',
-            [name, categoryId, branchId]
-        );
-
-        res.status(200).json({ success: true, message: 'Menu category updated successfully' });
-
-    } catch (error) {
-        console.error("Error updating menu category:", error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-};
-
-// Delete menu category
-exports.deleteMenuCategory = async (req, res) => {
-    const { branchId, categoryId } = req.params;
-
-    try {
-        await db.execute(
-            'DELETE FROM MenuCategory WHERE id = ? AND branch_id = ?',
-            [categoryId, branchId]
-        );
-
-        res.status(200).json({ success: true, message: 'Menu category deleted successfully' });
-
-    } catch (error) {
-        console.error("Error deleting menu category:", error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-};
-
-// Add combo
-exports.addCombo = async (req, res) => {
-    const { branchId } = req.params;
-    const { name, items } = req.body;
-
-    try {
-        const [result] = await db.execute(
-            'INSERT INTO Combo (branch_id, name) VALUES (?, ?)',
-            [branchId, name]
-        );
-
-        const comboId = result.insertId;
-
-        for (const item of items) {
-            await db.execute(
-                'INSERT INTO ComboItem (combo_id, menu_item_id) VALUES (?, ?)',
-                [comboId, item]
-            );
+        if (!result.recordset || result.recordset.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No staff found by name.",
+            });
         }
 
-        res.status(201).json({ success: true, message: 'Combo added successfully', data: { id: comboId } });
-
+        // Return the fetched data
+        res.status(200).json({
+            success: true,
+            data: result.recordset,
+        });
     } catch (error) {
-        console.error("Error adding combo:", error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
+        console.error("Error fetching staff data by name:", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while fetching staff data.",
+            error: error.message,
+        });
     }
 };
-
-// Update combo
-exports.updateCombo = async (req, res) => {
-    const { branchId, comboId } = req.params;
-    const { name, items } = req.body;
-
+// 12. xem doanh thu của chi nhánh mà quản lý đang quản
+exports.getBranchSales = async (req, res) => {
+    const {
+        start_date,
+        end_date,
+        user_id,
+        group_by // day, month, quarter, year
+    } = req.body;
     try {
-        await db.execute(
-            'UPDATE Combo SET name = ? WHERE id = ? AND branch_id = ?',
-            [name, comboId, branchId]
-        );
+        const pool = await con;
+        const branchResult = await pool.request()
+            .input('user_id', sql.Int, user_id)
+            .query(`
+          SELECT Department.branch_id
+          FROM Department
+          JOIN Staff ON Staff.department_id = Department.department_id
+          WHERE Staff.staff_id = @user_id;
+      `);
 
-        await db.execute(
-            'DELETE FROM ComboItem WHERE combo_id = ?',
-            [comboId]
-        );
-
-        for (const item of items) {
-            await db.execute(
-                'INSERT INTO ComboItem (combo_id, menu_item_id) VALUES (?, ?)',
-                [comboId, item]
-            );
+        if (!branchResult.recordset || branchResult.recordset.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Branch not found for the given user.",
+            });
         }
 
-        res.status(200).json({ success: true, message: 'Combo updated successfully' });
+        const branch_id = branchResult.recordset[0].branch_id;
+        const result = await pool
+            .input('start_date', sql.VarChar(10), start_date)
+            .input('end_date', sql.VarChar(10), end_date)
+            .input('branch_id', sql.VarChar(10), branch_id)
+            .input('group_by', sql.NVarChar(10), group_by)
+            .execute('sp_get_branch_revenue_stats');
 
+        if (!result.recordset || result.recordset.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No sales stats found.',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: result.recordset,
+            pagination: {
+                page: page_number,
+                size: page_size,
+            },
+        });
     } catch (error) {
-        console.error("Error updating combo:", error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-};
+        console.error('Error fetching sales data', error.message);
 
-// Delete combo
-exports.deleteCombo = async (req, res) => {
-    const { branchId, comboId } = req.params;
-
-    try {
-        await db.execute(
-            'DELETE FROM Combo WHERE id = ? AND branch_id = ?',
-            [comboId, branchId]
-        );
-
-        res.status(200).json({ success: true, message: 'Combo deleted successfully' });
-
-    } catch (error) {
-        console.error("Error deleting combo:", error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while fetching sales data.',
+            error: error.message,
+        });
     }
 };

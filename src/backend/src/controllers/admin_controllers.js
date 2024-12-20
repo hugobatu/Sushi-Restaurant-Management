@@ -9,6 +9,12 @@ exports.addRegion = async (req, res) => {
     const {
         region_name
     } = req.body;
+    if (!region_name) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields."
+        });
+    }
     try {
         const pool = await con;
         const result = await pool.request()
@@ -41,6 +47,13 @@ exports.addBranch = async (req, res) => {
         has_car_parking_lot,
     } = req.body;
     console.log(req.body);
+    if (!region_id || !branch_name|| !branch_address|| !opening_time|| !closing_time|| !phone_number|| 
+        !has_bike_parking_lot|| !has_car_parking_lot) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields."
+        });
+    }
     if (!region_id || !branch_name || !phone_number || !opening_time || !closing_time) {
         return res.status(400).json({
             success: false,
@@ -89,6 +102,12 @@ exports.updateBranch = async (req, res) => {
         has_bike_parking_lot = 0,
         has_car_parking_lot = 0,
     } = req.body;
+    if (!branch_id || !new_status || !has_bike_parking_lot|| !has_car_parking_lot) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields."
+        });
+    }
     try {
         if (new_status != 'working' && new_status != 'closed' && new_status != 'maintenance') {
             return res.status(500).json({
@@ -332,6 +351,12 @@ exports.fireStaff = async (req, res) => {
     const {
         staff_id
     } = req.body
+    if (!staff_id) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields."
+        });
+    }
     try {
         const pool = await con;
         const result = await pool.request()
@@ -357,6 +382,12 @@ exports.updateStaffSalary = async (req, res) => {
         staff_id,
         increase_rate,
     } = req.body
+    if (!staff_id || !increase_rate) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields."
+        });
+    }
     try {
         const pool = await con;
         const result = await pool.request()
@@ -383,6 +414,12 @@ exports.transferStaff = async (req, res) => {
         new_branch_id,
         new_department_name
     } = req.body;
+    if (!staff_id || !new_branch_id || !new_department_name) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields."
+        });
+    }
     try {
         console.log(new_branch_id);
         const pool = await con;
@@ -405,11 +442,11 @@ exports.transferStaff = async (req, res) => {
     }
 };
 // 9.
-exports.getStaffByName = async (req, res) => {
+exports.getStaffData = async (req, res) => {
     const {
-        staff_name,
-        page_number,
-        page_size
+        staff_name, // không truyền tên vào thì lấy dữ liệu của tất cả các staff
+        page_number = 1,
+        page_size = 1000
     } = req.body;
     try {
         const pool = await con;
@@ -440,7 +477,6 @@ exports.getStaffByName = async (req, res) => {
         });
     }
 };
-
 // 10.
 exports.getBranchRating = async (req, res) => {
     const {
@@ -521,9 +557,15 @@ exports.getSales = async (req, res) => {
     const {
         start_date,
         end_date,
-        branch_id,
+        branch_id, // không truyền gì vào thì cho tất cả các chi nhánh
         group_by // day, month, quarter, year
     } = req.body;
+    if (!start_date || !end_date|| !group_by) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields."
+        });
+    }
     try {
         const pool = await con;
         const result = await pool.request()
@@ -562,17 +604,24 @@ exports.getItemSalesStats = async (req, res) => {
     const {
         start_date,
         end_date,
-        branch_id,
-        region_id
+        branch_id, // không truyền gì vào thì cho tất cả các chi nhánh
+        region_id // không truyền gì vào thì cho tất cả các khu vực
     } = req.body;
+    if (!start_date || !end_date) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields."
+        });
+    }
     try {
         const pool = await con;
+        console.log(start_date, end_date, branch_id, region_id);
         const result = await pool.request()
             .input('start_date', sql.Date, start_date)
             .input('end_date', sql.Date, end_date)
             .input('branch_id', sql.VarChar(10), branch_id)
             .input('region_id', sql.VarChar(10), region_id)
-            .execute('sp_get_menu_sales_stats');
+            .query('sp_get_menu_sales_stats @start_date, @end_date, @branch_id, @region_id');
 
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({

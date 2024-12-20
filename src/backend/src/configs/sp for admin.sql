@@ -191,6 +191,7 @@ BEGIN
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
+GO
 -- 3. update branch status (working/closed/maintenance)
 GO
 CREATE OR ALTER PROC sp_update_branch_status
@@ -255,6 +256,7 @@ BEGIN
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
+GO
 -- 4. get all branch information
 GO
 CREATE OR ALTER PROC sp_get_branches_data
@@ -272,6 +274,7 @@ BEGIN
     OFFSET @offset ROWS
     FETCH NEXT @page_size ROWS ONLY;
 END
+GO
 -- 5. add a new staff (ORM)
 /*GO
 CREATE OR ALTER PROCEDURE sp_add_staff
@@ -456,11 +459,11 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH;
 END;
-
+GO
 -- 7. update salary for staff or deparment	
 GO
 CREATE OR ALTER PROCEDURE sp_update_staff_salary
-    @staff_id INT = NULL,              -- Staff ID (optional)
+    @staff_id INT,
     @increase_rate FLOAT	   -- Increase rate (default is 10%)
 AS
 BEGIN
@@ -475,25 +478,21 @@ BEGIN
             RETURN;
         END
 
-        -- Update salary for a specific staff member
-        IF @staff_id IS NOT NULL
+        -- Check if the staff member exists and is active
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM Staff 
+            WHERE staff_id = @staff_id AND staff_status = N'active'
+        )
         BEGIN
-            -- Check if the staff member exists and is active
-            IF NOT EXISTS (
-                SELECT 1 
-                FROM Staff 
-                WHERE staff_id = @staff_id AND staff_status = N'active'
-            )
-            BEGIN
-                RAISERROR(N'This staff does not exist or is not active.', 16, 1);
-                RETURN;
-            END
-
-            -- Update salary
-            UPDATE Staff
-            SET salary = salary * (1 + @increase_rate)
-            WHERE staff_id = @staff_id;
+            RAISERROR(N'This staff does not exist or is not active.', 16, 1);
+            RETURN;
         END
+
+        -- Update salary
+        UPDATE Staff
+        SET salary = salary * (1 + @increase_rate)
+        WHERE staff_id = @staff_id;
 
         -- Commit transaction
         COMMIT TRAN;
@@ -513,7 +512,7 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
-
+GO
 -- 8. move a staff to another branch
 GO
 CREATE OR ALTER PROCEDURE sp_transfer_staff
@@ -612,7 +611,7 @@ BEGIN
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
-
+GO
 -- 9. fetch staff data using name
 GO
 CREATE OR ALTER PROC sp_get_staff_info
@@ -628,7 +627,7 @@ BEGIN
 
         SELECT *
         FROM Staff
-        WHERE staff_name = @staff_name
+        WHERE (staff_name = @staff_name OR @staff_name is NULL)
         ORDER BY staff_id
         OFFSET @offset ROWS
         FETCH NEXT @page_size ROWS ONLY;
@@ -645,41 +644,40 @@ GO
 -- 10. fetch branch rating:
 GO
 CREATE OR ALTER PROCEDURE sp_get_branch_ratings
+    @branch_id VARCHAR(10) = NULL, -- NULL for all branches
     @page_number INT,
     @page_size INT
 AS
 BEGIN
     BEGIN TRY
-        DECLARE @offset INT;
+        -- Declare variables for pagination
+        DECLARE @offset INT = (@page_number - 1) * @page_size;
 
-        SET @offset = (@page_number - 1) * @page_size;
-
+        -- Fetch branch ratings with optional branch filtering
         SELECT
+            CR.branch_id,
             B.branch_name,
-            AVG(
-                COALESCE(branch_rating, 0) +
-                COALESCE(food_quality_rating, 0) +
-                COALESCE(price_rating, 0) +
-                COALESCE(surroundings_rating, 0)
-            ) / 4.0 AS BranchRating,
-            COUNT(CR.rating_id) AS TotalRatings
+            CR.rating_id,
+            CR.branch_rating -- Individual ratings
         FROM CustomerRating CR
-        JOIN Branch B ON CR.branch_id = B.branch_id
-        GROUP BY B.branch_id, B.branch_name
-        ORDER BY BranchRating DESC, TotalRatings DESC
-        OFFSET @offset ROWS
-        FETCH NEXT @page_size ROWS ONLY;
+        JOIN Branch B 
+		ON CR.branch_id = B.branch_id
+        WHERE (@branch_id IS NULL OR B.branch_id = @branch_id) -- Filter by branch_id if provided
+        ORDER BY CR.branch_rating DESC -- Order by individual rating
+        OFFSET @offset ROWS FETCH NEXT @page_size ROWS ONLY;
     END TRY
     BEGIN CATCH
         -- Handle errors
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
         DECLARE @ErrorState INT = ERROR_STATE();
 
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
-    END CATCH
-END
-EXEC sp_get_branch_ratings 1, 10
+    END CATCH;
+END;
+GO
 -- 11. fetch staff rating
 GO
 CREATE OR ALTER PROCEDURE sp_get_staff_ratings
@@ -758,6 +756,7 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
+GO
 -- 13. sales stats by each menu item
 GO
 CREATE OR ALTER PROCEDURE sp_get_menu_sales_stats
@@ -775,27 +774,27 @@ BEGIN
             SUM(OD.quantity) AS TotalQuantitySold
         FROM OrderDetails OD
         JOIN [Order] O ON OD.order_id = O.order_id
-        JOIN MenuItem MI ON OD.menu_item_id = MI.menu_item_id
+        JOIN MenuItem MI ON OD.item_id = MI.item_id
         JOIN Branch B ON O.branch_id = B.branch_id
         WHERE O.order_datetime BETWEEN @start_date AND @end_date
             AND (@branch_id IS NULL OR B.branch_id = @branch_id)
             AND (@region_id IS NULL OR B.region_id = @region_id)
-        GROUP BY MI.menu_item_name
+        GROUP BY MI.item_name
         ORDER BY TotalRevenue DESC;
 
         -- bot 1 sale
         SELECT TOP 1
-            MI.menu_item_name,
-            SUM(OD.quantity * OD.price) AS TotalRevenue,
+            MI.item_name,
+            SUM(OD.quantity * OD.unit_price) AS TotalRevenue,
             SUM(OD.quantity) AS TotalQuantitySold
         FROM OrderDetails OD
         JOIN [Order] O ON OD.order_id = O.order_id
-        JOIN MenuItems MI ON OD.menu_item_id = MI.menu_item_id
+        JOIN MenuItem MI ON OD.item_id = MI.item_id
         JOIN Branch B ON O.branch_id = B.branch_id
         WHERE O.order_datetime BETWEEN @start_date AND @end_date
             AND (@branch_id IS NULL OR B.branch_id = @branch_id)
             AND (@region_id IS NULL OR B.region_id = @region_id)
-        GROUP BY MI.menu_item_name
+        GROUP BY MI.item_name
         ORDER BY TotalRevenue ASC;
 
     END TRY
@@ -807,3 +806,6 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
+GO
+
+EXEC sp_get_menu_sales_stats '2000-05-25', '2020-05-25', 'B001', 'TPHCM'
