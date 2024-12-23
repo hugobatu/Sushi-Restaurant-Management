@@ -19,7 +19,7 @@ router.post('/staff/add', admin_controllers.addStaff);              // 5. thêm 
 router.put('/staff/fire', admin_controllers.fireStaff);             // 6. Sa thải nhân viên
 router.put('/staff/update', admin_controllers.updateStaffSalary);   // 7. tăng lương nhân viên
 router.put('/staff/transfer', admin_controllers.transferStaff);     // 8. chuyển nhân viên sang chi nhánh khác
-router.get('/staff/getstaffdata', admin_controllers.getStaffData);// 9. tìm nhân viên dựa theo tên (có thể có nhiều kết quả)
+router.get('/staff/getstaffdata', admin_controllers.getStaffData);  // 9. tìm nhân viên dựa theo tên (có thể có nhiều kết quả)
 
 // // Doanh thu và đánh giá
 router.get('/ratings/branches', admin_controllers.getBranchRating); // 10. xem đánh giá chi nhánh
@@ -27,4 +27,14 @@ router.get('/ratings/staffs', admin_controllers.getStaffRating);    // 11. xem �
 router.get('/branchsales', admin_controllers.getSales);             // 12. xem doanh thu theo tháng, quý, năm
 router.get('/itemsales', admin_controllers.getItemSalesStats);      // 13. xem thống kê số lượng món ăn bán ra được
 
-module.exports = router;
+// quản lý món ăn
+router.post('/menu-item/add', admin_controllers.addMenuItem);       // 14. thêm món ăn vào hệ thống
+router.delete('/menu-item/delete', admin_controllers.deleteMenuItem);  // 15. xóa món ăn ra khỏi hệ thống
+
+// thêm combo cho hệ thống
+router.post('/combo/add', admin_controllers.addCombo);              // 16. thêm combo vào hệ thống
+router.delete('/combo/delete', admin_controllers.deleteCombo);      // 17. xóa combo ra khỏi hệ thống
+
+// xem tất cả các có trong nhà hàng
+router.get('/menu-item/get', admin_controllers.viewAllMenuItem);
+module.exports = router;    

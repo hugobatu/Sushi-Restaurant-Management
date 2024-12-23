@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const customerController = require('../controllers/customerController');
+const { protect } = require('../../middlewares/authMiddleware');
+const staff_controllers = require('../controllers/staff_controllers');
 
-// customer routes
-router.get('/', customerController.getAllCustomers);
-router.post('/', customerController.addCustomer);
-router.get('/:id', customerController.getCustomerById);
-router.put('/:id', customerController.updateCustomer);
-router.delete('/:id', customerController.deleteCustomer);
+// router.use(protect(['staff']));
 
-router.get('/:id/feedbacks', customerController.getCustomerFeedbacks);
-router.post('/:id/feedbacks', customerController.addCustomerFeedback);
+// quản lý khách hàng
+router.post('/customer/add', staff_controllers.addCustomer);            // 1. thêm khách hàng
+router.post('/customer/order/create', staff_controllers.createOrder);   // 2. tạo order
+router.post('/customer/order/create', staff_controllers.createOrder);   // 3. xóa order
 
 module.exports = router;

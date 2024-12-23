@@ -1,6 +1,7 @@
 USE SushiXRestaurant;
 GO
-
+SELECT * FROM MenuItem
+SELECT * FROM MenuCategory
 /*
 -- sp kiểm tra menu có tại chi nhánh B001
 CREATE OR ALTER PROCEDURE sp_get_branch_menu
@@ -43,8 +44,7 @@ EXEC sp_get_all_branches;
 GO
 CREATE OR ALTER PROCEDURE sp_add_menu_branch
     @branch_id VARCHAR(10),
-    @item_id VARCHAR(10),
-    @category_id VARCHAR(10) -- Kiểm tra trong bảng MenuCategory
+    @item_id VARCHAR(10)
 AS
 BEGIN
     BEGIN TRANSACTION;
@@ -55,10 +55,10 @@ BEGIN
             RAISERROR('This branch does not exist', 16, 1);
         END
 
-        -- 2. Kiểm tra category_id có tồn tại trong MenuCategory không
-        IF NOT EXISTS (SELECT 1 FROM MenuCategory WHERE category_id = @category_id)
+        -- 2. Kiểm tra món ăn có tồn tại trong MenuItem không
+        IF NOT EXISTS (SELECT 1 FROM MenuItem WHERE item_id = @item_id)
         BEGIN
-            RAISERROR('This category does not exist', 16, 1);
+            RAISERROR('This item does not exist in menu', 16, 1);
         END
 
         -- 3. Kiểm tra item_id có tồn tại và đang ở trạng thái 'available' trong MenuItem không
@@ -81,12 +81,6 @@ BEGIN
         INSERT INTO BranchMenuItem(branch_id, item_id, is_available)
         VALUES(@branch_id, @item_id, 1);
 
-        -- 6. Kiểm tra và thêm liên kết danh mục vào MenuItemCategory nếu chưa tồn tại
-        IF NOT EXISTS (SELECT 1 FROM MenuItemCategory WHERE item_id = @item_id AND category_id = @category_id)
-        BEGIN
-            INSERT INTO MenuItemCategory(item_id, category_id)
-            VALUES(@item_id, @category_id);
-        END
 
         -- Commit transaction nếu không có lỗi
         COMMIT TRANSACTION;
@@ -164,7 +158,7 @@ BEGIN
     END CATCH
 END;
 
----- nháp thử
+---- test thử
 ---- 4.1
 --EXEC sp_add_menu_branch 'B002','Y6','Y';
 
@@ -243,297 +237,3 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
-
--- 4.4 Thêm món ăn vào trong MenuItem
---SELECT * FROM MenuItem;
-GO
-CREATE OR ALTER PROCEDURE sp_add_menu_item
-    @item_name NVARCHAR(50),
-    @description NVARCHAR(255),
-    @base_price FLOAT,
-    @status BIT,
-    @category_id VARCHAR(10), 
-	@image_url TEXT
-AS
-BEGIN
-    BEGIN TRANSACTION;
-    BEGIN TRY
-        -- 1. Kiểm tra category_id có tồn tại trong MenuCategory không
-        IF NOT EXISTS (SELECT 1 FROM MenuCategory WHERE category_id = @category_id)
-        BEGIN
-			RAISERROR('This category does not exist', 16, 1);
-        END
-
-        -- 2. Tạo ID mới cho món ăn dựa trên category_id
-        DECLARE @new_item_id VARCHAR(10);
-        DECLARE @numeric_part INT;
-
-        -- Tách phần chữ và số trong item_id
-        DECLARE @category_prefix VARCHAR(10);
-        SET @category_prefix = @category_id;
-
-        -- Lấy phần số lớn nhất của item_id theo category_id
-        SET @numeric_part = (
-            SELECT ISNULL(MAX(CAST(SUBSTRING(item_id, LEN(@category_prefix) + 1, LEN(item_id)) AS INT)), 0) + 1
-            FROM MenuItem
-            WHERE LEFT(item_id, LEN(@category_prefix)) = @category_prefix
-            AND ISNUMERIC(SUBSTRING(item_id, LEN(@category_prefix) + 1, LEN(item_id))) = 1
-        );
-
-        -- Tạo item_id mới với format "category_id + số"
-        SET @new_item_id = @category_prefix + CAST(@numeric_part AS VARCHAR(3));
-
-        -- 3. Thêm món ăn vào bảng MenuItem
-        INSERT INTO MenuItem(item_id, item_name, menu_item_description, base_price, menu_item_status, image_url)
-        VALUES(@new_item_id, @item_name, @description, @base_price, 
-               CASE WHEN @status = 1 THEN 'available' ELSE 'unavailable' END, @image_url);
-
-        -- 4. Thêm liên kết danh mục vào bảng MenuItemCategory
-        INSERT INTO MenuItemCategory(item_id, category_id)
-        VALUES(@new_item_id, @category_id);
-
-
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        -- Rollback khi gặp lỗi
-		IF @@TRANCOUNT > 0
-			ROLLBACK TRANSACTION;
-
-
-		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
-        DECLARE @ErrorState INT = ERROR_STATE();
-
-        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
-    END CATCH
-END;
-
---EXEC sp_add_menu N'UDON XÀO XÁO XAO', NULL, 22000, 0, 'ND', NULL;
-
---SELECT * FROM MenuItem;
-	
--- 4.5 Xóa món ăn xóa khỏi MenuItem -> xóa khỏi BranchMenuItem
-GO
-CREATE OR ALTER PROCEDURE sp_delete_MenuItem
-    @item_id VARCHAR(10)
-AS
-BEGIN
-    BEGIN TRANSACTION;
-    BEGIN TRY
-        -- 1. Kiểm tra có tồn tại item_id này trong MenuItem
-        IF NOT EXISTS (SELECT 1 FROM MenuItem WHERE item_id = @item_id)
-        BEGIN
-			RAISERROR('This item id does not exist.', 16, 1);
-        END
-
-        -- 2. Xóa tất cả các liên kết trong MenuItemCategory và BranchMenuItem
-        DELETE FROM MenuItemCategory WHERE item_id = @item_id;
-        DELETE FROM BranchMenuItem WHERE item_id = @item_id;
-
-        -- 3. Xóa món ăn khỏi MenuItem
-        DELETE FROM MenuItem WHERE item_id = @item_id;
-
-        -- Commit transaction nếu không có lỗi
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        -- Rollback khi gặp lỗi
-		IF @@TRANCOUNT > 0
-			ROLLBACK TRANSACTION;
-
-
-		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
-        DECLARE @ErrorState INT = ERROR_STATE();
-
-        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
-    END CATCH
-END;
-
---SELECT * FROM MenuItem;
---SELECT * FROM MenuItemCategory;
---SELECT * FROM BranchMenuItem;
-
---EXEC sp_delete_MenuItem 'ND14';
-
-
--- 4.6 Thêm combo món ăn
-GO
-CREATE OR ALTER PROCEDURE sp_add_combo
-    @combo_name NVARCHAR(50),
-    @combo_description NVARCHAR(255) = NULL,
-    @item_ids VARCHAR(MAX) -- Danh sách item_id, ví dụ 'A1,A10,A4,F3,FJ2'
-AS
-BEGIN
-    DECLARE @new_combo_id VARCHAR(10);
-    DECLARE @item_id VARCHAR(10);
-    DECLARE @pos INT;
-
-    BEGIN TRANSACTION;
-    BEGIN TRY
-        -- 1. Loại bỏ khoảng trắng dư thừa giữa các item_id
-        SET @item_ids = REPLACE(@item_ids, ' ', ''); -- Loại bỏ tất cả khoảng trắng
-
-        -- 2. Tạo combo_id mới (SC1, SC2, SC3, ...)
-        -- Lấy số combo_id lớn nhất hiện tại và tăng thêm 1
-        SET @new_combo_id = 'COMBO' + CAST(
-            (SELECT ISNULL(MAX(CAST(SUBSTRING(combo_id, 3, LEN(combo_id)) AS INT)), 0) + 1 FROM Combo) 
-            AS VARCHAR(3));
-        
-        -- 3. Thêm combo vào bảng Combo
-        INSERT INTO Combo (combo_id, combo_name, combo_description)
-        VALUES (@new_combo_id, @combo_name, @combo_description);
-
-        -- 4. Chia danh sách item_ids thành các phần tử
-        SET @pos = CHARINDEX(',', @item_ids);
-        
-        -- 5. Kiểm tra sự tồn tại của item_id trước khi thêm vào ComboMenuItem
-        WHILE @pos > 0
-        BEGIN
-            SET @item_id = SUBSTRING(@item_ids, 1, @pos - 1);
-
-            -- Kiểm tra item_id có tồn tại trong MenuItem không
-            IF NOT EXISTS (SELECT 1 FROM MenuItem WHERE item_id = @item_id)
-            BEGIN
-                THROW 50000, 'Món ăn không tồn tại trong MenuItem.', 1;
-            END
-
-            -- Thêm item vào ComboMenuItem
-            INSERT INTO ComboMenuItem (combo_id, item_id)
-            VALUES (@new_combo_id, @item_id);
-
-            -- Cập nhật danh sách item_ids để tiếp tục xử lý phần tử tiếp theo
-            SET @item_ids = SUBSTRING(@item_ids, @pos + 1, LEN(@item_ids));
-            SET @pos = CHARINDEX(',', @item_ids);
-        END
-
-        -- Thêm item cuối cùng (không có dấu ',' ở cuối)
-        IF LEN(@item_ids) > 0
-        BEGIN
-            SET @item_id = @item_ids;
-            
-            -- Kiểm tra item_id có tồn tại trong MenuItem không
-            IF NOT EXISTS (SELECT 1 FROM MenuItem WHERE item_id = @item_id)
-            BEGIN
-				RAISERROR('This menu item does not exist', 16, 1);
-            END
-            
-            -- Thêm item vào ComboMenuItem
-            INSERT INTO ComboMenuItem (combo_id, item_id)
-            VALUES (@new_combo_id, @item_id);
-        END
-
-        -- Commit transaction nếu không có lỗi
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        -- Rollback khi gặp lỗi
-		IF @@TRANCOUNT > 0
-			ROLLBACK TRANSACTION;
-
-
-		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
-        DECLARE @ErrorState INT = ERROR_STATE();
-
-        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
-    END CATCH
-END;
-
-
-
-/*
-CREATE TABLE ComboMenuItem
-(
-    combo_id VARCHAR(10) NOT NULL,  -- ID của Combo
-    item_id VARCHAR(10) NOT NULL,   -- ID của món ăn
-    CONSTRAINT PK_ComboMenuItem PRIMARY KEY (combo_id, item_id),  -- Khóa chính là sự kết hợp giữa combo_id và item_id
-    CONSTRAINT FK_ComboMenuItem_Combo FOREIGN KEY (combo_id) REFERENCES Combo (combo_id) ON DELETE CASCADE,  -- Ràng buộc khóa ngoại với bảng Combo
-    CONSTRAINT FK_ComboMenuItem_MenuItem FOREIGN KEY (item_id) REFERENCES MenuItem (item_id) ON DELETE CASCADE  -- Ràng buộc khóa ngoại với bảng MenuItem
-);
-*/
-
---EXEC sp_add_combo N'Combo Lẩu 3 Món', N'LẨU LẨU LẨU', 'HP1, HO2, IC1';
-
---SELECT * FROM Combo;
---SELECT * FROM ComboMenuItem;
-
--- 4.7 Xóa combo
-GO
-CREATE OR ALTER PROCEDURE sp_delete_combo
-    @p_combo_id VARCHAR(10)
-AS
-BEGIN
-    BEGIN TRANSACTION;
-    BEGIN TRY
-        -- 1. Kiểm tra xem combo có tồn tại trong bảng Combo hay không
-        IF NOT EXISTS (SELECT 1 FROM Combo WHERE combo_id = @p_combo_id)
-        BEGIN
-            RAISERROR('This combo does not exist', 16, 1);
-        END
-
-        -- 2. Xóa các item liên quan đến combo trong ComboMenuItem
-        DELETE FROM ComboMenuItem WHERE combo_id = @p_combo_id;
-
-        -- 3. Xóa combo khỏi bảng Combo
-        DELETE FROM Combo WHERE combo_id = @p_combo_id;
-
-
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        -- Rollback khi gặp lỗi
-		IF @@TRANCOUNT > 0
-			ROLLBACK TRANSACTION;
-
-
-		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
-        DECLARE @ErrorState INT = ERROR_STATE();
-
-        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
-    END CATCH
-END;
-
---EXEC sp_delete_combo 'COMBO1';
-
--- 4.8 thêm khách hàng
-GO
-CREATE OR ALTER PROC sp_add_customer_info
-	@customer_name NVARCHAR(50),
-	@email VARCHAR(50),
-	@phone_number VARCHAR(10),
-	@gender NVARCHAR(10),
-	@birth_date DATE,
-	@id_number VARCHAR(12)
-AS
-BEGIN
-	BEGIN TRY
-		BEGIN TRAN
-		IF EXISTS (
-			SELECT 1
-			FROM Customer
-			WHERE customer_name = @customer_name OR email = @email OR id_number = @id_number
-		)
-		BEGIN
-			RAISERROR('This customer has existed', 16, 1)
-		END
-
-        DECLARE @new_customer_id INT = SCOPE_IDENTITY();
-		INSERT INTO Customer(customer_id, customer_name, email, phone_number, gender, birth_date)
-		VALUES (@new_customer_id, @customer_name, @email, @phone_number, @gender, @birth_date)
-		COMMIT TRAN
-		PRINT 'Add new customer successfully with' + CAST(@new_customer_id AS NVARCHAR)
-	END TRY
-	BEGIN CATCH
-		IF @@TRANCOUNT > 0
-			ROLLBACK TRAN
-		
-		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
-        DECLARE @ErrorState INT = ERROR_STATE();
-
-        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
-	END CATCH
-END

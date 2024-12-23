@@ -47,8 +47,8 @@ exports.addBranch = async (req, res) => {
         has_car_parking_lot,
     } = req.body;
     console.log(req.body);
-    if (!region_id || !branch_name|| !branch_address|| !opening_time|| !closing_time|| !phone_number|| 
-        !has_bike_parking_lot|| !has_car_parking_lot) {
+    if (!region_id || !branch_name || !branch_address || !opening_time || !closing_time || !phone_number ||
+        !has_bike_parking_lot || !has_car_parking_lot) {
         return res.status(400).json({
             success: false,
             message: "Missing required fields."
@@ -102,7 +102,7 @@ exports.updateBranch = async (req, res) => {
         has_bike_parking_lot = 0,
         has_car_parking_lot = 0,
     } = req.body;
-    if (!branch_id || !new_status || !has_bike_parking_lot|| !has_car_parking_lot) {
+    if (!branch_id || !new_status || !has_bike_parking_lot || !has_car_parking_lot) {
         return res.status(400).json({
             success: false,
             message: "Missing required fields."
@@ -560,7 +560,7 @@ exports.getSales = async (req, res) => {
         branch_id, // không truyền gì vào thì cho tất cả các chi nhánh
         group_by // day, month, quarter, year
     } = req.body;
-    if (!start_date || !end_date|| !group_by) {
+    if (!start_date || !end_date || !group_by) {
         return res.status(400).json({
             success: false,
             message: "Missing required fields."
@@ -647,3 +647,188 @@ exports.getItemSalesStats = async (req, res) => {
         });
     }
 };
+// 14. thêm 1 món ăn vào database
+exports.addMenuItem = async (req, res) => {
+    const {
+        item_name,
+        description,
+        base_price,
+        status,
+        category_id,
+        image_url
+    } = req.body;
+
+    // Validate required fields
+    if (!item_name || !base_price || status === undefined || !category_id) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields (item_name, description, base_price, status, category_id).",
+        });
+    }
+
+    try {
+        const pool = await con;
+
+        // Call the stored procedure
+        await pool.request()
+            .input('item_name', sql.NVarChar(50), item_name)
+            .input('description', sql.NVarChar(255), description)
+            .input('base_price', sql.Float, base_price)
+            .input('status', sql.Bit, status)
+            .input('category_id', sql.VarChar(10), category_id)
+            .input('image_url', sql.Text, image_url || null)
+            .execute('sp_add_menu_item');
+
+        return res.status(200).json({
+            success: true,
+            message: "Menu item added successfully.",
+        });
+    } catch (error) {
+        console.error("Error adding menu item:", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while adding the menu item.",
+            error: error.message,
+        });
+    }
+};
+// 15. xóa 1 món ăn ra khỏi db
+exports.deleteMenuItem = async (req, res) => {
+    const {
+        item_id
+    } = req.body;
+
+    // Validate required fields
+    if (!item_id) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields (item_id).",
+        });
+    }
+
+    try {
+        const pool = await con;
+
+        // Call the stored procedure
+        await pool.request()
+            .input('item_id', sql.VarChar(10), item_id)
+            .execute('sp_delete_menu_item');
+
+        return res.status(200).json({
+            success: true,
+            message: "Menu item deleted successfully.",
+        });
+    } catch (error) {
+        console.error("Error deleting menu item:", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while deleting the menu item.",
+            error: error.message,
+        });
+    }
+};
+// 16. thêm combo
+exports.addCombo = async (req, res) => {
+    const {
+        combo_name,
+        combo_description,
+        item_ids } = req.body;
+    // Validate required fields
+    if (!combo_name || !item_ids) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields (combo_name, item_ids).",
+        });
+    }
+
+    try {
+        const pool = await con;
+
+        // table-valued parameter for item_ids
+        const tvp = new sql.Table('ItemIdTable');
+        tvp.columns.add('item_id', sql.VarChar(10)); // Match the table type definition in SQL Server
+        item_ids.forEach(item_id => tvp.rows.add(item_id)); // Add each item_id to the TVP
+
+        // Execute the stored procedure
+        await pool.request()
+            .input('combo_name', sql.NVarChar(50), combo_name)
+            .input('combo_description', sql.NVarChar(255), combo_description || null)
+            .input('item_ids', tvp) // Pass the table-valued parameter
+            .execute('sp_add_combo');
+
+        return res.status(200).json({
+            success: true,
+            message: "Combo added successfully.",
+        });
+    } catch (error) {
+        console.error("Error adding combo:", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while adding the combo.",
+            error: error.message,
+        });
+    }
+};
+// 17. xóa combo
+exports.deleteCombo = async (req, res) => {
+    const { combo_id } = req.body;
+
+    // Validate required fields
+    if (!combo_id) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required field: combo_id.",
+        });
+    }
+
+    try {
+        const pool = await con;
+
+        // Execute the stored procedure
+        await pool.request()
+            .input('combo_id', sql.VarChar(10), combo_id)
+            .execute('sp_delete_combo');
+
+        return res.status(200).json({
+            success: true,
+            message: "Combo deleted successfully.",
+        });
+    } catch (error) {
+        console.error("Error deleting combo:", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while deleting the combo.",
+            error: error.message,
+        });
+    }
+};
+// 18. lấy danh sách tất cả các món ăn có trong chuỗi nhà hàng
+exports.viewAllMenuItem = async (req, res) => {
+    try {
+        const pool = await con;
+        const result = await pool.request()
+            .query(`SELECT MI.*, MC.category_name
+                    FROM MenuItem MI
+                    JOIN MenuItemCategory MIC
+                    ON MIC.item_id = MI.item_id
+                    JOIN MenuCategory MC
+                    ON MC.category_id = MIC.category_id`)
+        if (!result.recordset || result.recordset.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No menu item found',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: result.recordset,
+        });
+    } catch (error) {
+        console.error("Error fetching menu item id, error:", error.message);
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while deleting the combo.",
+            error: error.message,
+        });
+    }
+}
