@@ -155,13 +155,18 @@ const StaffsPage = () => {
   // Search staff by name
   const searchStaffByName = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8000/company/staff/getstaffdata?name=${searchName}`,
-        { method: "GET" }
-      );
+      const response = await fetch("http://localhost:8000/company/staff/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ staff_name: searchName }),
+      });
+  
       const data = await response.json();
+  
       if (data.success) {
-        setStaffs(data.data);
+        setStaffs(data.data);  // Assuming 'data' contains the staff data
         setMessage(`Found ${data.data.length} result(s).`);
       } else {
         setStaffs([]);
@@ -169,8 +174,12 @@ const StaffsPage = () => {
       }
     } catch (error) {
       console.error("Error searching staff:", error);
+      setMessage("Error searching staff.");
     }
   };
+  
+  
+  
 
   // Pagination handlers
   const handleNextPage = () => {
@@ -282,7 +291,7 @@ const StaffsPage = () => {
         </div>
 
         {/* Update Staff Section */}
-        <div className="border p-4 rounded-lg bg-yellow-100 mb-6">
+        <div className="border p-4 rounded-lg bg-yellow-100 mb-6 hover:bg-yellow-300">
           <h2 className="font-bold text-xl mb-4">Update Staff Salary</h2>
           <form
             onSubmit={(e) => {
@@ -322,8 +331,8 @@ const StaffsPage = () => {
         </div>
 
         {/* Transfer Staff Section */}
-        <div className="border p-4 rounded-lg bg-green-100 mb-6">
-          <h2 className="font-bold text-xl mb-4">Transfer Staff</h2>
+        <div className="border p-4 rounded-lg bg-green-100 mb-6 hover:bg-green-300">
+            <h2 className="font-bold text-xl mb-4 ">Transfer Staff</h2>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -376,7 +385,7 @@ const StaffsPage = () => {
         </div>
 
         {/* Fire Staff Section */}
-        <div className="border p-4 rounded-lg bg-red-100 mb-6">
+        <div className="border p-4 rounded-lg bg-red-100 mb-6 hover:bg-red-300">
           <h2 className="font-bold text-xl mb-4">Fire Staff</h2>
           <form
             onSubmit={(e) => {
@@ -403,34 +412,61 @@ const StaffsPage = () => {
           </form>
         </div>
 
-                  {/* Search Staff by Name */}
-                  <div className="mt-4">
-          <h2 className="font-bold text-xl mb-4">Search Staff by Name</h2>
-          <form
-            onSubmit={(e) => {
-            e.preventDefault();
-            searchStaffByName();
-            }}
-          >
-            <div className="flex gap-4">
-            <input
-              type="text"
-              placeholder="Staff Name"
-              value={searchName}
-              onChange={(e) => setSearchName(e.target.value)}
-              className="p-2 border rounded"
-              required
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Search
-            </button>
-            </div>
-          </form>
-          </div>
-
+{/* Search Staff by Name
+<div className="mt-4">
+  <h2 className="font-bold text-xl mb-4">Search Staff by Name</h2>
+  <form
+    onSubmit={(e) => {
+      e.preventDefault();
+      searchStaffByName();  // Trigger search when the form is submitted
+    }}
+  >
+    <div className="flex gap-4">
+      <input
+        type="text"
+        placeholder="Staff Name"
+        value={searchName}
+        onChange={(e) => setSearchName(e.target.value)}  // Update search term
+        className="p-2 border rounded"
+      />
+      <button
+        type="submit"
+        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Search
+      </button>
+    </div>
+  </form>
+  <div className="border p-4 rounded-lg mt-4">
+    <h2 className="font-bold text-xl mb-4">Search Results</h2>
+    <table className="w-full border-collapse border">
+      <thead>
+        <tr>
+          <th className="border p-2">Staff ID</th>
+          <th className="border p-2">Staff Name</th>
+          <th className="border p-2">Phone Number</th>
+          <th className="border p-2">Gender</th>
+          <th className="border p-2">Department ID</th>
+          <th className="border p-2">Salary</th>
+          <th className="border p-2">Staff Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {staffs.map((staff) => (
+          <tr key={staff.staff_id}>
+            <td className="border p-2">{staff.staff_id}</td>
+            <td className="border p-2">{staff.staff_name}</td>
+            <td className="border p-2">{staff.phone_number}</td>
+            <td className="border p-2">{staff.gender}</td>
+            <td className="border p-2">{staff.department_id}</td>
+            <td className="border p-2">{staff.salary}</td>
+            <td className="border p-2">{staff.staff_status}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div> */}
 
 
         {/* Staff List */}
