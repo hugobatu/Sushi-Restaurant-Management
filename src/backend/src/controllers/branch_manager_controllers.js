@@ -310,7 +310,7 @@ exports.getBranchStaffRatings = async (req, res) => {
                 JOIN Staff ON Staff.department_id = Department.department_id
                 WHERE Staff.staff_id = @user_id;
             `);
-
+                
         if (!branchResult.recordset || branchResult.recordset.length === 0) {
             return res.status(404).json({
                 success: false,

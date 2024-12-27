@@ -17,7 +17,6 @@ EXEC sp_add_region N'Khánh Hòa'
 EXEC sp_add_region N'Nha Trang'
 EXEC sp_add_region N'Đà Nẵng'
 EXEC sp_add_region N'Hà Nội'
-
 -- Kiểm tra menu của chi nhánh B002
 SELECT * FROM BranchMenuItem WHERE branch_id = 'B002'
 

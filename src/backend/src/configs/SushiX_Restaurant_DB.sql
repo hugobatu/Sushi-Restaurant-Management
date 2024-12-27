@@ -327,6 +327,3 @@ SELECT
 FROM sys.objects
 WHERE type = 'P' -- procedures
 ORDER BY name;
-
-select * from Customer
-select * from Account

@@ -17,7 +17,7 @@ exports.addCustomer = async (req, res) => {
             message: "Missing required fields. Please provide all customer details.",
         });
     }
-
+    
     try {
         const pool = await con;
 
