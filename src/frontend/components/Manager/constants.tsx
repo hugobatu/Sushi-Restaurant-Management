@@ -13,4 +13,8 @@ export const SIDENAV_ITEMS: ManagerSideNavItem[] = [
     title: "Staffs",
     path: "/manager/staffs",
   },
+  {
+    title: "Branch Sales",
+    path: "/manager/branch-sale",
+  },
 ];

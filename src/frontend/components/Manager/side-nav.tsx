@@ -17,10 +17,15 @@ export const SIDENAV_ITEMS: ManagerSideNavItem[] = [
     icon: <BookOpen size={24} />,
   },
   {
-      title: 'Staffs',
-      path: '/manager/staffs',
-      icon: <User size={24} />,
-    },
+    title: 'Staffs',
+    path: '/manager/staffs',
+    icon: <User size={24} />,
+  },
+  {
+    title: 'Branch Sales',
+    path: '/manager/branch-sale',
+    icon: <User size={24} />,
+  },
 ];
 
 export function SideNav() {
