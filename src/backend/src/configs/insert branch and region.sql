@@ -1,5 +1,6 @@
 ﻿GO
 USE SushiXRestaurant
+
 SELECT * FROM Region
 SELECT * FROM Branch
 select * from [Table]
@@ -10,13 +11,13 @@ select * from Department
 select * from WorkHistory
 select * from Staff
 select * from Account
--- Thêm một khu vực mới
+
+-- Thêm 10 khu vực
 EXEC sp_add_region N'Thành Phố Hồ Chí Minh'
-EXEC sp_add_region N'Đà Lạt'
+EXEC sp_add_region N'Hà Nội'
+EXEC sp_add_region N'Đà Nẵng'
 EXEC sp_add_region N'Khánh Hòa'
 EXEC sp_add_region N'Nha Trang'
-EXEC sp_add_region N'Đà Nẵng'
-EXEC sp_add_region N'Hà Nội'
 
 -- Kiểm tra menu của chi nhánh B002
 SELECT * FROM BranchMenuItem WHERE branch_id = 'B002'
@@ -25,7 +26,7 @@ SELECT * FROM BranchMenuItem WHERE branch_id = 'B002'
 SELECT * FROM Staff JOIN Department ON Department.department_id = Staff.department_id AND Department.branch_id = 'B001'
 SELECT * FROM Staff JOIN Department ON Department.department_id = Staff.department_id AND Department.branch_id = 'B002'
 
--- Gọi stored procedure để thêm nhân viên chi nhánh vào bảng Branch
+-- Thêm chi nhánh
 EXEC sp_add_new_branch
     @region_id = 'TPHCM', 
     @branch_name = N'Tekashimaya quận 1', 
@@ -37,7 +38,7 @@ EXEC sp_add_new_branch
     @has_car_parking_lot = 1;
 
 EXEC sp_add_new_branch 
-    @region_id = 'tphcm', 
+    @region_id = 'TPHCM',
     @branch_name = N'Nguyễn Văn Cừ',
     @branch_address = N'456 Nguyễn Văn Cừ', 
     @opening_time = '09:00', 

@@ -172,6 +172,7 @@ exports.getBranches = async (req, res) => {
         });
     }
 };
+
 // 5.
 exports.addStaff = async (req, res) => {
     const {

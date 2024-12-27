@@ -1,4 +1,4 @@
-GO
+﻿GO
 USE SushiXRestaurant
 
 -- 1. get table status by branch
@@ -27,7 +27,7 @@ BEGIN
     END CATCH
 END;
 
--- 4. add customer
+-- 2. add customer
 GO
 CREATE OR ALTER PROC sp_add_customer
 	@customer_name NVARCHAR(50),
@@ -61,29 +61,7 @@ BEGIN
 		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
 	END CATCH
 END
--- 5. view customer list at that branch
+-- 3. xác nhận order
 GO
-CREATE OR ALTER PROC sp_view_customer_by_branch
-	@branch_id VARCHAR(10)
-AS
-BEGIN
-	BEGIN TRY
-		SELECT * 
-		FROM Staff S
-		JOIN Department D
-		ON D.department_id = S.department_id
-		WHERE D.branch_id = @branch_id
-	END TRY
-	BEGIN CATCH
-		IF @@TRANCOUNT > 0
-			ROLLBACK TRAN;
-
-		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-		DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
-		DECLARE @ErrorState INT = ERROR_STATE();
-
-		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
-	END CATCH
-END
-
--- 6. 
+CREATE OR ALTER PROC sp_confirm_order
+	

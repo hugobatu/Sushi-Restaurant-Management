@@ -37,4 +37,4 @@ router.delete('/combo/delete', admin_controllers.deleteCombo);      // 17. xóa 
 
 // xem tất cả các có trong nhà hàng
 router.get('/menu-item/get', admin_controllers.viewAllMenuItem);
-module.exports = router;    
+module.exports = router;

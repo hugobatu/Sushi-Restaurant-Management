@@ -6,10 +6,10 @@ const controllers = require('../controllers/branch_manager_controllers');
 // router.use(protect(['manager']));
 
 // xem danh sách nhân viên
-router.get('/manager/staff/name', controllers.getStaffDataByName); // 9. xem nhân viên theo tên
-router.get('/manager/staff/all-data', controllers.getAllBranchStaffData); // 10. xem tất cả nhân viên theo chi nhánh
-router.get('/manager/staff/ratings', controllers.getBranchStaffRatings); // 11. xem tất cả đánh giá của nhân viên tại chi nhánh đó
-router.get('/manager/branch-sales', controllers.getBranchSales); // 12. xem doanh thu của chi nhánh đó
+router.get('/manager/staff/name', controllers.getStaffDataByName); // 8. xem nhân viên theo tên
+router.get('/manager/staff/all-data', controllers.getAllBranchStaffData); // 9. xem tất cả nhân viên theo chi nhánh
+router.get('/manager/staff/ratings', controllers.getBranchStaffRatings); // 10. xem tất cả đánh giá của nhân viên tại chi nhánh đó
+router.get('/manager/branch-sales', controllers.getBranchSales); // 11. xem doanh thu của chi nhánh đó
 
 // menu của chi nhánh
 router.post('/menu-branch-item/add', controllers.addBranchMenuItem); // 1. thêm branch menu item vào chi nhánh
