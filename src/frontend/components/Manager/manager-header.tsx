@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import useScroll from '../../hooks/use-scroll';
 import { cn } from '../../lib/utils';
 
-export function AdminHeader() {
+export function ManagerHeader() {
   const scrolled = useScroll(5);
   const selectedLayout = useSelectedLayoutSegment();
   const [username, setUsername] = useState<string | null>(null);
@@ -20,7 +20,7 @@ export function AdminHeader() {
           <Link
             href="/a"
           >
-            <div className="text-white px-7 py-2.5 text-xl">Sushi - Branch Admin</div>
+            <div className="text-white px-7 py-2.5 text-xl">Sushi - Branch Manager</div>
           </Link>
         </div>
         <div className="relative h-full w-full">
