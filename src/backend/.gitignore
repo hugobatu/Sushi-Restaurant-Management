@@ -3,3 +3,4 @@ node_modules
 /src/publice/
 /test
 /configs
+.gitignore
