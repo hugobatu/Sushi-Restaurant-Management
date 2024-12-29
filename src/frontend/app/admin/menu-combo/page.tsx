@@ -54,7 +54,7 @@ const MenuPage = () => {
       const response = await fetch("http://localhost:8000/company/menu-item/delete", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ item_id: itemDelete }),
+        body: JSON.stringify({ combo_id: comboDelete }),
       });
       const data = await response.json();
       if (data.success) {
@@ -72,18 +72,14 @@ const MenuPage = () => {
   //--------------Combo Management----------------
   interface Combo {
     combo_name: string,
-    description: string,
-    item_id_1?: string,
-    item_id_2?: string,
-    item_id_3?: string,
+    combo_description: string,
+    item_ids: string[],
   }
   const [combo, setCombo] = useState<Combo[]>([]);
   const [newCombo, setNewCombo] = useState({
     combo_name: "",
-    description: "",
-    item_id_1: "",
-    item_id_2: "",
-    item_id_3: "",
+    combo_description: "",
+    item_ids: ["", "", ""],
   });
   const [comboDelete, setComboDelete] = useState<string | null>(null);
 
@@ -108,17 +104,17 @@ const MenuPage = () => {
 
   // Deleting combo
   const deleteCombo = async () => {
-    if (!itemDelete) return;
+    if (!comboDelete) return;
     try {
       const response = await fetch("http://localhost:8000/company/combo/delete", {
-        method: "PUT",
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ item_id: itemDelete }),
+        body: JSON.stringify({ combo_id: comboDelete }),
       });
       const data = await response.json();
       if (data.success) {
-        setMessage("Combo's been deleted successfully!");
-        setItemDelete(null);
+        setMessage("Combo deleted successfully!");
+        setComboDelete(null);
       } else {
         setMessage(data.message || "Error deleting combo.");
       }
@@ -223,69 +219,78 @@ const MenuPage = () => {
 
 
           <div className="border p-4 rounded-lg bg-gray-100 mb-6">
-    <h2 className="font-bold text-xl mb-4">Add New Combo</h2>
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        addCombo();
-      }}
-    >
-      <div className="grid grid-cols-2 gap-4">
-        <input
-          type="text"
-          placeholder="Combo Name"
-          value={newCombo.combo_name}
-          onChange={(e) =>
-            setNewCombo({ ...newCombo, combo_name: e.target.value })
-          }
-          className="p-2 border rounded col-span-2"
-          required
-        />
-        <textarea
-          placeholder="Combo Description"
-          value={newCombo.description}
-          onChange={(e) =>
-            setNewCombo({ ...newCombo, description: e.target.value })
-          }
-          className="p-2 border rounded col-span-2 max-h-[120px] min-h-[120px]"
-        />
-        <input
-          type="text"
-          placeholder="Item ID 1"
-          value={newCombo.item_id_1 || ""}
-          onChange={(e) =>
-            setNewCombo({ ...newCombo, item_id_1: e.target.value })
-          }
-          className="p-2 border rounded col-span-2"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Item ID 2"
-          value={newCombo.item_id_2 || ""}
-          onChange={(e) =>
-            setNewCombo({ ...newCombo, item_id_2: e.target.value })
-          }
-          className="p-2 border rounded col-span-2"
-        />
-        <input
-          type="text"
-          placeholder="Item ID 3"
-          value={newCombo.item_id_3 || ""}
-          onChange={(e) =>
-            setNewCombo({ ...newCombo, item_id_3: e.target.value })
-          }
-          className="p-2 border rounded col-span-2"
-        />
-      </div>
-      <button
-        type="submit"
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        Add Combo
-      </button>
-    </form>
-  </div> 
+            <h2 className="font-bold text-xl mb-4">Add New Combo</h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                addCombo();
+              }}
+            >
+              <div className="grid grid-cols-2 gap-4">
+                <input
+            type="text"
+            placeholder="Combo Name"
+            value={newCombo.combo_name}
+            onChange={(e) =>
+              setNewCombo({ ...newCombo, combo_name: e.target.value })
+            }
+            className="p-2 border rounded col-span-2"
+            required
+                />
+                <textarea
+            placeholder="Combo Description"
+            value={newCombo.combo_description}
+            onChange={(e) =>
+              setNewCombo({ ...newCombo, combo_description: e.target.value })
+            }
+            className="p-2 border rounded col-span-2 max-h-[120px] min-h-[120px]"
+                />
+                <input
+            type="text"
+            placeholder="Item ID 1"
+            value={newCombo.item_ids[0] || ""}
+            onChange={(e) =>
+              setNewCombo({
+                ...newCombo,
+                item_ids: [e.target.value, newCombo.item_ids[1], newCombo.item_ids[2]],
+              })
+            }
+            className="p-2 border rounded col-span-2"
+            required
+                />
+                <input
+            type="text"
+            placeholder="Item ID 2"
+            value={newCombo.item_ids[1] || ""}
+            onChange={(e) =>
+              setNewCombo({
+                ...newCombo,
+                item_ids: [newCombo.item_ids[0], e.target.value, newCombo.item_ids[2]],
+              })
+            }
+            className="p-2 border rounded col-span-2"
+                />
+                <input
+            type="text"
+            placeholder="Item ID 3"
+            value={newCombo.item_ids[2] || ""}
+            onChange={(e) =>
+              setNewCombo({
+                ...newCombo,
+                item_ids: [newCombo.item_ids[0], newCombo.item_ids[1], e.target.value],
+              })
+            }
+            className="p-2 border rounded col-span-2"
+                />
+              </div>
+              <button
+                type="submit"
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Add Combo
+              </button>
+            </form>
+          </div>
 
         {/* Delete Combo*/}
         <div className="border p-4 rounded-lg bg-red-100 mb-6 hover:bg-red-300">
@@ -294,6 +299,7 @@ const MenuPage = () => {
             onSubmit={(e) => {
               e.preventDefault();
               deleteCombo();
+              
             }}
           >
             <div className="grid grid-cols-1 gap-4">
