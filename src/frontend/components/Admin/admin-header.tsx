@@ -20,7 +20,7 @@ export function AdminHeader() {
           <Link
             href="/a"
           >
-            <div className="text-white px-7 py-2.5 text-xl">Sushi - Branch Admin</div>
+            <div className="text-white px-7 py-2.5 text-xl">Sushi - Admin</div>
           </Link>
         </div>
         <div className="relative h-full w-full">
