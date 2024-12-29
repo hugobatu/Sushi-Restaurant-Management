@@ -31,6 +31,9 @@ export function AdminHeader() {
               localStorage.removeItem("token");
               setUsername(null);
               window.location.href = "/";
+                localStorage.removeItem("cart");
+                localStorage.removeItem("checkedItems");
+                localStorage.removeItem("totalAmount");
               }}
             >
               ĐĂNG XUẤT

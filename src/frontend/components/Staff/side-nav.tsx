@@ -6,15 +6,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { StaffSideNavItem } from "./staff-item";
 import {
-  User,
+  User, Home 
+, ClipboardList
 } from "lucide-react";
 
 export const SIDENAV_ITEMS: StaffSideNavItem[] = [
   {
-    title: "For Staff",
-    path: "/staff/customers",
-    icon: <User size={24} />,
+    title: "Order Menu",
+    path: "/menu",
+    icon: <Home size={24} />
   },
+  {
+    title: "Check Order",
+    path: "/staff/checkorder",
+    icon: <ClipboardList size={24}/>
+  }
 ];
 
 export function SideNav() {

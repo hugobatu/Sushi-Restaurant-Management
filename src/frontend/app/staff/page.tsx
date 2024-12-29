@@ -1,5 +1,5 @@
 import { StaffSection } from "../../components/StaffPage/staff-section";
-import { StaffHeader } from "@/components/StaffPage/staff-header";
+import { StaffHeader } from "../../components/StaffPage/staff-header";
 const StaffPage = () => {
     return (
         <div>
