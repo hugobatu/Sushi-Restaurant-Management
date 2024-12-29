@@ -905,12 +905,13 @@ END;
 --EXEC sp_delete_MenuItem 'ND14';
 
 -- 16. thêm combo món ăn
---GO
---CREATE TYPE ItemIdTable AS TABLE (
---    item_id VARCHAR(10)
---);
---GO
-
+/*
+GO
+CREATE TYPE ItemIdTable AS TABLE (
+    item_id VARCHAR(10)
+);
+GO
+*/
 GO
 CREATE OR ALTER PROCEDURE sp_add_combo
     @combo_name NVARCHAR(50),

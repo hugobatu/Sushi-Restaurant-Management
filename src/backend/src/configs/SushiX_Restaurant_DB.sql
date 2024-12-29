@@ -98,7 +98,7 @@ CREATE TABLE WorkHistory(
 GO
 CREATE TABLE MenuItem (
     item_id VARCHAR(10) NOT NULL,
-    item_name NVARCHAR(50) NOT NULL,
+    item_name NVARCHAR(MAX) NOT NULL,
     menu_item_description NVARCHAR(255),
     base_price FLOAT NOT NULL,
     menu_item_status NVARCHAR(20) CHECK (menu_item_status IN (N'available', N'unavailable')),
@@ -171,7 +171,7 @@ CREATE TABLE [Order](
 	branch_id VARCHAR(10) NOT NULL,
 	staff_id INT NOT NULL,
 	order_datetime DATETIME NOT NULL,
-    order_status NVARCHAR(20) NOT NULL CHECK (order_status IN (N'pending', N'done')),
+    order_status NVARCHAR(20) NOT NULL CHECK (order_status IN (N'pending', N'done', 'cancelled')),
 	PRIMARY KEY (order_id),
 	FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
 	FOREIGN KEY (branch_id) REFERENCES Branch(branch_id) ,

@@ -90,25 +90,124 @@ END
 -- 2. xác nhận order và xuẩt ra bill
 GO
 CREATE OR ALTER PROC sp_confirm_order_export_bill_get_rating
-	@user_id INT,
-	@order_id INT,
-	
+    @user_id INT,
+    @order_id INT,
+    @vat FLOAT = 0.08, -- default VAT là 8%
+    -- Đánh giá của khách hàng
+    @servile_manner_rating INT,
+    @branch_rating INT,
+    @food_quality_rating INT,
+    @price_rating INT,
+    @surroundings_rating INT,
+    @personal_response NVARCHAR(255)
 AS
 BEGIN
-	-- getting branch id
-	DECLARE @branch_id INT
-	SET @branch_id = (
-		SELECT B.branch_id
-		FROM Branch B
-		JOIN Department D
-		ON D.branch_id = B.branch_id
-		JOIN Staff S
-		ON S.department_id = D.department_id
-		WHERE S.staff_id = @user_id
-	)
-	
-END
-	
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- lấy branch_id
+        DECLARE @branch_id VARCHAR(10);
+        SET @branch_id = (
+            SELECT B.branch_id
+            FROM Branch B
+            JOIN Department D ON D.branch_id = B.branch_id
+            JOIN Staff S ON S.department_id = D.department_id
+            WHERE S.staff_id = @user_id
+        );
+
+        -- kiểm tra nếu branch_id không hợp lệ
+        IF @branch_id IS NULL
+        BEGIN
+            RAISERROR('User does not belong to any branch.', 16, 1)
+        END;
+
+        -- lấy customer_id từ order
+        DECLARE @customer_id INT;
+        SET @customer_id = (
+            SELECT O.customer_id
+            FROM [Order] O
+            WHERE O.order_id = @order_id AND O.order_status = 'pending'
+        );
+
+        -- kiểm tra nếu order_id không hợp lệ
+        IF @customer_id IS NULL
+        BEGIN
+            RAISERROR('Invalid order ID or this order ID has been processed and exported to bill.', 16, 1)
+        END;
+
+        -- tính tổng tiền món ăn trong đơn hàng
+        DECLARE @total_amount FLOAT;
+        SET @total_amount = (
+            SELECT SUM(OD.quantity * OD.unit_price) * (1 + @vat)
+            FROM OrderDetails OD
+            WHERE OD.order_id = @order_id
+        );
+		PRINT(@total_amount)
+        -- kiểm tra nếu không có món ăn nào trong order
+        IF @total_amount IS NULL OR @total_amount <= 0
+        BEGIN
+            RAISERROR('No items found in the order.', 16, 1);
+        END;
+
+        -- insert dữ liệu vào bảng Bill
+        DECLARE @BillOutput TABLE (
+			bill_id VARCHAR(10)
+		);
+
+		INSERT INTO Bill(bill_id, order_id, subtotal, discount_amount, tax_amount, payment_method, bill_date, bill_status)
+		OUTPUT inserted.bill_id INTO @BillOutput
+		VALUES (CONVERT(VARCHAR(10), LEFT(NEWID(), 10)), @order_id, @total_amount, 0, @vat, 'cash', GETDATE(), 'paid');
+		
+		DECLARE @bill_id VARCHAR(10);
+        SELECT TOP 1 @bill_id = bill_id FROM @BillOutput;
+
+        -- insert đánh giá khách hàng vào bảng CustomerRating
+        INSERT INTO CustomerRating(
+			customer_id, 
+			branch_id, 
+			bill_id, 
+			staff_id,
+			service_manner_rating,
+			branch_rating,
+			food_quality_rating,
+			price_rating,
+			surroundings_rating,
+			personal_response
+		)
+        VALUES (
+			@customer_id, 
+			@branch_id,
+			@bill_id,
+			@user_id,
+			@servile_manner_rating, 
+			@branch_rating,
+			@food_quality_rating, 
+			@price_rating, 
+			@surroundings_rating,
+			@personal_response);
+
+        -- cập nhật trạng thái của order thành "confirmed"
+        UPDATE [Order]
+        SET order_status = 'done'
+        WHERE order_id = @order_id;
+
+		SELECT *
+		FROM Bill B
+		WHERE B.bill_id = @bill_id
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+
+        DECLARE @error_message NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @error_severity INT = ERROR_SEVERITY();
+        DECLARE @error_state INT = ERROR_STATE();
+
+        RAISERROR (@error_message, @error_severity, @error_state);
+    END CATCH
+END;
+GO
 -- 3. nhân viên tạo order cho khách hàng dùng dịch vụ ĂN TRỰC TIẾP
 GO
 CREATE OR ALTER PROC sp_create_order_by_staff
@@ -209,12 +308,17 @@ BEGIN
     END CATCH
 END;
 GO
+-- 4. 
+--SELECT * FROM [Order]
+--SELECT * FROM OrderDetails
+--SELECT * FROM DirectServiceOrder
+--SELECT * FROM Bill
 
-SELECT * FROM [Order]
-SELECT * FROM OrderDetails
-SELECT * FROM DirectServiceOrder
+--EXEC sp_confirm_order_export_bill_get_rating 1, 25, 0.08, 10, 10, 10, 10, 10, N'Nhà hàng đỉnh của chóp'
 
-
+--UPDATE [Order]
+--SET order_status = 'pending'
+--where order_id = 25
 --DELETE FROM OrderDetails
 --DELETE FROM DirectServiceOrder
 --DELETE FROM [Order]
