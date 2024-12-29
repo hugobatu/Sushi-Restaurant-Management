@@ -26,15 +26,22 @@ export function AdminHeader() {
         <div className="relative h-full w-full">
           <div className="absolute right-20 top-1">
           <Button
-              className="bg-black hover:bg-gray-800"
-              onClick={() => {
+            className="bg-black hover:bg-gray-800"
+            onClick={() => {
               localStorage.removeItem("token");
               setUsername(null);
               window.location.href = "/";
-              }}
-            >
-              ĐĂNG XUẤT
-            </Button>
+              localStorage.removeItem("cart");
+              localStorage.removeItem("checkedItems");
+              localStorage.removeItem("totalAmount");
+              document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+              document.cookie = "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+              document.cookie = "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+              document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }}
+          >
+            ĐĂNG XUẤT
+          </Button>
             </div>
           </div>
         </div>

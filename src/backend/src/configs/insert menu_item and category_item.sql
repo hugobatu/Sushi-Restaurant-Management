@@ -1,7 +1,9 @@
 GO
 USE SushiXRestaurant
 
+
 /*insert data into menu item*/
+<<<<<<< HEAD
 PRINT 'Loading MenuCategory';
 BULK INSERT MenuItem FROM 'D:\LEARNING\Sushi-Restaurant-Management\src\backend\data\final_data.csv'
 WITH (
@@ -13,8 +15,23 @@ WITH (
     FIRSTROW = 2,
 	ROWTERMINATOR = '0x0a',
     FORMAT = 'CSV'
+=======
+INSERT INTO MenuItem (item_id, item_name, menu_item_description, base_price, menu_item_status, image_url)
+SELECT 
+    [item_id],
+    [item_name], 
+    [menu_item_description], 
+    [base_price], 
+    [menu_item_status],
+	[image_url]
+FROM OPENROWSET(
+    'Microsoft.ACE.OLEDB.16.0',
+    'Excel 12.0;Database=D:\Sushi-Restaurant-Management\src\backend\data\final_data.xlsx',
+    'SELECT * FROM [Sheet1$]'
+>>>>>>> 52b6073f8fb1351b2e946e9d1542eadb2e7b9220
 );
 /*insert data into menu category*/
+<<<<<<< HEAD
 PRINT 'Loading MenuCategory';
 BULK INSERT MenuCategory FROM 'D:\LEARNING\Sushi-Restaurant-Management\src\backend\data\category_table.csv'
 WITH (
@@ -26,6 +43,18 @@ WITH (
     FIRSTROW = 2,
 	ROWTERMINATOR = '0x0a',
     FORMAT = 'CSV'
+=======
+
+INSERT INTO MenuCategory(category_id, category_name, menu_category_description)
+SELECT 
+    [category_id], 
+    [category_name], 
+    [menu_category_description]
+FROM OPENROWSET(
+    'Microsoft.ACE.OLEDB.16.0',
+    'Excel 12.0;Database=D:\Sushi-Restaurant-Management\src\backend\data\category_table.xlsx',
+    'SELECT * FROM [Sheet1$]'
+>>>>>>> 52b6073f8fb1351b2e946e9d1542eadb2e7b9220
 );
 
 

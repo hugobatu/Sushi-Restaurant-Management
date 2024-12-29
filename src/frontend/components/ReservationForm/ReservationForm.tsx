@@ -153,6 +153,8 @@ const ReservationForm = () => {
     guests: 0,
     date: "",
     time: "",
+    customer_name: "",
+    table_number: "",
   });
 
 
@@ -182,39 +184,45 @@ const ReservationForm = () => {
 
 
         <div className="form-group">
-          <label htmlFor="guests" className="form-label">Số lượng khách</label>
+          <label htmlFor="user_id" className="form-label">User ID</label>
           <input
-            type="number"
-            id="guests"
-            name="guests"
-            value={formData.guests}
+            type="text"
+            id="user_id"
+            name="user_id"
+            value={document.cookie.split('; ').find(row => row.startsWith('user_id='))?.split('=')[1] || ''}
+            readOnly
+            className="form-input"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="customer_name" className="form-label">Nhập tên khách hàng</label>
+          <input
+            type="text"
+            id="customer_name"
+            name="customer_name"
+            value={formData.customer_name || ''}
             onChange={handleChange}
             className="form-input"
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="date" className="form-label">Ngày</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={formData.date}
+          <label htmlFor="table_number" className="form-label">Chọn bàn 1-30</label>
+          <select
+            id="table_number"
+            name="table_number"
+            value={formData.table_number || ''}
             onChange={handleChange}
             className="form-input"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="time" className="form-label">Giờ</label>
-          <input
-            type="time"
-            id="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            className="form-input"
-          />
+          >
+            <option value="">Chọn bàn</option>
+            {Array.from({ length: 30 }, (_, i) => i + 1).map((number) => (
+              <option key={number} value={number}>
+          {number}
+              </option>
+            ))}
+          </select>
         </div>
         <button
           type="submit"
@@ -227,18 +235,41 @@ const ReservationForm = () => {
             const user_id = cookies.split('; ').find(row => row.startsWith('user_id='))?.split('=')[1];
 
             const checkedItems = JSON.parse(localStorage.getItem('checkedItems') || '[]');
-            const formattedCheckedItems = checkedItems.map((item: { id: string, name: string, price: number, quantity: number }) => `ID: ${item.id}, Name: ${item.name}, Price: ${item.price}, Quantity: ${item.quantity}`).join('\n');
+            const formattedCheckedItems = checkedItems.map((item: { id: string, quantity: number }) => `ID: ${item.id}, Quantity: ${item.quantity}`).join('\n');
             const totalAmount = localStorage.getItem('totalAmount');
-
             console.log("Cookies:", cookies);
             console.log("Role:", role);
             console.log("Token:", token);
             console.log("User Name:", username);
             console.log("user_id: ", user_id);
+            console.log("Customer Name:", formData.customer_name);
+            console.log("Table Number:", formData.table_number);
             console.log("Checked Items:", formattedCheckedItems);
             console.log("Total Amount:", totalAmount);
 
-            alert(`Form Data:\nUsername: ${username}\nuser_id: ${user_id}\nRole: ${role}\nGuests: ${formData.guests}\nDate: ${formData.date}\nTime: ${formData.time}\nToken: ${token}\nChecked Items:\n${formattedCheckedItems}\nTotal Amount: ${totalAmount}`);
+            // đợi API của Quân Bùi
+            fetch('/api/reservations', {
+              method: 'POST',
+              headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({
+              user_id,
+              customer_name: formData.customer_name,
+              table_number: formData.table_number,
+              items: checkedItems,
+              total_amount: totalAmount
+              })
+            })
+            .then(response => response.json())
+            .then(data => {
+              console.log('Success:', data);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+            alert(`Form Data:\nuser_id: ${user_id}\nRole: ${role}\nCustomer Name: ${formData.customer_name}\nTable ID: ${formData.table_number}\nChecked Items:\n${formattedCheckedItems}\nTotal Amount: ${totalAmount}`);
           }}
         >
           Gửi

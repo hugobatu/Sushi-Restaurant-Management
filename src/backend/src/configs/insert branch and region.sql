@@ -69,7 +69,7 @@ SELECT * FROM Staff
 SELECT * FROM WorkHistory
 SELECT * FROM Department	
 -- testing transfering
-EXEC sp_transfer_staff 5, 'b002', 'chef'
+--EXEC sp_transfer_staff 5, 'b002', 'chef'
 -- testing update salary
-EXEC sp_update_staff_salary 19, 0.1
+--EXEC sp_update_staff_salary 19, 0.1
 -- fetch branch rating
