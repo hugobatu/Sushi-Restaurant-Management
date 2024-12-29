@@ -1,6 +1,6 @@
 GO
 USE SushiXRestaurant
-
+select * from MenuItemCategory
 --/*insert data into menu item*/
 --PRINT 'Loading MenuCategory';
 --BULK INSERT MenuItem FROM 'D:\LEARNING\Sushi-Restaurant-Management\src\backend\data\menu_item.csv'
@@ -28,12 +28,10 @@ USE SushiXRestaurant
 --    FORMAT = 'CSV'
 --);
 
-select * from MenuItemCategory
-select * from MenuCategory
-select * from MenuItem
+
 INSERT INTO MenuItemCategory(item_id, category_id)
 VALUES
---('A1', 'A'),
+('A1', 'A'),
 ('A10', 'A'),
 ('A11', 'A'),
 ('A12', 'A'),

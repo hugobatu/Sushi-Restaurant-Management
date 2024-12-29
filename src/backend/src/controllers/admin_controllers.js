@@ -146,9 +146,7 @@ exports.getBranches = async (req, res) => {
     try {
         const pool = await con;
         const result = await pool.request()
-            .input('page_number', sql.Int, page_number)
-            .input('page_size', sql.Int, page_size)
-            .query('EXEC sp_get_branches_data @page_number, @page_size');
+            .query('EXEC sp_get_branches_data');
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
