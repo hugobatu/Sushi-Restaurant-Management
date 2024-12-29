@@ -29,22 +29,22 @@ exports.signup = async (req, res) => {
 
         // check if customer already exists
         const customerQuery = `
-            SELECT * FROM Customer
-            WHERE email = @email OR phone_number = @phone_number OR id_number = @id_number`;
+            SELECT customer_id, username 
+            FROM Customer
+            WHERE email = @email AND phone_number = @phone_number AND id_number = @id_number`;
         const customerResult = await pool.request()
             .input('email', sql.VarChar(50), email)
             .input('phone_number', sql.VarChar(10), phone_number)
             .input('id_number', sql.VarChar(12), id_number)
             .query(customerQuery);
 
-        const isExistingCustomer = customerResult.recordset.length > 0;
-
         // hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        if (isExistingCustomer) {
-            const customer = customerResult.recordset[0];
-            // check if customer already has an account linked
+        
+        if (customerResult.recordset.length > 0) {
+            const customer = customerResult.recordset[0]; // Access the first record
+            console.log(customer.username);
+            // Check if the customer already has an account linked
             if (customer.username != null) {
                 return res.status(400).json({
                     success: false,
@@ -74,17 +74,32 @@ exports.signup = async (req, res) => {
                 result: result
             });
         } else {
-            const customer = await pool.request()
+            console.log("lets go my frend")
+            const check = await pool.request()
                 .input('email', sql.NVarChar(50), email)
                 .input('phone_number', sql.NVarChar(15), phone_number)
+                .input('id_number', sql.VarChar(20), id_number)
+                .query(`
+                    SELECT 1 
+                    FROM Customer 
+                    WHERE email = @email OR phone_number = @phone_number OR id_number = @id_number`)
+            if (check.recordset.length > 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: `You are trying to register a new account as a new staff but this email/phone number/id number has been already used. This means that your data have already existed in the database. Try to remember your exact email, phone number and id number.`,
+                });
+            }
+            const customer = await pool.request()
+                .input('email', sql.NVarChar(50), email)
                 .input('name', sql.NVarChar(50), name)
+                .input('phone_number', sql.NVarChar(15), phone_number)
                 .input('gender', sql.NVarChar(10), gender)
                 .input('id_number', sql.VarChar(20), id_number)
                 .input('birth_date', sql.Date, birth_date)
                 .query(`
-                    INSERT INTO Customer (email, phone_number, customer_name, gender, id_number, birth_date)
+                    INSERT INTO Customer (customer_name, email, phone_number , gender, id_number, birth_date)
                     OUTPUT Inserted.customer_id
-                    VALUES (@email, @phone_number, @name, @gender, @id_number, @birth_date)
+                    VALUES (@name, @email, @phone_number, @gender, @id_number, @birth_date)
                 `);
 
             const customerId = customer.recordset[0].customer_id;
@@ -170,7 +185,7 @@ exports.login = async (req, res) => {
                     WHERE username = @username;
                 `);
             userId = userResult.recordset[0]?.customer_id || null;
-        } else if (account.account_type === 'manager') {
+        } else if (account.account_type === 'manager' || account.account_type === 'staff') {
             const userResult = await pool.request()
                 .input('username', sql.VarChar(50), username)
                 .query(`

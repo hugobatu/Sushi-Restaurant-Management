@@ -247,7 +247,6 @@ exports.addStaff = async (req, res) => {
         const account_type = department_name.toLowerCase();
         if (account_type === "manager") {
             const managerCheck = await request
-                .input("branch_id", sql.VarChar(10), branch_id)
                 .query(`
                     SELECT 1
                     FROM Staff S
@@ -744,7 +743,7 @@ exports.addCombo = async (req, res) => {
 
     try {
         const pool = await con;
-
+        
         // table-valued parameter for item_ids
         const tvp = new sql.Table('ItemIdTable');
         tvp.columns.add('item_id', sql.VarChar(10)); // Match the table type definition in SQL Server

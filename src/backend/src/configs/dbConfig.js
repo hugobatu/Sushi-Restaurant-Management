@@ -29,7 +29,7 @@ const config = {
     },
     port: process.env.DB_PORT
 };
-
+    
 const con = new sql.ConnectionPool(config)
     .connect()
     .then((pool) => {

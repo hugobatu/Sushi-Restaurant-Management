@@ -234,9 +234,9 @@ CREATE TABLE Bill (
 -- promotion program
 GO
 CREATE TABLE PromotionProgram (
-	program_id VARCHAR(10) NOT NULL,
+	program_id INT NOT NULL,
 	promotion_program_name NVARCHAR(50) NOT NULL,
-	program_description NVARCHAR(255) ,
+	program_description NVARCHAR(255),
 	starting_date DATETIME,
 	end_date DATETIME,
 	promotion_program_status NVARCHAR(20),
@@ -246,8 +246,8 @@ CREATE TABLE PromotionProgram (
 GO
 CREATE TABLE Coupon (
 	coupon_id VARCHAR(10) NOT NULL,
-	program_id VARCHAR(10) NOT NULL,
-	bill_id VARCHAR(10) NULL,
+	program_id INT NOT NULL,
+	customer_id INT NOT NULL,
 	coupon_code VARCHAR(10) NOT NULL UNIQUE,
     discount_rate FLOAT NOT NULL CHECK (discount_rate > 0 AND discount_rate <= 1),
 	max_amount FLOAT NOT NULL,
@@ -255,7 +255,7 @@ CREATE TABLE Coupon (
 	valid_to DATETIME NOT NULL,
     coupon_status NVARCHAR(20) CHECK (coupon_status IN (N'active', N'expired', N'used')),
 	PRIMARY KEY (coupon_id),
-	FOREIGN KEY (bill_id) REFERENCES Bill(bill_id) ,
+	FOREIGN KEY (customer_id) REFERENCES Customer(customer_id) ,
 	FOREIGN KEY (program_id) REFERENCES PromotionProgram(program_id) 
 );
 -- membership level

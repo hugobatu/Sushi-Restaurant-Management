@@ -12,7 +12,7 @@ select * from WorkHistory
 select * from Staff
 select * from Account
 
--- Thêm 10 khu vực
+-- Thêm 5 khu vực
 EXEC sp_add_region N'Thành Phố Hồ Chí Minh'
 EXEC sp_add_region N'Hà Nội'
 EXEC sp_add_region N'Đà Nẵng'

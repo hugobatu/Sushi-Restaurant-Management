@@ -260,19 +260,11 @@ GO
 -- 4. get all branch information
 GO
 CREATE OR ALTER PROC sp_get_branches_data
-    @page_number INT,
-    @page_size INT
 AS
 BEGIN
-    DECLARE @offset INT;
-
-    SET @offset = (@page_number - 1) * @page_size;
-
     SELECT *
     FROM Branch
     ORDER BY branch_id
-    OFFSET @offset ROWS
-    FETCH NEXT @page_size ROWS ONLY;
 END
 GO
 -- 5. add a new staff (ORM)
@@ -913,9 +905,11 @@ END;
 --EXEC sp_delete_MenuItem 'ND14';
 
 -- 16. thêm combo món ăn
-CREATE TYPE ItemIdTable AS TABLE (
-    item_id VARCHAR(10)
-);
+--GO
+--CREATE TYPE ItemIdTable AS TABLE (
+--    item_id VARCHAR(10)
+--);
+--GO
 
 GO
 CREATE OR ALTER PROCEDURE sp_add_combo
