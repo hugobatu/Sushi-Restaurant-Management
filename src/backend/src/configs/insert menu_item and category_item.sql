@@ -1,6 +1,7 @@
 GO
 USE SushiXRestaurant
 
+
 /*insert data into menu item*/
 INSERT INTO MenuItem (item_id, item_name, menu_item_description, base_price, menu_item_status, image_url)
 SELECT 
@@ -12,7 +13,7 @@ SELECT
 	[image_url]
 FROM OPENROWSET(
     'Microsoft.ACE.OLEDB.16.0',
-    'Excel 12.0;Database=D:\LEARNING\Web Scraping\final_data.xlsx',
+    'Excel 12.0;Database=D:\Sushi-Restaurant-Management\src\backend\data\final_data.xlsx',
     'SELECT * FROM [Sheet1$]'
 );
 
@@ -25,7 +26,7 @@ SELECT
     [menu_category_description]
 FROM OPENROWSET(
     'Microsoft.ACE.OLEDB.16.0',
-    'Excel 12.0;Database=D:\LEARNING\Web Scraping\category_table.xlsx',
+    'Excel 12.0;Database=D:\Sushi-Restaurant-Management\src\backend\data\category_table.xlsx',
     'SELECT * FROM [Sheet1$]'
 );
 

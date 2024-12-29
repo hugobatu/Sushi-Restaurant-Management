@@ -69,12 +69,6 @@ const RegionPage = () => {
         {message && (
           <div className="mt-4 text-center text-green-500 font-bold">{message}</div>
         )}
-
-        {/* Region List (Optional for now, assuming we will fetch data in the future) */}
-        <div className="border p-4 rounded-lg">
-          <h2 className="font-bold text-xl mb-4">Regions List</h2>
-          <p className="text-gray-500">Currently, there's no API to fetch region data.</p>
-        </div>
       </div>
     </>
   );
