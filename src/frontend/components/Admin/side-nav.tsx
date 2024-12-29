@@ -29,45 +29,40 @@ export const SIDENAV_ITEMS: AdminSideNavItem[] = [
     icon: <Star size={24} />
   },
   {
-    title: 'Menu',
-    path: '/admin/menu',
+    title: 'Menu-Combo',
+    path: '/admin/menu-combo',
     icon: <BookOpen size={24} />,
   },
-  {
-    title: 'Customers',
-    path: '/admin/customers',
-    icon: <User size={24} />,
-  },
-  {
-    title: 'Sales',
-    path: '/admin/sales',
-    icon: <House size={24} />,
-  },
-  {
-    title: 'Reservations',
-    path: '/admin/reservations',
-    icon: <CalendarCheck size={24} />,
-  },
-  {
-    title: 'Orders',
-    path: '#',
-    icon: <List size={24} />,
-  },
-  {
-    title: 'Direct service',
-    path: '/admin/orders/direct-service',
-    icon: <Utensils size={24} />,
-  },
-  {
-    title: 'Delivery',
-    path: '/admin/orders/delivery',
-    icon: <Truck size={24} />,
-  },
-  {
-    title: 'Invoice',
-    path: '/admin/invoice',
-    icon: <NotepadText size={24} />,
-  },
+  // {
+  //   title: 'Customers',
+  //   path: '/admin/customers',
+  //   icon: <User size={24} />,
+  // },
+  // {
+  //   title: 'Reservations',
+  //   path: '/admin/reservations',
+  //   icon: <CalendarCheck size={24} />,
+  // },
+  // {
+  //   title: 'Orders',
+  //   path: '#',
+  //   icon: <List size={24} />,
+  // },
+  // {
+  //   title: 'Direct service',
+  //   path: '/admin/orders/direct-service',
+  //   icon: <Utensils size={24} />,
+  // },
+  // {
+  //   title: 'Delivery',
+  //   path: '/admin/orders/delivery',
+  //   icon: <Truck size={24} />,
+  // },
+  // {
+  //   title: 'Invoice',
+  //   path: '/admin/invoice',
+  //   icon: <NotepadText size={24} />,
+  // },
 ];
 
 
