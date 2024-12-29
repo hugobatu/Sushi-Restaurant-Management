@@ -910,7 +910,7 @@ END;
 --    item_id VARCHAR(10)
 --);
 --GO
-
+SELECT *FROM Account;
 GO
 CREATE OR ALTER PROCEDURE sp_add_combo
     @combo_name NVARCHAR(50),

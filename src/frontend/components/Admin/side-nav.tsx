@@ -39,6 +39,11 @@ export const SIDENAV_ITEMS: AdminSideNavItem[] = [
     icon: <User size={24} />,
   },
   {
+    title: 'Sales',
+    path: '/admin/sales',
+    icon: <House size={24} />,
+  },
+  {
     title: 'Reservations',
     path: '/admin/reservations',
     icon: <CalendarCheck size={24} />,
