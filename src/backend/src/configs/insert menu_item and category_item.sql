@@ -4,7 +4,7 @@ USE SushiXRestaurant
 
 /*insert data into menu item*/
 PRINT 'Loading MenuCategory';
-BULK INSERT MenuItem FROM 'D:\LEARNING\Sushi-Restaurant-Management\src\backend\data\final_data.csv'
+BULK INSERT MenuItem FROM 'D:\Downloads\DATH\Sushi-Restaurant-Management\src\backend\data\menu_item.csv'
 WITH (
     CHECK_CONSTRAINTS,
     DATAFILETYPE = 'char',
@@ -17,7 +17,7 @@ WITH (
 );
 /*insert data into menu category*/
 PRINT 'Loading MenuCategory';
-BULK INSERT MenuCategory FROM 'D:\LEARNING\Sushi-Restaurant-Management\src\backend\data\category_table.csv'
+BULK INSERT MenuCategory FROM 'D:\Downloads\DATH\Sushi-Restaurant-Management\src\backend\data\category_table.csv'
 WITH (
     CHECK_CONSTRAINTS,
     DATAFILETYPE = 'char',
@@ -207,4 +207,3 @@ VALUES
 ('Y4', 'Y'),
 ('Y5', 'Y'),
 ('Y6', 'Y')
-
