@@ -22,7 +22,7 @@ const MenuPage = () => {
     base_price: "",
     status: "available",
     category_id: "",
-    image_url: "NULL",
+    image_url: "",
   });
   const [message, setMessage] = useState("");
   const [itemDelete, setItemDelete] = useState<string | null>(null);
@@ -37,10 +37,10 @@ const MenuPage = () => {
       });
       const data = await response.json();
       if (data.success) {
-        setMessage("Menu Item added successfully!");
+        alert("Menu Item added successfully!");
         //fetchMenuList(); // Refresh menu list
       } else {
-        setMessage(data.message || "Error adding menu item.");
+        alert(data.message || "Error adding menu item.");
       }
     } catch (error) {
       console.error("Error adding menu item:", error);
@@ -54,15 +54,15 @@ const MenuPage = () => {
       const response = await fetch("http://localhost:8000/company/menu-item/delete", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ combo_id: comboDelete }),
+        body: JSON.stringify({ item_id: itemDelete }),
       });
       const data = await response.json();
       if (data.success) {
-        setMessage("Menu Item deleted successfully!");
+        alert("Menu Item deleted successfully!");
         //fetchMenuList(); // Refresh menu list
-        setItemDelete(itemDelete);
+        setItemDelete(null);
       } else {
-        setMessage(data.message || "Error deleting menu item.");
+        alert(data.message || "Error deleting menu item.");
       }
     } catch (error) {
       console.error("Error deleting menu item:", error);
@@ -93,9 +93,9 @@ const MenuPage = () => {
       });
       const data = await response.json();
       if (data.success) {
-        setMessage("Combo added successfully!");
+        alert("Combo added successfully!");
       } else {
-        setMessage(data.message || "Error adding combo.");
+        alert(data.message || "Error adding combo.");
       }
     } catch (error) {
       console.error("Error adding combo:", error);
@@ -113,10 +113,10 @@ const MenuPage = () => {
       });
       const data = await response.json();
       if (data.success) {
-        setMessage("Combo deleted successfully!");
+        alert("Combo deleted successfully!");
         setComboDelete(null);
       } else {
-        setMessage(data.message || "Error deleting combo.");
+        alert(data.message || "Error deleting combo.");
       }
     } catch (error) {
       console.error("Error deleting combo:", error);
