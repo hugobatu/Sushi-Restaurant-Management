@@ -19,13 +19,14 @@ EXEC sp_add_region N'Đà Nẵng'
 EXEC sp_add_region N'Khánh Hòa'
 EXEC sp_add_region N'Nha Trang'
 
+
 -- Kiểm tra menu của chi nhánh B002
 SELECT * FROM BranchMenuItem WHERE branch_id = 'B002'
 
 -- Kiểm tra nhân viên của chi nhánh B002
 SELECT * FROM Staff JOIN Department ON Department.department_id = Staff.department_id AND Department.branch_id = 'B001'
 SELECT * FROM Staff JOIN Department ON Department.department_id = Staff.department_id AND Department.branch_id = 'B002'
-
+select * from Branch
 -- Thêm chi nhánh
 EXEC sp_add_new_branch
     @region_id = 'TPHCM', 
@@ -60,7 +61,7 @@ EXEC sp_add_new_branch
 -- chỉnh sửa thông tin chi nhánh
 EXEC sp_update_branch_status 'B001', 'closed', 1, 1
 
--- thêm nhân viên bằng api viết trong ORM
+-- thêm nhân viên bằng api trong postman
 
 
 -- testing firing

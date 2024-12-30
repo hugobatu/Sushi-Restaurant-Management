@@ -1,32 +1,32 @@
 GO
 USE SushiXRestaurant
-select * from MenuItemCategory
---/*insert data into menu item*/
---PRINT 'Loading MenuCategory';
---BULK INSERT MenuItem FROM 'D:\LEARNING\Sushi-Restaurant-Management\src\backend\data\menu_item.csv'
---WITH (
---    CHECK_CONSTRAINTS,
---    DATAFILETYPE = 'char',
---    FIELDTERMINATOR= ',',
---    KEEPIDENTITY,
---    TABLOCK,
---    FIRSTROW = 2,
---	ROWTERMINATOR = '0x0a',
---    FORMAT = 'CSV'
---);
---/*insert data into menu category*/
---PRINT 'Loading MenuCategory';
---BULK INSERT MenuCategory FROM 'D:\LEARNING\Sushi-Restaurant-Management\src\backend\data\category_table.csv'
---WITH (
---    CHECK_CONSTRAINTS,
---    DATAFILETYPE = 'char',
---    FIELDTERMINATOR= ',',
---    KEEPIDENTITY,
---    TABLOCK,
---    FIRSTROW = 2,
---	ROWTERMINATOR = '0x0a',
---    FORMAT = 'CSV'
---);
+
+/*insert data into menu item*/
+PRINT 'Loading MenuCategory';
+BULK INSERT MenuItem FROM 'D:\LEARNING\Sushi-Restaurant-Management\src\backend\data\menu_item.csv'
+WITH (
+    CHECK_CONSTRAINTS,
+    DATAFILETYPE = 'char',
+    FIELDTERMINATOR= ',',
+    KEEPIDENTITY,
+    TABLOCK,
+    FIRSTROW = 2,
+	ROWTERMINATOR = '0x0a',
+    FORMAT = 'CSV'
+);
+/*insert data into menu category*/
+PRINT 'Loading MenuCategory';
+BULK INSERT MenuCategory FROM 'D:\LEARNING\Sushi-Restaurant-Management\src\backend\data\category_table.csv'
+WITH (
+    CHECK_CONSTRAINTS,
+    DATAFILETYPE = 'char',
+    FIELDTERMINATOR= ',',
+    KEEPIDENTITY,
+    TABLOCK,
+    FIRSTROW = 2,
+	ROWTERMINATOR = '0x0a',
+    FORMAT = 'CSV'
+);
 
 
 INSERT INTO MenuItemCategory(item_id, category_id)

@@ -262,7 +262,7 @@ CREATE TABLE Coupon (
 GO
 CREATE TABLE MembershipLevel (
 	level_id INT IDENTITY(1, 1) NOT NULL,
-	level_name NVARCHAR(20) NOT NULL CHECK (level_name IN (N'silver', N'gold')),
+	level_name NVARCHAR(20) NOT NULL CHECK (level_name IN (N'silver', N'gold', 'membership')),
 	discount_percentage FLOAT NOT NULL,
 	min_points_required INT NOT NULL,
 	min_spending FLOAT NOT NULL,
@@ -315,15 +315,33 @@ CREATE TABLE CustomerRating (
 	FOREIGN KEY (branch_id) REFERENCES Branch(branch_id) 
 );
 
+
+INSERT INTO MembershipLevel (level_name, discount_percentage, min_points_required, min_spending, maintenance_spending)
+VALUES 
+(N'membership', 0, 0, 0, 0),
+(N'silver', 5, 100, 10000000, 5000000),
+(N'gold', 10, 100, 10000000, 10000000);
+
+-- Explanation of Columns:
+-- level_name: Name of the membership level
+-- discount_percentage: Discount percentage offered for this membership level
+-- min_points_required: Minimum points required to achieve this level
+-- min_spending: Minimum spending required to achieve this level
+-- maintenance_spending: Minimum spending required to maintain this level annually
+
+
 --SELECT session_id, login_name, host_name, program_name
 --FROM sys.dm_exec_sessions
 --WHERE database_id = DB_ID('SushiXRestaurant');
 
 
-SELECT 
-    name AS ProcedureName, 
-    create_date AS CreationDate, 
-    modify_date AS LastModifiedDate
-FROM sys.objects
-WHERE type = 'P' -- procedures
-ORDER BY name;
+--SELECT 
+--    name AS ProcedureName, 
+--    create_date AS CreationDate, 
+--    modify_date AS LastModifiedDate
+--FROM sys.objects
+--WHERE type = 'P' -- procedures
+--ORDER BY name;
+
+
+-- Thêm hạng thẻ thành viên:

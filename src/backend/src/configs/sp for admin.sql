@@ -267,6 +267,7 @@ BEGIN
     ORDER BY branch_id
 END
 GO
+EXEC sp_get_branches_data
 -- 5. add a new staff (ORM)
 /*GO
 CREATE OR ALTER PROCEDURE sp_add_staff
