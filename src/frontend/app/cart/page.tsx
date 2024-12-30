@@ -95,14 +95,21 @@ const TestCart = () => {
         <button
           className="px-4 py-2 bg-orange-600 text-white rounded"
           onClick={() => {
-            if (totalAmount === 0) {
-              alert('Giỏ hàng của bạn chưa chọn sản phẩm. Vui lòng kiểm tra lại.');
-            } else {
-              const checkedItems = items.filter(item => item.checked);
-              localStorage.setItem('totalAmount', JSON.stringify(totalAmount));
-              localStorage.setItem('checkedItems', JSON.stringify(checkedItems));
-              window.location.href = '/reservation';
-            }
+        if (totalAmount === 0) {
+          alert('Giỏ hàng của bạn chưa chọn sản phẩm. Vui lòng kiểm tra lại.');
+        } else {
+          const checkedItems = items.filter(item => item.checked);
+          localStorage.setItem('totalAmount', JSON.stringify(totalAmount));
+          localStorage.setItem('checkedItems', JSON.stringify(checkedItems));
+          
+          const roleCookie = document.cookie.split('; ').find(row => row.startsWith('role='));
+          const role = roleCookie ? roleCookie.split('=')[1] : null;
+          if (role === 'staff') {
+            window.location.href = 'http://localhost:3000/staff/staffreservation';
+          } else {
+            window.location.href = '/reservation';
+          }
+        }
           }}
         >
           Đặt chỗ

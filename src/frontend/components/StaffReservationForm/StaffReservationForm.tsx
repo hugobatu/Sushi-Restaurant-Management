@@ -1,18 +1,17 @@
 
 "use client";
 
-import { time } from "console";
-import "./ReservationStyles.css";
+import "./StaffReservationForm.css";
 import { useState } from "react";
 
-const ReservationForm = () => {
+const StaffReservationForm = () => {
   const [formData, setFormData] = useState({
     guests: 0,
     date: "",
     time: "",
     customer_name: "",
     table_number: "",
-    branch_id: ""
+    phone_number: ""
   });
 
 
@@ -52,52 +51,48 @@ const ReservationForm = () => {
             className="form-input"
           />
         </div>
+
         <div className="form-group">
-          <label htmlFor="branch_id" className="form-label">Chọn chi nhánh</label>
+          <label htmlFor="customer_name" className="form-label">Nhập tên khách hàng</label>
+          <input
+            type="text"
+            id="customer_name"
+            name="customer_name"
+            value={formData.customer_name || ''}
+            onChange={handleChange}
+            className="form-input"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="customer_name" className="form-label">Nhập SDT</label>
+          <input
+            type="text"
+            id="phone_number"
+            name="phone_number"
+            value={formData.phone_number || ''}
+            onChange={handleChange}
+            className="form-input"
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="table_number" className="form-label">Chọn bàn 1-30</label>
           <select
-            id="branch_id"
-            name="branch_id"
-            value={formData.branch_id}
+            id="table_number"
+            name="table_number"
+            value={formData.table_number || ''}
             onChange={handleChange}
             className="form-input"
           >
-            <option value="">Chọn chi nhánh</option>
-            {Array.from({ length: 10 }, (_, i) => (
-              <option key={i + 1} value={`option${i + 1}`}>Option {i + 1}</option>
+            <option value="">Chọn bàn</option>
+            {Array.from({ length: 30 }, (_, i) => i + 1).map((number) => (
+              <option key={number} value={number}>
+          {number}
+              </option>
             ))}
           </select>
         </div>
-
-        
-        <div>
-          <div className="form-group">
-            <label htmlFor="date" className="form-label">Chọn ngày</label>
-            <input
-              type="date"
-              id="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              className="form-input"
-            />
-          </div>
-        </div>
-
-        <div>
-          <div className="form-group">
-            <label htmlFor="date" className="form-label">Chọn Giờ</label>
-            <input
-              type="time"
-              id="time"
-              name="time"
-              value={formData.time}
-              onChange={handleChange}
-              className="form-input"
-            />
-          </div>
-        </div>
-
-
         <button
           type="submit"
           className="submit-button"
@@ -111,6 +106,7 @@ const ReservationForm = () => {
             const checkedItems = JSON.parse(localStorage.getItem('checkedItems') || '[]');
             const formattedCheckedItems = checkedItems.map((item: { id: string, quantity: number }) => `ID: ${item.id}, Quantity: ${item.quantity}`).join('\n');
             const totalAmount = localStorage.getItem('totalAmount');
+
             console.log("Cookies:", cookies);
             console.log("Role:", role);
             console.log("Token:", token);
@@ -118,10 +114,11 @@ const ReservationForm = () => {
             console.log("user_id: ", user_id);
             console.log("Customer Name:", formData.customer_name);
             console.log("Table Number:", formData.table_number);
+            console.log("Phone Number:", formData.phone_number);
             console.log("Checked Items:", formattedCheckedItems);
             console.log("Total Amount:", totalAmount);
 
-            // đợi API của Quân Bùi
+            // đợi API của Quân Bùi (chua co nen lam alert)
             fetch('/api/reservations', {
               method: 'POST',
               headers: {
@@ -131,13 +128,10 @@ const ReservationForm = () => {
               body: JSON.stringify({
               user_id,
               customer_name: formData.customer_name,
+              phone_number: formData.phone_number,
               table_number: formData.table_number,
               items: checkedItems,
-              total_amount: totalAmount,
-              time: formData.time,
-              date: formData.date,
-              branch_id: formData.branch_id,
-
+              total_amount: totalAmount
               })
             })
             .then(response => response.json())
@@ -146,8 +140,8 @@ const ReservationForm = () => {
             })
             .catch((error) => {
               console.error('Error:', error);
-              alert(`Form Data:\nuser_id: ${user_id}\nRole: ${role}\nDate: ${formData.date}\nTime: ${formData.time}\nBranch ID: ${formData.branch_id}\nChecked Items:\n${formattedCheckedItems}\nTotal Amount: ${totalAmount}`);
             });
+            alert(`Form Data:\nuser_id: ${user_id}\nRole: ${role}\nCustomer Name: ${formData.customer_name}\nPhone Number: ${formData.phone_number}\nTable ID: ${formData.table_number}\nChecked Items:\n${formattedCheckedItems}\nTotal Amount: ${totalAmount}`);
           }}
         >
           Gửi
@@ -157,4 +151,4 @@ const ReservationForm = () => {
   );
 };
 
-export default ReservationForm;
+export default StaffReservationForm;

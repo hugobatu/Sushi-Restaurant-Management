@@ -20,6 +20,11 @@ export const SIDENAV_ITEMS: StaffSideNavItem[] = [
     title: "Check Order",
     path: "/staff/checkorder",
     icon: <ClipboardList size={24}/>
+  },
+  { title: "Staff Reservation",
+    path: "/staff/staffreservation",
+    icon: <User size = {24}/>
+
   }
 ];
 

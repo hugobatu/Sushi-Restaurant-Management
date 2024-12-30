@@ -60,7 +60,7 @@ const LoginForm = () => {
         } else if (data.role === "manager") {
           router.push("/manager");
         } else if (data.role === "staff") {
-          router.push("/staff/customers"); // trước đó là router.push("/staff");
+          router.push("/staff"); // trước đó là router.push("/staff");
         }
       } else {
         setMessage(data.message || "Login failed. Please try again.");

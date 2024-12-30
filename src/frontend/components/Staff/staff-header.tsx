@@ -26,18 +26,21 @@ export function StaffHeader() {
         <div className="relative h-full w-full">
           <div className="absolute right-20 top-1">
           <Button
-              className="bg-black hover:bg-gray-800"
-              onClick={() => {
-              localStorage.removeItem("token");
+            className="bg-black hover:bg-gray-800"
+            onClick={() => {
+              document.cookie = "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+              document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+              document.cookie = "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+              document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
               setUsername(null);
               window.location.href = "/";
-                localStorage.removeItem("cart");
-                localStorage.removeItem("checkedItems");
-                localStorage.removeItem("totalAmount");
-              }}
-            >
-              ĐĂNG XUẤT
-            </Button>
+              localStorage.removeItem("cart");
+              localStorage.removeItem("checkedItems");
+              localStorage.removeItem("totalAmount");
+            }}
+          >
+            ĐĂNG XUẤT
+          </Button>
             </div>
           </div>
         </div>
