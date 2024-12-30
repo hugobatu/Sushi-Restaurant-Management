@@ -1,4 +1,8 @@
-const { sql, con } = require('../configs/dbConfig');  // Import the db connection
+const { MAX } = require('mssql');
+const { con, sql } = require('../configs/dbConfig');
+const { hashPassword } = require('../utils/accountService');
+const { formatBirthDate } = require('../utils/stringUtils');
+const { reset } = require('nodemon');
 
 // 1. Add a menu item to a branch
 exports.addBranchMenuItem = async (req, res) => {
@@ -108,7 +112,7 @@ exports.deleteBranchMenuItem = async (req, res) => {
 exports.changeBranchMenuItem = async (req, res) => {
     const { user_id, item_id, is_available } = req.body;
 
-    if (!user_id || !item_id || !is_available) {
+    if (user_id === undefined || item_id === undefined || is_available === undefined) {
         return res.status(400).json({
             success: false,
             message: "Missing required fields (user_id, item_id, is_available).",
@@ -118,7 +122,7 @@ exports.changeBranchMenuItem = async (req, res) => {
     try {
         const pool = await con;
 
-        // Step 1: Fetch branch_id based on user_id
+        // Fetch branch_id based on user_id
         const branchResult = await pool.request()
             .input('user_id', sql.Int, user_id)
             .query(`
@@ -131,13 +135,13 @@ exports.changeBranchMenuItem = async (req, res) => {
         if (!branchResult.recordset || branchResult.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: "Branch not found for the given user.",
+                message: `No branch found for user_id: ${user_id}.`,
             });
         }
 
         const branch_id = branchResult.recordset[0].branch_id;
 
-        // Step 2: Delete menu item from the branch
+        // Update menu item status for the branch
         await pool.request()
             .input('branch_id', sql.VarChar(10), branch_id)
             .input('item_id', sql.VarChar(10), item_id)
@@ -146,18 +150,51 @@ exports.changeBranchMenuItem = async (req, res) => {
         
         return res.status(200).json({
             success: true,
-            message: "Changing branch menu item status successfully.",
+            message: `Menu item status updated successfully for branch_id: ${branch_id}.`,
         });
     } catch (error) {
         console.error("Error changing branch menu item status:", error.message);
         return res.status(500).json({
             success: false,
-            message: "An error occurred while changing branch menu item status.",
+            message: "An internal server error occurred.",
             error: error.message,
         });
     }
 };
-// 4. xem danh sách nhân viên theo tên
+// *. Get all menu items from all branches
+exports.getBranchMenuItem = async (req, res) => {
+    const {
+        page_number = 1,
+        page_size = 1000
+    } = req.body
+    try {
+        const pool = await con;
+        const result = await pool.request()
+            .query('EXEC sp_get_branches_menu_items');
+        if (!result.recordset || result.recordset.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No menu items found',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: result.recordset,
+            pagination: {
+                page: page_number,
+                size: page_size,
+            },
+        });
+    } catch (error) {
+        console.error('Error fetching menu items data', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error fetching menu items data',
+            error: error.message,
+        });
+    }
+};
+// 4.
 exports.getStaffDataByName = async (req, res) => {
     const { staff_name, user_id } = req.body;
 
