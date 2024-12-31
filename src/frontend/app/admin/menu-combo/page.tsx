@@ -292,11 +292,11 @@ const MenuPage = () => {
           <table className="w-full border-collapse border">
             <thead>
               <tr>
-                <th className="border p-2">Item ID</th>
+                <th style={{ width: "100px" }} className="border p-2">Item ID</th>
                 <th className="border p-2">Item Name</th>
-                <th className="border p-2">Base Price</th>
-                <th className="border p-2">Status</th>
-                <th className="border p-2">Category Name</th>
+                <th style={{ width: "150px" }} className="border p-2">Base Price</th>
+                <th style={{ width: "120px" }} className="border p-2">Status</th>
+                <th style={{ width: "180px" }} className="border p-2">Category Name</th>
               </tr>
             </thead>
             <tbody>
