@@ -33,6 +33,11 @@ export const SIDENAV_ITEMS: AdminSideNavItem[] = [
     path: '/admin/menu-combo',
     icon: <BookOpen size={24} />,
   },
+  {
+    title: 'Sales',
+    path: '/admin/sales',
+    icon: <NotepadText size = {24} />,
+  }
   // {
   //   title: 'Customers',
   //   path: '/admin/customers',

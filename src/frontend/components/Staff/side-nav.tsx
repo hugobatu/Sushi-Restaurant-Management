@@ -49,12 +49,21 @@ const MenuItem = ({ item }: { item: StaffSideNavItem }) => {
     setSubMenuOpen(!subMenuOpen);
   };
 
+  const handleClick = () => {
+    if (item.title === "Order Menu") {
+      localStorage.removeItem("simplifiedItems");
+    }
+  };
+
   return (
     <div className="">
       {item.submenu ? (
         <>
           <button
-            onClick={toggleSubMenu}
+            onClick={() => {
+              toggleSubMenu();
+              handleClick();
+            }}
             className={`flex flex-row items-center p-2 rounded-lg hover-bg-zinc-100 w-full justify-between hover:bg-zinc-200 ${
               pathname.includes(item.path) ? "bg-zinc-200" : ""
             }`}
@@ -86,6 +95,7 @@ const MenuItem = ({ item }: { item: StaffSideNavItem }) => {
       ) : (
         <Link
           href={item.path}
+          onClick={handleClick}
           className={`flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-200 ${
             item.path === pathname ? "bg-zinc-100" : ""
           }`}
