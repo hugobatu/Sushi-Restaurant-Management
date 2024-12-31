@@ -80,6 +80,7 @@ const MenuPage = () => {
     image_url: string,
   }
   const [menuItemList, setMenuItemList] = useState<MenuItemList[]>([]);
+
   // Get menu list
   const fetchMenuList = async () => {
     try {
@@ -103,6 +104,34 @@ const MenuPage = () => {
   useEffect(() => {
     fetchMenuList();
   }, []);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
+
+  // Calculate displayed rows
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = menuItemList.slice(indexOfFirstRow, indexOfLastRow);
+
+  // Total pages
+  const totalPages = Math.ceil(menuItemList.length / rowsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handlePageClick = (page: number) => {
+    setCurrentPage(page);
+  };
 
   //--------------Combo Management----------------
   interface Combo {
