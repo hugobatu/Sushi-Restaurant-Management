@@ -80,6 +80,7 @@ const MenuPage = () => {
     image_url: string,
   }
   const [menuItemList, setMenuItemList] = useState<MenuItemList[]>([]);
+
   // Get menu list
   const fetchMenuList = async () => {
     try {
@@ -103,6 +104,34 @@ const MenuPage = () => {
   useEffect(() => {
     fetchMenuList();
   }, []);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
+
+  // Calculate displayed rows
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = menuItemList.slice(indexOfFirstRow, indexOfLastRow);
+
+  // Total pages
+  const totalPages = Math.ceil(menuItemList.length / rowsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handlePageClick = (page: number) => {
+    setCurrentPage(page);
+  };
 
   //--------------Combo Management----------------
   interface Combo {
@@ -271,8 +300,8 @@ const MenuPage = () => {
               </tr>
             </thead>
             <tbody>
-              {menuItemList.length > 0 ? (
-                menuItemList.map((menu) => (
+              {currentRows.length > 0 ? (
+                currentRows.map((menu) => (
                   <tr key={menu.item_id}>
                     <td className="border p-2">{menu.item_id}</td>
                     <td className="border p-2">{menu.item_name}</td>
@@ -290,8 +319,43 @@ const MenuPage = () => {
               )}
             </tbody>
           </table>
-          </div>
 
+
+          {/* Pagination Controls */}
+          <div className="flex justify-between items-center mt-4">
+            <button
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-300 text-black rounded disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <div className="flex gap-2">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handlePageClick(index + 1)}
+                  className={`px-4 py-2 rounded ${
+                    currentPage === index + 1
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-300 text-black"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-gray-300 text-black rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+
+        {/* Add Combo */}
         <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Add New Combo</h2>
           <form
@@ -394,7 +458,6 @@ const MenuPage = () => {
             </button>
           </form>
         </div>
-
       </div>
     </>
   );
