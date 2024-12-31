@@ -1027,9 +1027,46 @@ END;
 
 SELECT * FROM MenuItem JOIN MenuItemCategory ON MenuItemCategory.item_id = MenuItem.item_id AND MenuItemCategory.category_id = 'HP'
 
-SELECT MI.*, MC.category_name
-                    FROM MenuItem MI
-                    JOIN MenuItemCategory MIC
-                    ON MIC.item_id = MI.item_id
-                    JOIN MenuCategory MC
-                    ON MC.category_id = MIC.category_id
+-- 19. xem tất cả các món có trong cơ sở dữ liệu
+-- EXEC sp_get_menu_item_list 17, 10
+GO
+CREATE OR ALTER PROCEDURE sp_get_menu_item_list
+    @page_number INT,
+    @page_size INT
+AS
+BEGIN
+    BEGIN TRY
+        -- Declare variables for pagination
+        DECLARE @offset INT = (@page_number - 1) * @page_size;
+
+		-- Find number of menu items
+		DECLARE @total_page int;
+		SET @total_page = (
+			SELECT COUNT(*) AS 'row_num'
+				FROM MenuItem MI
+				JOIN MenuItemCategory MIC
+				ON MIC.item_id = MI.item_id
+				JOIN MenuCategory MC
+				ON MC.category_id = MIC.category_id)
+        
+		-- Fetch menu item with category_name
+		SELECT MI.*, MC.category_name, @total_page AS 'row_num'
+			FROM MenuItem MI
+			JOIN MenuItemCategory MIC
+			ON MIC.item_id = MI.item_id
+			JOIN MenuCategory MC
+			ON MC.category_id = MIC.category_id
+		ORDER BY MI.item_id ASC
+		OFFSET @offset ROWS FETCH NEXT @page_size ROWS ONLY;
+    END TRY
+    BEGIN CATCH
+        -- Handle errors
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
+END;

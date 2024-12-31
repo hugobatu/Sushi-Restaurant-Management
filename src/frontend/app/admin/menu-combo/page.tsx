@@ -36,7 +36,7 @@ const MenuPage = () => {
       const data = await response.json();
       if (data.success) {
         alert("Menu Item added successfully!");
-        fetchMenuList(); // Refresh menu list
+        fetchMenuListPage(currentPage); // Refresh menu list
       } else {
         alert(data.message || "Error adding menu item.");
       }
@@ -57,7 +57,7 @@ const MenuPage = () => {
       const data = await response.json();
       if (data.success) {
         alert("Menu Item deleted successfully!");
-        fetchMenuList(); // Refresh menu list
+        fetchMenuListPage(1); // Refresh menu list
         setItemDelete(null);
       } else {
         alert(data.message || "Error deleting menu item.");
@@ -78,59 +78,114 @@ const MenuPage = () => {
     category_id: string,
     category_name: string,
     image_url: string,
+    row_num: number,
   }
   const [menuItemList, setMenuItemList] = useState<MenuItemList[]>([]);
 
   // Get menu list
-  const fetchMenuList = async () => {
+  // const fetchMenuList = async () => {
+  //   try {
+  //     const response = await fetch(`http://localhost:8000/company/menu-item/get`, {
+  //       method: "GET",
+  //       headers: { "Content-Type": "application/json" },
+  //     });
+  //     const data = await response.json();
+  //     if (data.success) {
+  //       setMenuItemList(data.data);
+  //       setMessage("Menu data fetched successfully!");
+  //     } else {
+  //       setMenuItemList([]);
+  //       setMessage(data.message || "Error fetching menu data.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching menu data:", error);
+  //     setMessage("Error occurred while fetching menu data.");
+  //   }
+  // };
+  const fetchMenuListPage = async (pageNumber: number) => {
     try {
-      const response = await fetch(`http://localhost:8000/company/menu-item/get`, {
-        method: "GET",
+      const response = await fetch("http://localhost:8000/company/menu-item/get-page", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          page_number: pageNumber,
+          page_size: 10,
+        }),
       });
       const data = await response.json();
+
       if (data.success) {
         setMenuItemList(data.data);
-        setMessage("Menu data fetched successfully!");
+        setTotalPages(Math.ceil(data.data[0].row_num / 10));
+        console.log("Fetch");
       } else {
         setMenuItemList([]);
-        setMessage(data.message || "Error fetching menu data.");
+        setTotalPages(1);
+        console.error("Error fetching menu items:", data.message);
       }
     } catch (error) {
       console.error("Error fetching menu data:", error);
-      setMessage("Error occurred while fetching menu data.");
     }
   };
-  useEffect(() => {
-    fetchMenuList();
-  }, []);
+
+  // useEffect(() => {
+  //   //fetchMenuList();
+  //   fetchMenuListPage();
+  // }, []);
+
+  // // Pagination State
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const rowsPerPage = 10;
+
+  // // Calculate displayed rows
+  // const indexOfLastRow = currentPage * rowsPerPage;
+  // const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  // const currentRows = menuItemList.slice(indexOfFirstRow, indexOfLastRow);
+
+  // // Total pages
+  // const totalPages = Math.ceil(menuItemList.length / rowsPerPage);
+
+  // const handleNextPage = () => {
+  //   if (currentPage < totalPages) {
+  //     setCurrentPage(currentPage + 1);
+  //   }
+  // };
+
+  // const handlePrevPage = () => {
+  //   if (currentPage > 1) {
+  //     setCurrentPage(currentPage - 1);
+  //   }
+  // };
+
+  // const handlePageClick = (page: number) => {
+  //   setCurrentPage(page);
+  // };
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10;
+  const [totalPages, setTotalPages] = useState(1); 
 
-  // Calculate displayed rows
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = menuItemList.slice(indexOfFirstRow, indexOfLastRow);
-
-  // Total pages
-  const totalPages = Math.ceil(menuItemList.length / rowsPerPage);
+  useEffect(() => {
+    // Fetch initial data for page 1
+    fetchMenuListPage(currentPage);
+  }, [currentPage]);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
+      setCurrentPage((prevPage) => prevPage + 1);
     }
   };
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+      setCurrentPage((prevPage) => prevPage - 1);
     }
   };
 
   const handlePageClick = (page: number) => {
-    setCurrentPage(page);
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
 
   //--------------Combo Management----------------
@@ -284,12 +339,17 @@ const MenuPage = () => {
         <div className="border p-4 rounded-lg mb-6">
           <h2 className="font-bold text-xl mb-4">Menu List</h2>
           <button
-            onClick={fetchMenuList}
+            // onClick={fetchMenuList}
+            onClick={(e) => {
+              e.preventDefault();
+              fetchMenuListPage(1);
+              handlePageClick(1);
+            }}
             className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
           >
             Refresh Menu List
           </button>
-          <table className="w-full border-collapse border">
+          <table id="myTable" className="w-full border-collapse border">
             <thead>
               <tr>
                 <th style={{ width: "100px" }} className="border p-2">Item ID</th>
@@ -300,14 +360,14 @@ const MenuPage = () => {
               </tr>
             </thead>
             <tbody>
-              {currentRows.length > 0 ? (
-                currentRows.map((menu) => (
-                  <tr key={menu.item_id}>
-                    <td className="border p-2">{menu.item_id}</td>
-                    <td className="border p-2">{menu.item_name}</td>
-                    <td className="border p-2">{menu.base_price}</td>
-                    <td className="border p-2">{menu.menu_item_status}</td>
-                    <td className="border p-2">{menu.category_name}</td>
+              {menuItemList.length > 0 ? (
+                menuItemList.map((item) => (
+                  <tr key={item.item_id}>
+                    <td className="border p-2">{item.item_id}</td>
+                    <td className="border p-2">{item.item_name}</td>
+                    <td className="border p-2">{item.base_price}</td>
+                    <td className="border p-2">{item.menu_item_status}</td>
+                    <td className="border p-2">{item.category_name}</td>
                   </tr>
                 ))
               ) : (
@@ -331,7 +391,102 @@ const MenuPage = () => {
               Previous
             </button>
             <div className="flex gap-2">
-              {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                onClick={() => handlePageClick(1)}
+                type="button"
+                className={`px-4 py-2 rounded ${
+                  currentPage === 1
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300 text-black"
+                }`}
+              >
+                {1}
+              </button>
+
+              {currentPage > 3 && <div className={'px-4 py-2 font-bold'}>. . .</div>}
+
+              {currentPage === totalPages && totalPages > 4 && (
+                <button
+                  onClick={() => handlePageClick(currentPage - 3)}
+                  type="button"
+                className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                >
+                  {currentPage - 3}
+                </button>
+              )}
+              {currentPage > 3 && (
+                <button
+                  onClick={() => handlePageClick(currentPage - 2)}
+                  type="button"
+                className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                >
+                  {currentPage - 2}
+                </button>
+              )}
+              {currentPage > 2 && (
+                <button
+                  onClick={() => handlePageClick(currentPage - 1)}
+                  type="button"
+                className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                >
+                  {currentPage - 1}
+                </button>
+              )}
+              {currentPage !== 1 && currentPage !== totalPages && (
+                <button
+                  onClick={() => handlePageClick(currentPage)}
+                  type="button"
+                className={`px-4 py-2 rounded ${
+                  currentPage !== 1 && currentPage !== totalPages
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300 text-black"
+                }`}
+                >
+                  {currentPage}
+                </button>
+              )}
+              {currentPage < totalPages - 1 && (
+                <button
+                  onClick={() => handlePageClick(currentPage + 1)}
+                  type="button"
+                className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                >
+                  {currentPage + 1}
+                </button>
+              )}
+              {currentPage < totalPages - 2 && (
+                <button
+                  onClick={() => handlePageClick(currentPage + 2)}
+                  type="button"
+                className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                >
+                  {currentPage + 2}
+                </button>
+              )}
+              {currentPage === 1 && totalPages > 4 && (
+                <button
+                  onClick={() => handlePageClick(currentPage + 3)}
+                  type="button"
+                className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                >
+                  {currentPage + 3}
+                </button>
+              )}
+
+              {currentPage < totalPages - 2 && <div className={'px-4 py-2 font-bold'}>. . .</div>}
+
+              <button
+                onClick={() => handlePageClick(totalPages)}
+                type="button"
+              className={`px-4 py-2 rounded ${
+                currentPage === totalPages
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-300 text-black"
+              }`}
+              >
+                {totalPages}
+              </button>
+              {/* {Array.from({ length: totalPages }, (_, index) => (
                 <button
                   key={index}
                   onClick={() => handlePageClick(index + 1)}
@@ -343,7 +498,7 @@ const MenuPage = () => {
                 >
                   {index + 1}
                 </button>
-              ))}
+              ))} */}
             </div>
             <button
               onClick={handleNextPage}
@@ -458,48 +613,6 @@ const MenuPage = () => {
             </button>
           </form>
         </div>
-
-{/* Menu List */}
-<div className="border p-4 rounded-lg mb-6">
-          <h2 className="font-bold text-xl mb-4">Menu List</h2>
-          <button
-            onClick={fetchMenuList}
-            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Refresh Menu List
-          </button>
-          <table className="w-full border-collapse border">
-            <thead>
-              <tr>
-                <th className="border p-2">Item ID</th>
-                <th className="border p-2">Item Name</th>
-                <th className="border p-2">Base Price</th>
-                <th className="border p-2">Status</th>
-                <th className="border p-2">Category Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {menuItemList.length > 0 ? (
-                menuItemList.map((menu) => (
-                  <tr key={menu.item_id}>
-                    <td className="border p-2">{menu.item_id}</td>
-                    <td className="border p-2">{menu.item_name}</td>
-                    <td className="border p-2">{menu.base_price}</td>
-                    <td className="border p-2">{menu.menu_item_status}</td>
-                    <td className="border p-2">{menu.category_name}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="border p-2 text-center">
-                    No menu item available.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          </div>
-
       </div>
     </>
   );
