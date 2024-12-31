@@ -14,8 +14,6 @@ const MenuPage = () => {
     category_id: string,
     image_url: string,
   }
-
-  const [menuItem, setMenuItem] = useState<MenuItem[]>([]);
   const [newMenuItem, setNewMenuItem] = useState({
     item_name: "",
     description: "",
@@ -38,7 +36,7 @@ const MenuPage = () => {
       const data = await response.json();
       if (data.success) {
         alert("Menu Item added successfully!");
-        //fetchMenuList(); // Refresh menu list
+        fetchMenuList(); // Refresh menu list
       } else {
         alert(data.message || "Error adding menu item.");
       }
@@ -59,7 +57,7 @@ const MenuPage = () => {
       const data = await response.json();
       if (data.success) {
         alert("Menu Item deleted successfully!");
-        //fetchMenuList(); // Refresh menu list
+        fetchMenuList(); // Refresh menu list
         setItemDelete(null);
       } else {
         alert(data.message || "Error deleting menu item.");
@@ -68,6 +66,43 @@ const MenuPage = () => {
       console.error("Error deleting menu item:", error);
     }
   };
+
+
+  //-----------------Menu List-------------------
+  interface MenuItemList {
+    item_id: string,
+    item_name: string,
+    menu_item_description: string,
+    base_price: number,
+    menu_item_status: string,
+    category_id: string,
+    category_name: string,
+    image_url: string,
+  }
+  const [menuItemList, setMenuItemList] = useState<MenuItemList[]>([]);
+  // Get menu list
+  const fetchMenuList = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/company/menu-item/get`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await response.json();
+      if (data.success) {
+        setMenuItemList(data.data);
+        setMessage("Menu data fetched successfully!");
+      } else {
+        setMenuItemList([]);
+        setMessage(data.message || "Error fetching menu data.");
+      }
+    } catch (error) {
+      console.error("Error fetching menu data:", error);
+      setMessage("Error occurred while fetching menu data.");
+    }
+  };
+  useEffect(() => {
+    fetchMenuList();
+  }, []);
 
   //--------------Combo Management----------------
   interface Combo {
@@ -187,7 +222,7 @@ const MenuPage = () => {
             </button>
           </form>
         </div>
-        {message && <p className="mt-4 text-green-500">{message}</p>}
+        {/*message && <p className="mt-4 text-green-500">{message}</p>*/}
         {/* Delete Menu Item Section */}
         <div className="border p-4 rounded-lg bg-red-100 mb-6 hover:bg-red-300">
           <h2 className="font-bold text-xl mb-4">Delete Menu Item</h2>
@@ -216,81 +251,120 @@ const MenuPage = () => {
           </form>
         </div>
 
-
-
-          <div className="border p-4 rounded-lg bg-gray-100 mb-6">
-            <h2 className="font-bold text-xl mb-4">Add New Combo</h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                addCombo();
-              }}
-            >
-              <div className="grid grid-cols-2 gap-4">
-                <input
-            type="text"
-            placeholder="Combo Name"
-            value={newCombo.combo_name}
-            onChange={(e) =>
-              setNewCombo({ ...newCombo, combo_name: e.target.value })
-            }
-            className="p-2 border rounded col-span-2"
-            required
-                />
-                <textarea
-            placeholder="Combo Description"
-            value={newCombo.combo_description}
-            onChange={(e) =>
-              setNewCombo({ ...newCombo, combo_description: e.target.value })
-            }
-            className="p-2 border rounded col-span-2 max-h-[120px] min-h-[120px]"
-                />
-                <input
-            type="text"
-            placeholder="Item ID 1"
-            value={newCombo.item_ids[0] || ""}
-            onChange={(e) =>
-              setNewCombo({
-                ...newCombo,
-                item_ids: [e.target.value, newCombo.item_ids[1], newCombo.item_ids[2]],
-              })
-            }
-            className="p-2 border rounded col-span-2"
-            required
-                />
-                <input
-            type="text"
-            placeholder="Item ID 2"
-            value={newCombo.item_ids[1] || ""}
-            onChange={(e) =>
-              setNewCombo({
-                ...newCombo,
-                item_ids: [newCombo.item_ids[0], e.target.value, newCombo.item_ids[2]],
-              })
-            }
-            className="p-2 border rounded col-span-2"
-                />
-                <input
-            type="text"
-            placeholder="Item ID 3"
-            value={newCombo.item_ids[2] || ""}
-            onChange={(e) =>
-              setNewCombo({
-                ...newCombo,
-                item_ids: [newCombo.item_ids[0], newCombo.item_ids[1], e.target.value],
-              })
-            }
-            className="p-2 border rounded col-span-2"
-                />
-              </div>
-              <button
-                type="submit"
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                Add Combo
-              </button>
-            </form>
+        {/* Menu List */}
+        <div className="border p-4 rounded-lg mb-6">
+          <h2 className="font-bold text-xl mb-4">Menu List</h2>
+          <button
+            onClick={fetchMenuList}
+            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Refresh Menu List
+          </button>
+          <table className="w-full border-collapse border">
+            <thead>
+              <tr>
+                <th className="border p-2">Item ID</th>
+                <th className="border p-2">Item Name</th>
+                <th className="border p-2">Base Price</th>
+                <th className="border p-2">Status</th>
+                <th className="border p-2">Category Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {menuItemList.length > 0 ? (
+                menuItemList.map((menu) => (
+                  <tr key={menu.item_id}>
+                    <td className="border p-2">{menu.item_id}</td>
+                    <td className="border p-2">{menu.item_name}</td>
+                    <td className="border p-2">{menu.base_price}</td>
+                    <td className="border p-2">{menu.menu_item_status}</td>
+                    <td className="border p-2">{menu.category_name}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="border p-2 text-center">
+                    No menu item available.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
           </div>
+
+        <div className="border p-4 rounded-lg bg-gray-100 mb-6">
+          <h2 className="font-bold text-xl mb-4">Add New Combo</h2>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              addCombo();
+            }}
+          >
+            <div className="grid grid-cols-2 gap-4">
+              <input
+          type="text"
+          placeholder="Combo Name"
+          value={newCombo.combo_name}
+          onChange={(e) =>
+            setNewCombo({ ...newCombo, combo_name: e.target.value })
+          }
+          className="p-2 border rounded col-span-2"
+          required
+              />
+              <textarea
+          placeholder="Combo Description"
+          value={newCombo.combo_description}
+          onChange={(e) =>
+            setNewCombo({ ...newCombo, combo_description: e.target.value })
+          }
+          className="p-2 border rounded col-span-2 max-h-[120px] min-h-[120px]"
+              />
+              <input
+          type="text"
+          placeholder="Item ID 1"
+          value={newCombo.item_ids[0] || ""}
+          onChange={(e) =>
+            setNewCombo({
+              ...newCombo,
+              item_ids: [e.target.value, newCombo.item_ids[1], newCombo.item_ids[2]],
+            })
+          }
+          className="p-2 border rounded col-span-2"
+          required
+              />
+              <input
+          type="text"
+          placeholder="Item ID 2"
+          value={newCombo.item_ids[1] || ""}
+          onChange={(e) =>
+            setNewCombo({
+              ...newCombo,
+              item_ids: [newCombo.item_ids[0], e.target.value, newCombo.item_ids[2]],
+            })
+          }
+          className="p-2 border rounded col-span-2"
+              />
+              <input
+          type="text"
+          placeholder="Item ID 3"
+          value={newCombo.item_ids[2] || ""}
+          onChange={(e) =>
+            setNewCombo({
+              ...newCombo,
+              item_ids: [newCombo.item_ids[0], newCombo.item_ids[1], e.target.value],
+            })
+          }
+          className="p-2 border rounded col-span-2"
+              />
+            </div>
+            <button
+              type="submit"
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              Add Combo
+            </button>
+          </form>
+        </div>
 
         {/* Delete Combo*/}
         <div className="border p-4 rounded-lg bg-red-100 mb-6 hover:bg-red-300">
