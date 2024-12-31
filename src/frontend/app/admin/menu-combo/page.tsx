@@ -458,6 +458,48 @@ const MenuPage = () => {
             </button>
           </form>
         </div>
+
+{/* Menu List */}
+<div className="border p-4 rounded-lg mb-6">
+          <h2 className="font-bold text-xl mb-4">Menu List</h2>
+          <button
+            onClick={fetchMenuList}
+            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Refresh Menu List
+          </button>
+          <table className="w-full border-collapse border">
+            <thead>
+              <tr>
+                <th className="border p-2">Item ID</th>
+                <th className="border p-2">Item Name</th>
+                <th className="border p-2">Base Price</th>
+                <th className="border p-2">Status</th>
+                <th className="border p-2">Category Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {menuItemList.length > 0 ? (
+                menuItemList.map((menu) => (
+                  <tr key={menu.item_id}>
+                    <td className="border p-2">{menu.item_id}</td>
+                    <td className="border p-2">{menu.item_name}</td>
+                    <td className="border p-2">{menu.base_price}</td>
+                    <td className="border p-2">{menu.menu_item_status}</td>
+                    <td className="border p-2">{menu.category_name}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="border p-2 text-center">
+                    No menu item available.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+          </div>
+
       </div>
     </>
   );
