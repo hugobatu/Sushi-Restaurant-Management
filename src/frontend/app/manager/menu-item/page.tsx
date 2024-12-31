@@ -7,30 +7,31 @@ import { SideNav } from "@/components/Manager/side-nav";
 const BranchMenuPage = () => {
   interface BranchMenuItem {
     branch_id: string;
-    menu_item_id: string;
+    item_id: string;
     item_name: string;
-    status: string;
-    price: number;
+    is_available: boolean;
+    base_price: number;
   }
+
+  const formatPrice = (base_price) => {
+    return `${base_price.toLocaleString("vi-VN")} VND`;
+  };
 
   const [branchMenuItems, setBranchMenuItems] = useState<BranchMenuItem[]>([]);
   const [newMenuItem, setNewMenuItem] = useState({
-    branch_id: "",
-    menu_item_id: "",
-    item_name: "",
-    status: "available",
-    price: 0
+    user_id: "",
+    item_id: "",
   });
 
   const [deleteMenuItem, setDeleteMenuItem] = useState({
-    branch_id: "",
-    menu_item_id: ""
+    user_id: "",
+    item_id: ""
   });
 
   const [updateMenuItem, setUpdateMenuItem] = useState({
-    branch_id: "",
-    menu_item_id: "",
-    new_status: "",
+    user_id: "",
+    item_id: "",
+    is_available: true
   });
 
   const [message, setMessage] = useState("");
@@ -38,8 +39,8 @@ const BranchMenuPage = () => {
   // Fetch branch menu items
   const fetchBranchMenuItems = async () => {
     try {
-      const response = await fetch("http://localhost:8000/company/menu-branch-item", {
-        method: "GET",
+      const response = await fetch("http://localhost:8000/manager/menu-branch-item", {
+        method: "GET", // Changed to POST as per controller
         headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();
@@ -59,22 +60,19 @@ const BranchMenuPage = () => {
   // Add menu item to branch
   const addBranchMenuItem = async () => {
     try {
-      const response = await fetch("http://localhost:8000/company/menu-branch-item/add", {
+      const response = await fetch("http://localhost:8000/manager/menu-branch-item/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newMenuItem),
+        body: JSON.stringify({
+          user_id: parseInt(newMenuItem.user_id),
+          item_id: newMenuItem.item_id
+        }),
       });
       const data = await response.json();
       if (data.success) {
         setMessage("Menu item added successfully!");
         fetchBranchMenuItems();
-        setNewMenuItem({
-          branch_id: "",
-          menu_item_id: "",
-          item_name: "",
-          status: "available",
-          price: 0
-        });
+        setNewMenuItem({ user_id: "", item_id: "" });
       } else {
         setMessage(data.message || "Error adding menu item.");
       }
@@ -87,16 +85,19 @@ const BranchMenuPage = () => {
   // Delete menu item from branch
   const deleteBranchMenuItem = async () => {
     try {
-      const response = await fetch("http://localhost:8000/company/menu-branch-item/delete", {
+      const response = await fetch("http://localhost:8000/manager/menu-branch-item/delete", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(deleteMenuItem),
+        body: JSON.stringify({
+          user_id: parseInt(deleteMenuItem.user_id),
+          item_id: deleteMenuItem.item_id
+        }),
       });
       const data = await response.json();
       if (data.success) {
         setMessage("Menu item deleted successfully!");
         fetchBranchMenuItems();
-        setDeleteMenuItem({ branch_id: "", menu_item_id: "" });
+        setDeleteMenuItem({ user_id: "", item_id: "" });
       } else {
         setMessage(data.message || "Error deleting menu item.");
       }
@@ -106,19 +107,23 @@ const BranchMenuPage = () => {
     }
   };
 
-   // Update menu item status
-   const updateBranchMenuItemStatus = async () => {
+  // Update menu item status
+  const updateBranchMenuItemStatus = async () => {
     try {
-      const response = await fetch("http://localhost:8000/company/menu-branch-item/change-status", {
+      const response = await fetch("http://localhost:8000/manager/menu-branch-item/change-status", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updateMenuItem),
+        body: JSON.stringify({
+          user_id: parseInt(updateMenuItem.user_id),
+          item_id: updateMenuItem.item_id,
+          is_available: updateMenuItem.is_available
+        }),
       });
       const data = await response.json();
       if (data.success) {
         setMessage("Menu item status updated successfully!");
         fetchBranchMenuItems();
-        setUpdateMenuItem({ branch_id: "", menu_item_id: "", new_status: "" });
+        setUpdateMenuItem({ user_id: "", item_id: "", is_available: true });
       } else {
         setMessage(data.message || "Error updating menu item status.");
       }
@@ -142,66 +147,26 @@ const BranchMenuPage = () => {
         {/* Add New Menu Item Form */}
         <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Add Menu Item to Branch</h2>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              addBranchMenuItem();
-            }}
-          >
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            addBranchMenuItem();
+          }}>
             <div className="grid grid-cols-2 gap-4">
               <input
-                type="text"
-                placeholder="Branch ID"
-                value={newMenuItem.branch_id}
-                onChange={(e) =>
-                  setNewMenuItem({ ...newMenuItem, branch_id: e.target.value })
-                }
-                className="p-2 border rounded"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Menu Item ID"
-                value={newMenuItem.menu_item_id}
-                onChange={(e) =>
-                  setNewMenuItem({ ...newMenuItem, menu_item_id: e.target.value })
-                }
-                className="p-2 border rounded"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Item Name"
-                value={newMenuItem.item_name}
-                onChange={(e) =>
-                  setNewMenuItem({ ...newMenuItem, item_name: e.target.value })
-                }
-                className="p-2 border rounded"
-                required
-              />
-              <select
-                value={newMenuItem.status}
-                onChange={(e) =>
-                  setNewMenuItem({ ...newMenuItem, status: e.target.value })
-                }
-                className="p-2 border rounded"
-                required
-              >
-                <option value="available">Available</option>
-                <option value="unavailable">Unavailable</option>
-                <option value="sold_out">Sold Out</option>
-              </select>
-              <input
                 type="number"
-                placeholder="Price"
-                value={newMenuItem.price}
-                onChange={(e) =>
-                  setNewMenuItem({ ...newMenuItem, price: parseFloat(e.target.value) })
-                }
+                placeholder="User ID"
+                value={newMenuItem.user_id}
+                onChange={(e) => setNewMenuItem({ ...newMenuItem, user_id: e.target.value })}
                 className="p-2 border rounded"
                 required
-                min="0"
-                step="0.01"
+              />
+              <input
+                type="text"
+                placeholder="Item ID"
+                value={newMenuItem.item_id}
+                onChange={(e) => setNewMenuItem({ ...newMenuItem, item_id: e.target.value })}
+                className="p-2 border rounded"
+                required
               />
             </div>
             <button
@@ -216,30 +181,24 @@ const BranchMenuPage = () => {
         {/* Delete Menu Item Form */}
         <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Delete Menu Item</h2>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              deleteBranchMenuItem();
-            }}
-          >
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            deleteBranchMenuItem();
+          }}>
             <div className="grid grid-cols-2 gap-4">
               <input
-                type="text"
-                placeholder="Branch ID"
-                value={deleteMenuItem.branch_id}
-                onChange={(e) =>
-                  setDeleteMenuItem({ ...deleteMenuItem, branch_id: e.target.value })
-                }
+                type="number"
+                placeholder="User ID"
+                value={deleteMenuItem.user_id}
+                onChange={(e) => setDeleteMenuItem({ ...deleteMenuItem, user_id: e.target.value })}
                 className="p-2 border rounded"
                 required
               />
               <input
                 type="text"
-                placeholder="Menu Item ID"
-                value={deleteMenuItem.menu_item_id}
-                onChange={(e) =>
-                  setDeleteMenuItem({ ...deleteMenuItem, menu_item_id: e.target.value })
-                }
+                placeholder="Item ID"
+                value={deleteMenuItem.item_id}
+                onChange={(e) => setDeleteMenuItem({ ...deleteMenuItem, item_id: e.target.value })}
                 className="p-2 border rounded"
                 required
               />
@@ -253,48 +212,41 @@ const BranchMenuPage = () => {
           </form>
         </div>
 
-         {/* Update Menu Item Status Form */}
-         <div className="border p-4 rounded-lg bg-gray-100 mb-6">
+        {/* Update Menu Item Status Form */}
+        <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Update Menu Item Status</h2>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              updateBranchMenuItemStatus();
-            }}
-          >
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            updateBranchMenuItemStatus();
+          }}>
             <div className="grid grid-cols-3 gap-4">
               <input
-                type="text"
-                placeholder="Branch ID"
-                value={updateMenuItem.branch_id}
-                onChange={(e) =>
-                  setUpdateMenuItem({ ...updateMenuItem, branch_id: e.target.value })
-                }
+                type="number"
+                placeholder="User ID"
+                value={updateMenuItem.user_id}
+                onChange={(e) => setUpdateMenuItem({ ...updateMenuItem, user_id: e.target.value })}
                 className="p-2 border rounded"
                 required
               />
               <input
                 type="text"
-                placeholder="Menu Item ID"
-                value={updateMenuItem.menu_item_id}
-                onChange={(e) =>
-                  setUpdateMenuItem({ ...updateMenuItem, menu_item_id: e.target.value })
-                }
+                placeholder="Item ID"
+                value={updateMenuItem.item_id}
+                onChange={(e) => setUpdateMenuItem({ ...updateMenuItem, item_id: e.target.value })}
                 className="p-2 border rounded"
                 required
               />
               <select
-                value={updateMenuItem.new_status}
-                onChange={(e) =>
-                  setUpdateMenuItem({ ...updateMenuItem, new_status: e.target.value })
-                }
+                value={updateMenuItem.is_available.toString()}
+                onChange={(e) => setUpdateMenuItem({ 
+                  ...updateMenuItem, 
+                  is_available: e.target.value === "true" 
+                })}
                 className="p-2 border rounded"
                 required
               >
-                <option value="">Select Status</option>
-                <option value="available">Available</option>
-                <option value="unavailable">Unavailable</option>
-                <option value="sold_out">Sold Out</option>
+                <option value="true">Available</option>
+                <option value="false">Unavailable</option>
               </select>
             </div>
             <button
@@ -319,7 +271,7 @@ const BranchMenuPage = () => {
             <thead>
               <tr>
                 <th className="border p-2">Branch ID</th>
-                <th className="border p-2">Menu Item ID</th>
+                <th className="border p-2">Item ID</th>
                 <th className="border p-2">Item Name</th>
                 <th className="border p-2">Status</th>
                 <th className="border p-2">Price</th>
@@ -328,12 +280,14 @@ const BranchMenuPage = () => {
             <tbody>
               {branchMenuItems.length > 0 ? (
                 branchMenuItems.map((item) => (
-                  <tr key={`${item.branch_id}-${item.menu_item_id}`}>
+                  <tr key={`${item.branch_id}-${item.item_id}`}>
                     <td className="border p-2">{item.branch_id}</td>
-                    <td className="border p-2">{item.menu_item_id}</td>
+                    <td className="border p-2">{item.item_id}</td>
                     <td className="border p-2">{item.item_name}</td>
-                    <td className="border p-2">{item.status}</td>
-                    <td className="border p-2">${item.price}</td>
+                    <td className="border p-2">
+                      {item.is_available ? "Available" : "Unavailable"}
+                    </td>
+                    <td className="border p-2">{formatPrice(item.base_price)}</td>
                   </tr>
                 ))
               ) : (
