@@ -101,7 +101,11 @@ const TestCart = () => {
           const checkedItems = items.filter(item => item.checked);
           localStorage.setItem('totalAmount', JSON.stringify(totalAmount));
           localStorage.setItem('checkedItems', JSON.stringify(checkedItems));
-          
+          const simplifiedItems = checkedItems.map((item: { id: string; quantity: number }) => ({
+            item_id: item.id,
+            quantity: item.quantity,
+          }));
+          localStorage.setItem('simplifiedItems', JSON.stringify(simplifiedItems));
           const roleCookie = document.cookie.split('; ').find(row => row.startsWith('role='));
           const role = roleCookie ? roleCookie.split('=')[1] : null;
           if (role === 'staff') {

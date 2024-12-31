@@ -45,12 +45,13 @@ exports.addCustomer = async (req, res) => {
         });
     }
 };
+
 // 2. xem danh sách các order (của nhân viên phụ trách + reserve và delivery)
 exports.viewOrder = async (req, res) => {
     const {
         user_id,
         order_status = 'pending'
-    } = req.body;
+    } = req.query;
 
     if (!user_id) {
         return res.status(400).json({ error: 'User ID is required' });

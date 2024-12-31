@@ -6,10 +6,10 @@ import { SideNav } from "@/components/Staff/side-nav";
 
 const CustomerOrderPage = () => {
   interface Order {
-    id: string;
+    order_id: string;
     customer_name: string;
-    total: number;
-    status: string;
+    total_amount: number;
+    order_status: string;
   }
 
   const [customerForm, setCustomerForm] = useState({
@@ -28,24 +28,42 @@ const CustomerOrderPage = () => {
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [message, setMessage] = useState("");
-
-  // Fetch Orders
   const fetchOrders = async () => {
-    try {
-      const response = await fetch("http://localhost:8000/orders");
-      const data = await response.json();
-      if (data.success) {
-        setOrders(data.data);
-        setMessage("Orders fetched successfully!");
-      } else {
-        setOrders([]);
-        setMessage(data.message || "No orders found.");
-      }
-    } catch (error) {
-      console.error("Error fetching orders:", error);
-      setMessage("An error occurred while fetching orders.");
+    const userId = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('user_id='))
+        ?.split('=')[1];
+
+    if (!userId) {
+        setMessage("User ID is missing in cookies.");
+        return;
     }
-  };
+
+    try {
+        const response = await fetch(
+            `http://localhost:8000/staff/customer/order/view?user_id=${userId}&order_status=pending`,
+            {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.success) {
+            setOrders(data.order);
+            setMessage("Orders fetched successfully!");
+        } else {
+            setOrders([]);
+            setMessage(data.message || "No orders found.");
+        }
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+        setMessage("An error occurred while fetching orders.");
+    }
+};
+
+
 
   // Add Customer
   const handleAddCustomer = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -58,7 +76,7 @@ const CustomerOrderPage = () => {
       });
       const data = await response.json();
       if (data.success) {
-        setMessage("Customer added successfully!");
+        alert("Customer added successfully!");
         setCustomerForm({
           customer_name: "",
           email: "",
@@ -68,7 +86,7 @@ const CustomerOrderPage = () => {
           id_number: "",
         });
       } else {
-        setMessage(data.message || "Error adding customer.");
+        alert(data.message || "Error adding customer.");
       }
     } catch (error) {
       console.error("Error adding customer:", error);
@@ -190,7 +208,7 @@ const CustomerOrderPage = () => {
           </form>
         </div>
 
-        {/* Create Order Form */}
+        {/* Create Order Form KHÔNG DÙNG CÁI NÀY NỮA ĐÃ LÀM XONG FLOW KHÁC RỒI
         <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Create Order</h2>
           <form
@@ -223,52 +241,43 @@ const CustomerOrderPage = () => {
               Create Order
             </button>
           </form>
-        </div>
+        </div> */}
 
-        {/* Orders List */}
-        <div className="border p-4 rounded-lg">
-          <h2 className="font-bold text-xl mb-4">Orders List</h2>
-          <table className="w-full border-collapse border">
-            <thead>
-              <tr>
-                <th className="border p-2">Order ID</th>
-                <th className="border p-2">Customer</th>
-                <th className="border p-2">Total</th>
-                <th className="border p-2">Status</th>
-                <th className="border p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.length > 0 ? (
-                orders.map((order) => (
-                  <tr key={order.id}>
-                    <td className="border p-2">{order.id}</td>
-                    <td className="border p-2">{order.customer_name}</td>
-                    <td className="border p-2">${order.total}</td>
-                    <td className="border p-2">{order.status}</td>
-                    <td className="border p-2 space-x-2">
-                      <button className="px-2 py-1 bg-blue-500 text-white rounded">
-                        Confirm
-                      </button>
-                      <button className="px-2 py-1 bg-red-500 text-white rounded">
-                        Delete
-                      </button>
-                      <button className="px-2 py-1 bg-gray-300 text-black rounded">
-                        Export
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="text-center p-4">
-                    No orders available.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+{/* Orders List */}
+<div className="border p-4 rounded-lg">
+  <h2 className="font-bold text-xl mb-4">Orders List</h2>
+  <table className="w-full border-collapse border">
+    <thead>
+      <tr>
+        <th className="border p-2">Order ID</th>
+        <th className="border p-2">Customer</th>
+        <th className="border p-2">Order Type</th>
+        <th className="border p-2">Status</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {orders.length > 0 ? (
+        orders.map((order) => (
+          <tr key={order.order_id}>
+            <td className="border p-2">{order.order_id}</td>
+            <td className="border p-2">{order.customer_name}</td>
+            <td className="border p-2">{order.total_amount}</td>
+            <td className="border p-2">{order.order_status}</td>
+
+          </tr>
+        ))
+      ) : (
+        <tr>
+          <td colSpan={5} className="text-center p-4">
+            No orders available.
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</div>
+
 
         {message && (
           <div className="mt-4 text-center text-red-500 font-bold">{message}</div>
