@@ -3,12 +3,8 @@ const dotenv = require('dotenv').config();
 const cors = require('cors');
 const authController = require('./src/controllers/auth_controllers');
 const admin_routes = require('./src/routes/admin_routes'); //admin
-<<<<<<< HEAD
 const manager_routes = require('./src/routes/branch_manager_routes'); // quan ly chi nhanh (branch manager)
 const customer_routes = require('./src/routes/customer_routes'); // khach hang
-=======
-const manager_routes = require('./src/routes/branch_manager_routes'); // manager
->>>>>>> c07605f674e3b926aac41bb9c05318aea44c14fb
 const staff_routes = require('./src/routes/staff_routes'); // staff
 const app = express();
 
