@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { CustomerHeader } from "@/components/CustomerPage/customer-header";
 
 const MembershipPage = () => {
-    const [phoneNumber, setPhoneNumber] = useState("");
+    const [phone_number, setPhoneNumber] = useState("");
     const [membershipData, setMembershipData] = useState<any | null>(null);
     const [message, setMessage] = useState("");
 
@@ -12,16 +12,16 @@ const MembershipPage = () => {
         e.preventDefault();
         setMessage(""); // Clear previous messages
 
-        if (!phoneNumber) {
+        if (!phone_number) {
             setMessage("Please enter your phone number.");
             return;
         }
 
         try {
             const response = await fetch("http://localhost:8000/customer/view-points", {
-                method: "POST",
+                method: "POST", // Corrected to POST
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ phone_number: phoneNumber }),
+                body: JSON.stringify({ phone_number }), // Passing phone_number in the request body
             });
 
             const data = await response.json();
@@ -35,7 +35,7 @@ const MembershipPage = () => {
             }
         } catch (error) {
             console.error("Error fetching membership points:", error);
-            setMessage("An error occurred while fetching membership points or no active membership found for the provided phone number..");
+            setMessage("An error occurred while fetching membership points.");
         }
     };
 
@@ -55,7 +55,7 @@ const MembershipPage = () => {
                         id="phone"
                         type="text"
                         className="w-full p-2 border rounded mb-4"
-                        value={phoneNumber}
+                        value={phone_number}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         placeholder="Enter your phone number"
                         required
@@ -74,35 +74,53 @@ const MembershipPage = () => {
 
                 {membershipData && (
                     <div className="bg-white shadow p-6 rounded">
-                        <h2 className="text-2xl font-bold mb-4">
-                            Membership Details
-                        </h2>
-                        <p>
-                            <strong>Customer Name:</strong> {membershipData.customer_name}
-                        </p>
-                        <p>
-                            <strong>Phone Number:</strong> {membershipData.phone_number}
-                        </p>
-                        <p>
-                            <strong>Card ID:</strong> {membershipData.card_id}
-                        </p>
-                        <p>
-                            <strong>Membership Level:</strong> {membershipData.level_name}
-                        </p>
-                        <p>
-                            <strong>Points:</strong> {membershipData.points}
-                        </p>
-                        <p>
-                            <strong>Status:</strong> {membershipData.membership_status}
-                        </p>
-                        <p>
-                            <strong>Issued Date:</strong>{" "}
-                            {new Date(membershipData.issued_date).toLocaleDateString()}
-                        </p>
-                        <p>
-                            <strong>Valid Until:</strong>{" "}
-                            {new Date(membershipData.valid_until).toLocaleDateString()}
-                        </p>
+                        <h2 className="text-2xl font-bold mb-4">Membership Details</h2>
+                        <table className="w-full border-collapse border text-left">
+                            <thead className="bg-gray-100">
+                                <tr>
+                                    <th className="border p-2">Field</th>
+                                    <th className="border p-2">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="border p-2">Customer Name</td>
+                                    <td className="border p-2">{membershipData.customer_name}</td>
+                                </tr>
+                                <tr>
+                                    <td className="border p-2">Phone Number</td>
+                                    <td className="border p-2">{membershipData.phone_number}</td>
+                                </tr>
+                                <tr>
+                                    <td className="border p-2">Card ID</td>
+                                    <td className="border p-2">{membershipData.card_id}</td>
+                                </tr>
+                                <tr>
+                                    <td className="border p-2">Membership Level</td>
+                                    <td className="border p-2">{membershipData.level_name}</td>
+                                </tr>
+                                <tr>
+                                    <td className="border p-2">Points</td>
+                                    <td className="border p-2">{membershipData.points}</td>
+                                </tr>
+                                <tr>
+                                    <td className="border p-2">Status</td>
+                                    <td className="border p-2">{membershipData.membership_status}</td>
+                                </tr>
+                                <tr>
+                                    <td className="border p-2">Issued Date</td>
+                                    <td className="border p-2">
+                                        {new Date(membershipData.issued_date).toLocaleDateString()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="border p-2">Valid Until</td>
+                                    <td className="border p-2">
+                                        {new Date(membershipData.valid_until).toLocaleDateString()}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 )}
             </div>
