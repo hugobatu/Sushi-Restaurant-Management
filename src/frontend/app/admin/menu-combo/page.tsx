@@ -391,114 +391,118 @@ const MenuPage = () => {
               Previous
             </button>
             <div className="flex gap-2">
-              <button
-                onClick={() => handlePageClick(1)}
-                type="button"
-                className={`px-4 py-2 rounded ${
-                  currentPage === 1
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-300 text-black"
-                }`}
-              >
-                {1}
-              </button>
+                {totalPages > 0 && (
+                  <button
+                    onClick={() => handlePageClick(1)}
+                    type="button"
+                    className={`px-4 py-2 rounded ${
+                      currentPage === 1
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-300 text-black"
+                    }`}
+                  >
+                    {1}
+                  </button>
+                )}
 
-              {currentPage > 3 && <div className={'px-4 py-2 font-bold'}>. . .</div>}
+                {currentPage > 4 && <div className={'px-4 py-2 font-bold'}>. . .</div>}
 
-              {currentPage === totalPages && totalPages > 4 && (
-                <button
-                  onClick={() => handlePageClick(currentPage - 3)}
-                  type="button"
-                className={'px-4 py-2 rounded bg-gray-300 text-black'}
-                >
-                  {currentPage - 3}
-                </button>
-              )}
-              {currentPage > 3 && (
-                <button
-                  onClick={() => handlePageClick(currentPage - 2)}
-                  type="button"
-                className={'px-4 py-2 rounded bg-gray-300 text-black'}
-                >
-                  {currentPage - 2}
-                </button>
-              )}
-              {currentPage > 2 && (
-                <button
-                  onClick={() => handlePageClick(currentPage - 1)}
-                  type="button"
-                className={'px-4 py-2 rounded bg-gray-300 text-black'}
-                >
-                  {currentPage - 1}
-                </button>
-              )}
-              {currentPage !== 1 && currentPage !== totalPages && (
-                <button
-                  onClick={() => handlePageClick(currentPage)}
-                  type="button"
-                className={`px-4 py-2 rounded ${
-                  currentPage !== 1 && currentPage !== totalPages
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-300 text-black"
-                }`}
-                >
-                  {currentPage}
-                </button>
-              )}
-              {currentPage < totalPages - 1 && (
-                <button
-                  onClick={() => handlePageClick(currentPage + 1)}
-                  type="button"
-                className={'px-4 py-2 rounded bg-gray-300 text-black'}
-                >
-                  {currentPage + 1}
-                </button>
-              )}
-              {currentPage < totalPages - 2 && (
-                <button
-                  onClick={() => handlePageClick(currentPage + 2)}
-                  type="button"
-                className={'px-4 py-2 rounded bg-gray-300 text-black'}
-                >
-                  {currentPage + 2}
-                </button>
-              )}
-              {currentPage === 1 && totalPages > 4 && (
-                <button
-                  onClick={() => handlePageClick(currentPage + 3)}
-                  type="button"
-                className={'px-4 py-2 rounded bg-gray-300 text-black'}
-                >
-                  {currentPage + 3}
-                </button>
-              )}
-
-              {currentPage < totalPages - 2 && <div className={'px-4 py-2 font-bold'}>. . .</div>}
-
-              <button
-                onClick={() => handlePageClick(totalPages)}
-                type="button"
-              className={`px-4 py-2 rounded ${
-                currentPage === totalPages
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-300 text-black"
-              }`}
-              >
-                {totalPages}
-              </button>
-              {/* {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => handlePageClick(index + 1)}
+                {currentPage === totalPages && totalPages > 4 && (
+                  <button
+                    onClick={() => handlePageClick(currentPage - 3)}
+                    type="button"
+                  className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                  >
+                    {currentPage - 3}
+                  </button>
+                )}
+                {currentPage > 3 && (
+                  <button
+                    onClick={() => handlePageClick(currentPage - 2)}
+                    type="button"
+                  className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                  >
+                    {currentPage - 2}
+                  </button>
+                )}
+                {currentPage > 2 && (
+                  <button
+                    onClick={() => handlePageClick(currentPage - 1)}
+                    type="button"
+                  className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                  >
+                    {currentPage - 1}
+                  </button>
+                )}
+                {currentPage !== 1 && currentPage !== totalPages && (
+                  <button
+                    onClick={() => handlePageClick(currentPage)}
+                    type="button"
                   className={`px-4 py-2 rounded ${
-                    currentPage === index + 1
+                    currentPage !== 1 && currentPage !== totalPages
                       ? "bg-blue-500 text-white"
                       : "bg-gray-300 text-black"
                   }`}
-                >
-                  {index + 1}
-                </button>
-              ))} */}
+                  >
+                    {currentPage}
+                  </button>
+                )}
+                {currentPage < totalPages - 1 && (
+                  <button
+                    onClick={() => handlePageClick(currentPage + 1)}
+                    type="button"
+                  className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                  >
+                    {currentPage + 1}
+                  </button>
+                )}
+                {currentPage < totalPages - 2 && (
+                  <button
+                    onClick={() => handlePageClick(currentPage + 2)}
+                    type="button"
+                  className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                  >
+                    {currentPage + 2}
+                  </button>
+                )}
+                {currentPage === 1 && totalPages > 4 && (
+                  <button
+                    onClick={() => handlePageClick(currentPage + 3)}
+                    type="button"
+                  className={'px-4 py-2 rounded bg-gray-300 text-black'}
+                  >
+                    {currentPage + 3}
+                  </button>
+                )}
+
+                {currentPage < totalPages - 3 && <div className={'px-4 py-2 font-bold'}>. . .</div>}
+
+                {totalPages !== 1 && (
+                  <button
+                    onClick={() => handlePageClick(totalPages)}
+                    type="button"
+                  className={`px-4 py-2 rounded ${
+                    currentPage === totalPages
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-300 text-black"
+                  }`}
+                  >
+                    {totalPages}
+                  </button>
+                )}
+                {/* {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handlePageClick(index + 1)}
+                    className={`px-4 py-2 rounded ${
+                      currentPage === index + 1
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-300 text-black"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))} */}
             </div>
             <button
               onClick={handleNextPage}
