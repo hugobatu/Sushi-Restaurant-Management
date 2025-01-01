@@ -12,8 +12,8 @@ router.post('/menu-branch-item/change-status', manager_controllers.changeBranchM
 router.get('/menu-branch-item', manager_controllers.getBranchMenuItem); // *. lấy danh sách các menu chi nhánh
 
 // xem danh sách nhân viên
-router.get('/staff/name', manager_controllers.getStaffDataByName); // 4. xem nhân viên theo tên
-router.get('/staff/all-data', manager_controllers.getAllBranchStaffData); // 5. xem tất cả nhân viên theo chi nhánh
+router.post('/staff/name', manager_controllers.getStaffDataByName); // 4. xem nhân viên theo tên
+router.post('/staff/all-data', manager_controllers.getAllBranchStaffData); // 5. xem tất cả nhân viên theo chi nhánh
 router.get('/staff/ratings', manager_controllers.getBranchStaffRatings); // 6. xem đánh giá nvien của cnhanh manager đang qly
 
 // xem doanh thu

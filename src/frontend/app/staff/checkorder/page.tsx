@@ -13,6 +13,7 @@ const CustomerOrderPage = () => {
     order_status: string;
   }
 
+
   const [customerForm, setCustomerForm] = useState({
     customer_name: "",
     email: "",
@@ -22,10 +23,6 @@ const CustomerOrderPage = () => {
     id_number: "",
   });
 
-  const [orderForm, setOrderForm] = useState({
-    customer_id: "",
-    notes: "",
-  });
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [message, setMessage] = useState("");
@@ -39,6 +36,37 @@ const CustomerOrderPage = () => {
     personal_response: "",
   });
 
+
+  // Add Customer
+  const handleAddCustomer = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:8000/staff/customer/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(customerForm),
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert("Customer added successfully!");
+        setCustomerForm({
+          customer_name: "",
+          email: "",
+          phone_number: "",
+          gender: "",
+          birth_date: "",
+          id_number: "",
+        });
+      } else {
+        alert(data.message || "Error adding customer.");
+      }
+    } catch (error) {
+      console.error("Error adding customer:", error);
+      setMessage("An error occurred while adding the customer.");
+    }
+  };
+
+  // Fetch orders
   const fetchOrders = async () => {
     const userId = document.cookie
       .split("; ")
@@ -74,37 +102,8 @@ const CustomerOrderPage = () => {
     }
   };
 
-
-    // Add Customer
-    const handleAddCustomer = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      try {
-        const response = await fetch("http://localhost:8000/staff/customer/add", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(customerForm),
-        });
-        const data = await response.json();
-        if (data.success) {
-          alert("Customer added successfully!");
-          setCustomerForm({
-            customer_name: "",
-            email: "",
-            phone_number: "",
-            gender: "",
-            birth_date: "",
-            id_number: "",
-          });
-        } else {
-          alert(data.message || "Error adding customer.");
-        }
-      } catch (error) {
-        console.error("Error adding customer:", error);
-        setMessage("An error occurred while adding the customer.");
-      }
-    };
-
-  const handleConfirmOrder = async (order_id: string) => {
+  // Confirm Direct Service Order
+  const handleConfirmDirectOrder = async (order_id: string) => {
     const userId = document.cookie
       .split("; ")
       .find((row) => row.startsWith("user_id="))
@@ -116,21 +115,25 @@ const CustomerOrderPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/staff/customer/order/confirm-direct", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: userId,
-          order_id,
-          ...ratings,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:8000/staff/customer/order/confirm-direct",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: userId,
+            order_id,
+            ...ratings,
+          }),
+        }
+      );
+
       const data = await response.json();
 
       if (data.success) {
         setMessage("Order confirmed successfully!");
         fetchOrders();
-        setSelectedOrder(null); // Reset the selected order
+        setSelectedOrder(null);
       } else {
         setMessage(data.message || "Error confirming order.");
       }
@@ -140,6 +143,34 @@ const CustomerOrderPage = () => {
     }
   };
 
+  // Confirm Reserve or Delivery Order
+  const handleConfirmReserveDelivery = async (order_id: string) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/staff/customer/order/confirm-reserve-delivery",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order_id }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(`Order ID: ${order_id} confirmed successfully.`);
+        setMessage(`Order ID: ${order_id} confirmed successfully.`);
+        fetchOrders();
+      } else {
+        setMessage(data.message || "Error confirming reserve/delivery order.");
+      }
+    } catch (error) {
+      console.error("Error confirming reserve/delivery order:", error);
+      setMessage("An error occurred while confirming the reserve/delivery order.");
+    }
+  };
+
+  // Delete order
   const handleDeleteOrder = async (order_id: string) => {
     if (window.confirm(`Are you sure you want to delete order ID: ${order_id}?`)) {
       try {
@@ -174,8 +205,9 @@ const CustomerOrderPage = () => {
       <SideNav />
       <div className="ml-60 p-6">
         <h1 className="font-bold text-4xl mb-6">Customer & Order Management</h1>
-                {/* Add Customer Form */}
-                <div className="border p-4 rounded-lg bg-gray-100 mb-6">
+
+   {/* Add Customer Form */}
+   <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Add Customer</h2>
           <form
             onSubmit={handleAddCustomer}
@@ -251,7 +283,7 @@ const CustomerOrderPage = () => {
           </form>
         </div>
 
-        
+
         {/* Orders List */}
         <div className="border p-4 rounded-lg">
           <h2 className="font-bold text-xl mb-4">Orders List</h2>
@@ -273,15 +305,23 @@ const CustomerOrderPage = () => {
                     <td className="border p-2">{order.customer_name}</td>
                     <td className="border p-2">{order.order_type}</td>
                     <td className="border p-2">{order.order_status}</td>
-                    <td className="border p-2">
-                      <button
-                        className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 mr-2"
-                        onClick={() => {
-                          setSelectedOrder(order);
-                        }}
-                      >
-                        Confirm
-                      </button>
+                    <td className="border p-2 space-x-2">
+                      {order.order_type === "Direct Service Order" && (
+                        <button
+                          className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 mr-2"
+                          onClick={() => setSelectedOrder(order)}
+                        >
+                          Confirm
+                        </button>
+                      )}
+                      {["Reservation Order", "Delivery Order"].includes(order.order_type) && (
+                        <button
+                          className="px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 mr-2"
+                          onClick={() => handleConfirmReserveDelivery(order.order_id)}
+                        >
+                          Confirm
+                        </button>
+                      )}
                       <button
                         className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                         onClick={() => handleDeleteOrder(order.order_id)}
@@ -302,14 +342,14 @@ const CustomerOrderPage = () => {
           </table>
         </div>
 
-        {/* Confirm Order Form */}
-        {selectedOrder && (
+        {/* Confirm Order Form for Direct Service Orders */}
+        {selectedOrder && selectedOrder.order_type === "Direct Service Order" && (
           <div className="border p-4 rounded-lg bg-gray-100 mt-6">
             <h2 className="font-bold text-xl mb-4">Confirm Order - {selectedOrder.order_id}</h2>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (selectedOrder) handleConfirmOrder(selectedOrder.order_id);
+                handleConfirmDirectOrder(selectedOrder.order_id);
               }}
               className="grid grid-cols-2 gap-4"
             >

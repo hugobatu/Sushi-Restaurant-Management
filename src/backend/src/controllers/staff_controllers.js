@@ -196,6 +196,7 @@ exports.confirmDirectOrder = async (req, res) => {
         });
     }
 }
+
 // 5. xác nhận delivery và reserve
 exports.confirmDeliveryReserve = async (req, res) => {
     const {

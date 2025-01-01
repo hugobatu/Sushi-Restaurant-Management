@@ -35,6 +35,7 @@ exports.viewCustomerPoints = async (req, res) => {
         });
     }
 };
+
 // 2. đặt trước
 exports.reserveOrderByCustomer = async (req, res) => {
     const {
@@ -81,10 +82,11 @@ exports.deliveryOrderByCustomer = async (req, res) => {
         user_id,
         branch_id,
         address,
-        items_json
+        items_json,
+        datetime
     } = req.body;
 
-    if (!user_id || !branch_id || !address || !items_json) {
+    if (!user_id || !branch_id || !address || !items_json || !datetime) {
         return res.status(400).json({
             success: false,
             error: 'Required fields are missing (user_id, branch_id, datetime, address, items_json).',
@@ -98,6 +100,7 @@ exports.deliveryOrderByCustomer = async (req, res) => {
             .input('type', sql.VarChar(20), type)
             .input('user_id', sql.Int, user_id)
             .input('branch_id', sql.VarChar(10), branch_id)
+            .input('datetime', sql.DateTime, datetime)
             .input('address', sql.NVarChar(255), address)
             .input('items_json', sql.NVarChar(sql.MAX), itemsJson)
             .execute('sp_reserve_and_delivery_order_by_customer');

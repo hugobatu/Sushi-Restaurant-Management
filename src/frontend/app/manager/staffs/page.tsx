@@ -6,12 +6,20 @@ import { SideNav } from "@/components/Manager/side-nav";
 
 const StaffManagementPage = () => {
   interface Staff {
-    staff_id: string;
-    name: string;
+    staff_id: number;
+    department_id: number[];
+    staff_name: string;
+    birth_date: string;
+    phone_number: string;
+    gender: string;
+    salary: number;
+    join_date: string;
+    resign_date: string | null;
+    staff_status: string;
+    username: string;
     branch_id: string;
-    role: string;
-    phone: string;
-    email: string;
+    department_name: string;
+    base_salary: number;
   }
 
   interface StaffRating {
@@ -25,82 +33,115 @@ const StaffManagementPage = () => {
   const [staffList, setStaffList] = useState<Staff[]>([]);
   const [staffRatings, setStaffRatings] = useState<StaffRating[]>([]);
   const [searchName, setSearchName] = useState("");
-  const [selectedBranchId, setSelectedBranchId] = useState("");
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState<"success" | "error">("success");
   const [activeView, setActiveView] = useState("all"); // all, search, ratings
+  const [currentUserId, setCurrentUserId] = useState("");
 
-  // Fetch staff by name - kept outside useEffect as it's triggered by button click
+  const showMessage = (msg: string, type: "success" | "error") => {
+    setMessage(msg);
+    setMessageType(type);
+    setTimeout(() => setMessage(""), 3000);
+  };
+
+  // Fetch staff by name
   const searchStaffByName = async () => {
+    if (!currentUserId || !searchName) {
+      showMessage("Please enter both User ID and Staff Name", "error");
+      return;
+    }
+
     try {
-      const response = await fetch(`http://localhost:8000/company/manager/staff/name?name=${searchName}`, {
-        method: "GET",
+      const response = await fetch("http://localhost:8000/manager/staff/name", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: parseInt(currentUserId),
+          staff_name: searchName
+        })
       });
       const data = await response.json();
       if (data.success) {
         setStaffList(data.data);
-        setMessage("Staff search completed!");
+        showMessage("Staff search completed!", "success");
       } else {
         setStaffList([]);
-        setMessage(data.message || "No staff found with that name.");
+        showMessage(data.message || "No staff found with that name.", "error");
       }
     } catch (error) {
       console.error("Error searching staff:", error);
-      setMessage("Error occurred while searching staff.");
+      showMessage("Error occurred while searching staff.", "error");
     }
   };
 
   // Effect to fetch data based on active view
   useEffect(() => {
-    // Moved functions inside useEffect to avoid dependency issues
     const fetchAllStaffData = async () => {
+      if (!currentUserId) {
+        showMessage("Please enter User ID", "error");
+        return;
+      }
+
       try {
-        const response = await fetch(`http://localhost:8000/company/manager/staff/all-data?branch_id=${selectedBranchId}`, {
-          method: "GET",
+        const response = await fetch("http://localhost:8000/manager/staff/all-data", {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: parseInt(currentUserId)
+          })
         });
         const data = await response.json();
         if (data.success) {
           setStaffList(data.data);
-          setMessage("Staff data fetched successfully!");
+          showMessage("Staff data fetched successfully!", "success");
         } else {
           setStaffList([]);
-          setMessage(data.message || "Error fetching staff data.");
+          showMessage(data.message || "Error fetching staff data.", "error");
         }
       } catch (error) {
         console.error("Error fetching staff data:", error);
-        setMessage("Error occurred while fetching staff data.");
+        showMessage("Error occurred while fetching staff data.", "error");
       }
     };
 
     const fetchStaffRatings = async () => {
+      if (!currentUserId) {
+        showMessage("Please enter User ID", "error");
+        return;
+      }
+
       try {
-        const response = await fetch(`http://localhost:8000/company/manager/staff/ratings?branch_id=${selectedBranchId}`, {
-          method: "GET",
+        const response = await fetch("http://localhost:8000/manager/staff/ratings", {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: parseInt(currentUserId),
+            page_number: 1,
+            page_size: 100000
+          })
         });
         const data = await response.json();
         if (data.success) {
           setStaffRatings(data.data);
-          setMessage("Staff ratings fetched successfully!");
+          showMessage("Staff ratings fetched successfully!", "success");
         } else {
           setStaffRatings([]);
-          setMessage(data.message || "Error fetching staff ratings.");
+          showMessage(data.message || "Error fetching staff ratings.", "error");
         }
       } catch (error) {
         console.error("Error fetching staff ratings:", error);
-        setMessage("Error occurred while fetching staff ratings.");
+        showMessage("Error occurred while fetching staff ratings.", "error");
       }
     };
 
-    if (selectedBranchId) {
+    if (currentUserId) {
       if (activeView === "all") {
         fetchAllStaffData();
       } else if (activeView === "ratings") {
         fetchStaffRatings();
       }
     }
-  }, [selectedBranchId, activeView]);
+  }, [currentUserId, activeView]);
 
   return (
     <>
@@ -109,14 +150,15 @@ const StaffManagementPage = () => {
       <div className="ml-60 p-6">
         <h1 className="font-bold text-4xl mb-6">Staff Management</h1>
 
-        {/* Branch Selection */}
+        {/* User ID Input */}
         <div className="mb-6">
           <input
-            type="text"
-            placeholder="Enter Branch ID"
-            value={selectedBranchId}
-            onChange={(e) => setSelectedBranchId(e.target.value)}
+            type="number"
+            placeholder="Enter Your User ID"
+            value={currentUserId}
+            onChange={(e) => setCurrentUserId(e.target.value)}
             className="p-2 border rounded mr-4"
+            required
           />
         </div>
 
@@ -154,7 +196,7 @@ const StaffManagementPage = () => {
           </button>
         </div>
 
-        {/* Search Bar (Only shown in search view) */}
+        {/* Search Bar */}
         {activeView === "search" && (
           <div className="mb-6">
             <div className="flex gap-4">
@@ -182,12 +224,16 @@ const StaffManagementPage = () => {
             <table className="w-full border-collapse border">
               <thead>
                 <tr>
-                  <th className="border p-2">Staff ID</th>
-                  <th className="border p-2">Name</th>
-                  <th className="border p-2">Branch ID</th>
-                  <th className="border p-2">Role</th>
-                  <th className="border p-2">Phone</th>
-                  <th className="border p-2">Email</th>
+                <th className="border p-2">Staff ID</th>
+                <th className="border p-2">Name</th>
+                <th className="border p-2">Department</th>
+                <th className="border p-2">Branch</th>
+                <th className="border p-2">Gender</th>
+                <th className="border p-2">Phone</th>
+                <th className="border p-2">Birth Date</th>
+                <th className="border p-2">Join Date</th>
+                <th className="border p-2">Status</th>
+                <th className="border p-2">Salary</th>
                 </tr>
               </thead>
               <tbody>
@@ -195,16 +241,24 @@ const StaffManagementPage = () => {
                   staffList.map((staff) => (
                     <tr key={staff.staff_id}>
                       <td className="border p-2">{staff.staff_id}</td>
-                      <td className="border p-2">{staff.name}</td>
-                      <td className="border p-2">{staff.branch_id}</td>
-                      <td className="border p-2">{staff.role}</td>
-                      <td className="border p-2">{staff.phone}</td>
-                      <td className="border p-2">{staff.email}</td>
+                    <td className="border p-2">{staff.staff_name}</td>
+                    <td className="border p-2">{staff.department_name}</td>
+                    <td className="border p-2">{staff.branch_id}</td>
+                    <td className="border p-2 capitalize">{staff.gender}</td>
+                    <td className="border p-2">{staff.phone_number}</td>
+                    <td className="border p-2">
+                      {new Date(staff.birth_date).toLocaleDateString()}
+                    </td>
+                    <td className="border p-2">
+                      {new Date(staff.join_date).toLocaleDateString()}
+                    </td>
+                    <td className="border p-2 capitalize">{staff.staff_status}</td>
+                    <td className="border p-2">{staff.salary.toLocaleString()} VND</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="border p-2 text-center">
+                    <td colSpan={7} className="border p-2 text-center">
                       No staff data available.
                     </td>
                   </tr>
@@ -252,7 +306,11 @@ const StaffManagementPage = () => {
         )}
 
         {message && (
-          <div className="mt-4 text-center text-red-500 font-bold">{message}</div>
+          <div className={`mt-4 text-center font-bold ${
+            messageType === "success" ? "text-green-500" : "text-red-500"
+          }`}>
+            {message}
+          </div>
         )}
       </div>
     </>

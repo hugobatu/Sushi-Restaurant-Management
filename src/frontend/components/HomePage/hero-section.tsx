@@ -28,14 +28,8 @@ export function HeroSection() {
               <Link href="/menu" legacyBehavior passHref>
               <Button variant="outline" className="text-lg h-12 px-8">XEM MENU</Button>
               </Link>
-
             </div>
           </div>
-        </div>
-      </div>
-      <div className="absolute bottom-0 right-0 w-32 h-32">
-        <div className="absolute transform rotate-45">
-          <div className="w-16 h-16 bg-red-200 rounded-full opacity-20" />
         </div>
       </div>
     </div>

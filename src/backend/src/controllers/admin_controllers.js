@@ -558,7 +558,7 @@ exports.getSales = async (req, res) => {
         end_date,
         branch_id, // không truyền gì vào thì cho tất cả các chi nhánh
         group_by // day, month, quarter, year
-    } = req.body;
+    } = req.body; // lúc trước là req.body
     if (!start_date || !end_date || !group_by) {
         return res.status(400).json({
             success: false,
@@ -605,7 +605,7 @@ exports.getItemSalesStats = async (req, res) => {
         end_date,
         branch_id, // không truyền gì vào thì cho tất cả các chi nhánh
         region_id // không truyền gì vào thì cho tất cả các khu vực
-    } = req.body;
+    } = req.body; // lúc trước là req.body
     if (!start_date || !end_date) {
         return res.status(400).json({
             success: false,
