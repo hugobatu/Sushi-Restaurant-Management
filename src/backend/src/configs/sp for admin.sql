@@ -711,7 +711,7 @@ CREATE OR ALTER PROCEDURE sp_get_branch_revenue_stats
     @start_date DATE,
     @end_date DATE,
     @branch_id VARCHAR(10) = NULL,  -- null for all branch
-    @group_by NVARCHAR(10)  -- 'day', 'month', 'year'
+    @group_by NVARCHAR(10)  -- 'day', 'month', 'quarter', 'year'
 AS
 BEGIN
     BEGIN TRY
@@ -722,6 +722,8 @@ BEGIN
             SET @dateFormat = 'yyyy-MM-dd';
         ELSE IF @group_by = 'month'
             SET @dateFormat = 'yyyy-MM';
+        ELSE IF @group_by = 'quarter'
+            SET @dateFormat = 'yyyy-qq';
         ELSE IF @group_by = 'year'
             SET @dateFormat = 'yyyy';
         ELSE
@@ -761,7 +763,7 @@ AS
 BEGIN
     BEGIN TRY
         -- top 1 sale
-        SELECT TOP 1
+        SELECT
             MI.item_name,
             SUM(OD.quantity * OD.unit_price) AS TotalRevenue,
             SUM(OD.quantity) AS TotalQuantitySold

@@ -23,7 +23,7 @@ router.get('/staff/getstaffdata', admin_controllers.getStaffData);  // 9. tìm n
 
 // đang đúng
 router.post('/ratings/branches', admin_controllers.getBranchRating); // 10. xem đánh giá chi nhánh
-router.post('/ratings/staffs', admin_controllers.getStaffRating); 
+router.post('/ratings/staffs', admin_controllers.getStaffRating);   // 11. xem đánh giá nhân viên
 // // Doanh thu và đánh giá
 // router.get('/ratings/branches', admin_controllers.getBranchRating); // 10. xem đánh giá chi nhánh
 // router.get('/ratings/staffs', admin_controllers.getStaffRating);    // 11. xem đánh giá nhân viên

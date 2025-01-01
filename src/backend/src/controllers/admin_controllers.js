@@ -583,10 +583,6 @@ exports.getSales = async (req, res) => {
         res.status(200).json({
             success: true,
             data: result.recordset,
-            pagination: {
-                page: page_number,
-                size: page_size,
-            },
         });
     } catch (error) {
         console.error('Error fetching sales data', error.message);
@@ -631,10 +627,6 @@ exports.getItemSalesStats = async (req, res) => {
         res.status(200).json({
             success: true,
             data: result.recordset,
-            pagination: {
-                page: page_number,
-                size: page_size,
-            },
         });
     } catch (error) {
         console.error('Error fetching item stats.', error.message);
