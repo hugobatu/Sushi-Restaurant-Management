@@ -7,7 +7,7 @@ const { reset } = require('nodemon');
 // 1. Add a menu item to a branch
 exports.addBranchMenuItem = async (req, res) => {
     const { user_id, item_id } = req.body;
-
+    
     if (!user_id || !item_id) {
         return res.status(400).json({
             success: false,
@@ -234,8 +234,10 @@ exports.getStaffDataByName = async (req, res) => {
             .input('branch_id', sql.VarChar(10), branch_id)
             .query(`
                 SELECT *
-                FROM Staff
-                WHERE branch_id = @branch_id AND staff_name LIKE @staff_name;
+                FROM Staff S
+                JOIN Department D
+                ON D.department_id = S.department_id
+                WHERE D.branch_id = @branch_id AND staff_name LIKE @staff_name;
             `);
 
         if (!result.recordset || result.recordset.length === 0) {
@@ -298,8 +300,10 @@ exports.getAllBranchStaffData = async (req, res) => {
             .input('branch_id', sql.VarChar(10), branch_id)
             .query(`
                 SELECT *
-                FROM Staff
-                WHERE branch_id = @branch_id AND staff_name;
+                FROM Staff S
+                JOIN Department D
+                ON D.department_id = S.department_id
+                WHERE D.branch_id = @branch_id;
             `);
 
         if (!result.recordset || result.recordset.length === 0) {
@@ -327,8 +331,8 @@ exports.getAllBranchStaffData = async (req, res) => {
 exports.getBranchStaffRatings = async (req, res) => {
     const {
         user_id,
-        page_number = 1,
-        page_size = 100000
+        page_number,
+        page_size
     } = req.body;
     try {
         if (!user_id) {

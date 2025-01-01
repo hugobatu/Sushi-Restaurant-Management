@@ -94,8 +94,8 @@ exports.createOrder = async (req, res) => {
         table_id,
         items // Mảng các món ăn [{ item_id: 'item1', quantity: 2 }, { item_id: 'item2', quantity: 1 }]
     } = req.body;
-
     if (!user_id || !customer_name || !phone_number || !table_id || !items || items.length === 0) {
+        console.log('Missing required fields or items array is empty.');
         return res.status(400).json({
             success: false,
             message: 'Missing required fields or items array is empty.'
@@ -119,19 +119,19 @@ exports.createOrder = async (req, res) => {
 
         // Kiểm tra kết quả trả về
         if (result.rowsAffected && result.rowsAffected[0] > 0) {
-            console.log(itemsJson)
             return res.status(201).json({
                 success: true,
                 message: 'Order created successfully.',
             });
         } else {
+            console.log('No rows affected');
             return res.status(400).json({
                 success: false,
                 message: 'Order creation failed: No rows affected.',
             });
         }
     } catch (error) {
-        console.error('Error creating order:', error);
+        console.error('Error creating order:', error.message);
         return res.status(500).json({
             success: false,
             message: 'Failed to create order.',

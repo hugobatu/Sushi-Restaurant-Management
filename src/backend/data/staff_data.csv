@@ -1,0 +1,151 @@
+branch_id,department_name,staff_name,birth_date,phone_number,gender
+B001,chef,Ronnie Beer,1995-05-19,0916638147,male
+B001,chef,Nora Haley,2002-12-02,0960500830,male
+B001,chef,Stephen Nitzsche,1986-08-21,0930342837,female
+B001,chef,Amanda Murphy,1997-06-11,0952085419,female
+B001,staff,Mary Goyette,2001-04-02,0980216032,female
+B001,staff,Ella Cremin,1999-06-18,0901535925,female
+B001,staff,Christine Block,1996-11-08,0901393581,male
+B001,staff,Bradford Braun,1995-02-20,0935415070,female
+B001,security,Irving Nader,1987-11-16,0944891929,male
+B001,security,Irene Wunsch,1991-02-24,0947615272,female
+B001,security,Eloise Tillman,1992-04-01,0956054453,male
+B001,security,Lori Ullrich,1985-07-05,0945142445,male
+B001,security,Kayla Towne,2001-05-31,0997103007,female
+B001,security,Sharon Nolan,1989-02-09,0961235529,female
+B001,manager,Becky Quitzon,1994-04-28,0970260535,male
+B002,chef,Karl Carter,1998-09-13,0980715089,female
+B002,chef,Darrin Kunde,1994-09-29,0992091668,male
+B002,chef,Brandy Schuster,1998-10-03,0914583377,female
+B002,chef,Domingo Herman Jr.,1995-05-17,0975902823,male
+B002,staff,Santos Bashirian V,1987-12-23,0996036687,male
+B002,staff,Traci Marvin,1986-11-14,0909096674,female
+B002,staff,Sandra Botsford,1983-08-29,0923273152,male
+B002,staff,Harry Turner,1981-01-28,0943675873,male
+B002,security,Frederick Hahn,1980-05-01,0993164552,female
+B002,security,Nicolas Ullrich,1989-11-29,0927949797,female
+B002,security,Donnie Mante,1991-06-16,0938132224,male
+B002,security,Katrina Blick,1999-09-25,0927130410,female
+B002,security,Laura Bernhard PhD,1997-04-22,0908037912,female
+B002,security,Leslie Rempel,1998-05-04,0913431881,male
+B002,manager,Miss Evan Carroll,1997-12-20,0913389949,male
+B003,chef,Sharon Crist,1987-01-19,0979481789,female
+B003,chef,Dana Dibbert,1989-01-31,0982295068,female
+B003,chef,Lorenzo Lebsack DVM,1991-02-03,0969307205,female
+B003,chef,Jordan Roob,1982-03-24,0962949693,female
+B003,staff,Wilfred DuBuque MD,1996-08-27,0948847797,female
+B003,staff,Alan Mills II,1980-11-25,0939867604,female
+B003,staff,Dr. Randal Lind,1984-09-06,0979138391,female
+B003,staff,Theodore Denesik IV,1986-05-04,0920060531,male
+B003,security,Raul Flatley MD,1982-08-22,0946011751,male
+B003,security,Susan Waelchi,1991-01-13,0900023712,female
+B003,security,Al Bahringer,1996-02-03,0993307473,male
+B003,security,Nancy Rohan Jr.,1996-06-13,0974647984,female
+B003,security,Joy Rutherford,1993-06-13,0953608917,female
+B003,security,Elsie Sipes,1981-09-22,0906843035,male
+B003,manager,Rachel Rath,1997-10-22,0941585422,female
+B004,security,Christian Pfannerstill,1982-05-18,0988015198,male
+B004,security,Kristy VonRueden,1988-10-27,0923596761,male
+B004,security,Luke Hodkiewicz,1997-03-12,0937787170,female
+B004,security,Elvira Kohler,1986-11-18,0940572898,female
+B004,security,Abel Dickinson,1991-04-21,0906472691,male
+B004,security,Jan Donnelly,1990-01-19,0978275120,female
+B004,manager,Aubrey Rippin,1984-12-16,0987291492,male
+B004,chef,Amos Bruen,1994-03-05,0925458788,male
+B004,chef,Tiffany Erdman,1989-06-08,0972013921,female
+B004,chef,Dr. Luz Upton,1999-10-12,0955105100,female
+B004,chef,Sylvia Glover,1982-06-11,0926994692,female
+B004,staff,Christine Schmeler,1982-04-07,0965751634,female
+B004,staff,Dr. Miguel Hilpert,1991-11-17,0924632520,female
+B004,staff,Doris Beer,1999-09-21,0976312889,female
+B004,staff,Patricia Bauch,1991-10-15,0967063681,female
+B005,chef,Mrs. Pablo Wuckert,1992-01-09,0910230461,female
+B005,chef,Mona Wisoky,1985-09-28,0973956755,male
+B005,chef,Dawn Hoppe,1985-08-26,0920036286,male
+B005,chef,Linda Anderson,1994-03-08,0900037233,male
+B005,staff,Erma Feeney,1998-02-07,0921282847,male
+B005,staff,Sammy Quitzon,1986-01-09,0978517756,female
+B005,staff,Boyd Bahringer,1989-03-28,0990766976,female
+B005,staff,Doyle Schmitt,1998-12-28,0940286096,female
+B005,security,Wesley Runte,1980-03-14,0958177290,male
+B005,security,Shelley Medhurst,2000-11-29,0944376665,female
+B005,security,Betsy Schuppe MD,2001-02-14,0985635652,female
+B005,security,Estelle Roberts,1984-04-16,0986113927,female
+B005,security,Jordan Marquardt,1980-06-27,0952819205,male
+B005,security,Ollie Russel,1995-03-31,0925345278,male
+B005,manager,Marta Von,1985-07-26,0939529757,male
+B006,chef,Jamie Wintheiser,1992-05-09,0924331667,female
+B006,chef,Nelson Funk,1985-05-12,0972030664,female
+B006,chef,Marie Windler I,1998-01-17,0979939714,female
+B006,chef,Mrs. Jimmy Hegmann,2001-07-16,0980208412,male
+B006,staff,Erika Steuber II,1995-01-15,0956919905,female
+B006,staff,Catherine Nolan DDS,1989-08-31,0917094700,male
+B006,staff,Elisa Hirthe,1995-08-18,0989366930,female
+B006,staff,Lester Donnelly,1983-03-19,0920530313,male
+B006,security,Dan Shields,1984-10-04,0958688491,female
+B006,security,Leona Roob,1987-06-12,0956421712,male
+B006,security,Rodney Dach,1985-03-20,0998153056,male
+B006,security,Ivan Simonis,1990-09-14,0938468833,female
+B006,security,Ian Thompson I,1997-09-21,0968882143,female
+B006,security,Shane Rohan,1985-09-02,0981908031,female
+B006,manager,Luis D'Amore,1988-02-29,0952551357,female
+B007,chef,Geraldine Kshlerin IV,1990-01-30,0964125524,female
+B007,chef,Jeremiah Renner,1985-04-23,0970420959,female
+B007,chef,Julie Dickens,1993-07-09,0914651502,male
+B007,chef,Opal Schulist,1992-06-22,0988592603,female
+B007,staff,Marlon Nitzsche III,1995-02-24,0937200178,female
+B007,staff,Betty Thiel MD,1992-01-24,0913973138,female
+B007,staff,Irma Hudson,1988-01-19,0993340410,male
+B007,staff,Martin Boyle,1981-08-26,0979854993,male
+B007,security,Josephine Corwin,1990-11-28,0966131101,female
+B007,security,Sherman Corwin,1982-09-16,0933438868,male
+B007,security,Naomi Medhurst,1981-11-23,0912253458,female
+B007,security,Joel Jacobs,1990-01-01,0983691434,female
+B007,security,Gabriel Zemlak,1980-12-19,0997595084,male
+B007,security,Delbert Hodkiewicz,2000-02-27,0968388466,female
+B007,manager,Natasha Dicki DDS,1982-10-24,0912701813,male
+B008,chef,Hannah McDermott,2000-04-02,0914623814,male
+B008,chef,Marcus Murphy,1997-07-10,0953236919,male
+B008,chef,Jacob Littel,1985-06-22,0903900311,female
+B008,chef,Roger Nienow,1984-10-22,0988237159,male
+B008,staff,Eunice Gibson,1992-06-02,0958558923,female
+B008,staff,Rachael Harvey,1982-05-09,0991938739,female
+B008,staff,Susie Lynch,2000-07-17,0959297867,female
+B008,staff,Angela Spinka MD,1995-01-20,0946876590,male
+B008,security,Armando Adams III,1982-06-28,0938626819,female
+B008,security,Jo Schumm,1990-11-14,0920854610,male
+B008,security,Lindsay Lehner,1994-01-16,0980983225,female
+B008,security,Amy Roob,1989-12-19,0995594110,female
+B008,security,Jeremy Howell V,1984-02-25,0903877293,female
+B008,security,Verna Barton,1988-08-07,0904250334,male
+B008,manager,Vickie Hodkiewicz DDS,1989-11-07,0987206317,female
+B009,chef,Jermaine Harber,1987-02-11,0958375891,male
+B009,chef,Dr. Lowell Conn,1982-12-05,0921055853,female
+B009,chef,Lorena Douglas,1983-05-01,0934126604,female
+B009,chef,Leticia Ankunding DDS,1988-03-16,0938303870,male
+B009,staff,Kerry Hermann MD,1991-04-28,0912167115,female
+B009,staff,Rene Beer,1994-06-13,0957370852,male
+B009,staff,Dr. Connie Wehner,1987-03-01,0979644202,male
+B009,staff,Kelly Swift,2001-01-29,0973626261,male
+B009,security,Wade Zulauf,1999-01-14,0918475626,male
+B009,security,Abraham Howe,1999-09-30,0947967747,male
+B009,security,Eula Quitzon,1994-10-12,0902031139,female
+B009,security,Thomas Kunze,1991-06-05,0906063090,female
+B009,security,Norma Cormier PhD,2000-01-03,0904150059,female
+B009,security,Audrey Schuppe,2000-08-24,0905488289,female
+B009,manager,Bonnie Simonis,1987-02-23,0970938100,female
+B010,chef,Roosevelt Leannon,1998-01-20,0957567195,female
+B010,chef,Keith Goldner,1990-05-07,0919237211,male
+B010,chef,Melody Stroman,1993-01-03,0901318175,male
+B010,chef,Guillermo Johnston,1999-10-24,0907136711,male
+B010,staff,Johnnie Cummerata,1980-08-28,0916591466,female
+B010,staff,Jody Stoltenberg,1999-04-08,0927830370,male
+B010,staff,Orville Spinka,1990-03-03,0972645424,male
+B010,staff,Mr. Marvin Feeney,1982-03-02,0943756259,male
+B010,security,Marlon Botsford V,1983-01-10,0925299195,female
+B010,security,Johanna Marks,2001-05-05,0928224330,female
+B010,security,Anthony Yost,1987-10-10,0920430579,male
+B010,security,Sophia Hudson,1996-02-25,0979745958,male
+B010,security,Melinda Gorczany,1980-03-24,0977138618,male
+B010,security,Bethany Goldner,1997-12-19,0957766185,male
+B010,manager,Carlos Mraz,1988-05-28,0913232796,female

@@ -487,7 +487,7 @@ exports.getBranchRating = async (req, res) => {
         const result = await pool.request()
             .input('page_number', sql.Int, page_number)
             .input('page_size', sql.Int, page_size)
-            .query(`EXEC sp_get_branch_ratings @page_number, @page_size`);
+            .execute(`sp_get_branch_ratings`);
 
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({

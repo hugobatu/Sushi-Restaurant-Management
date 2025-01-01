@@ -1,33 +1,15 @@
 ﻿GO
 USE SushiXRestaurant
 
-SELECT * FROM Region
-SELECT * FROM Branch
-select * from [Table]
-select * from MenuItem
-select * from MenuCategory
-select * from MenuItemCategory
-select * from Department
-select * from WorkHistory
-select * from Staff
-select * from Account
-
--- Thêm 5 khu vực
+-- insert 5 khu vực
 EXEC sp_add_region N'Thành Phố Hồ Chí Minh'
 EXEC sp_add_region N'Hà Nội'
 EXEC sp_add_region N'Đà Nẵng'
 EXEC sp_add_region N'Khánh Hòa'
 EXEC sp_add_region N'Nha Trang'
+select * from Region
 
-
--- Kiểm tra menu của chi nhánh B002
-SELECT * FROM BranchMenuItem WHERE branch_id = 'B002'
-
--- Kiểm tra nhân viên của chi nhánh B002
-SELECT * FROM Staff JOIN Department ON Department.department_id = Staff.department_id AND Department.branch_id = 'B001'
-SELECT * FROM Staff JOIN Department ON Department.department_id = Staff.department_id AND Department.branch_id = 'B002'
-select * from Branch
--- Thêm chi nhánh
+-- insert 10 chi nhánh
 EXEC sp_add_new_branch
     @region_id = 'TPHCM', 
     @branch_name = N'Tekashimaya quận 1', 
@@ -58,19 +40,90 @@ EXEC sp_add_new_branch
     @has_bike_parking_lot = 0, 
     @has_car_parking_lot = 1;
 
--- chỉnh sửa thông tin chi nhánh
-EXEC sp_update_branch_status 'B001', 'closed', 1, 1
+	-- Thêm chi nhánh
+EXEC sp_add_new_branch 
+    @region_id = 'HN', 
+    @branch_name = N'Vincom Bà Triệu', 
+    @branch_address = N'191 Bà Triệu', 
+    @opening_time = '08:30', 
+    @closing_time = '22:30', 
+    @phone_number = '0977777888', 
+    @has_bike_parking_lot = 1, 
+    @has_car_parking_lot = 1;
 
--- thêm nhân viên bằng api trong postman
+EXEC sp_add_new_branch 
+    @region_id = N'ĐN',
+    @branch_name = N'Hàn River Center', 
+    @branch_address = N'50 Nguyễn Văn Linh', 
+    @opening_time = '08:00', 
+    @closing_time = '23:00', 
+    @phone_number = '0944444555', 
+    @has_bike_parking_lot = 1, 
+    @has_car_parking_lot = 1;
+
+EXEC sp_add_new_branch 
+    @region_id = 'KH', 
+    @branch_name = N'Tokyo Deli Đà Nẵng Cầu Rồng', 
+    @branch_address = N'20 Nguyễn Đình Chiểu Đà Nẵng',
+    @opening_time = '09:00', 
+    @closing_time = '22:00', 
+    @phone_number = '0933333222', 
+    @has_bike_parking_lot = 0, 
+    @has_car_parking_lot = 1;
+
+EXEC sp_add_new_branch 
+    @region_id = 'NT', 
+    @branch_name = N'Nha Trang Center', 
+    @branch_address = N'20 Trần Phú', 
+    @opening_time = '10:00', 
+    @closing_time = '22:00', 
+    @phone_number = '0922222111', 
+    @has_bike_parking_lot = 1, 
+    @has_car_parking_lot = 1;
+
+EXEC sp_add_new_branch 
+    @region_id = 'NT',
+    @branch_name = N'Sense City Nha Trang',
+    @branch_address = N'1 Hòa Bình', 
+    @opening_time = '09:30', 
+    @closing_time = '22:00', 
+    @phone_number = '0911111222', 
+    @has_bike_parking_lot = 1, 
+    @has_car_parking_lot = 0;
+
+EXEC sp_add_new_branch 
+    @region_id = 'HN', 
+    @branch_name = N'Royal City', 
+    @branch_address = N'72A Nguyễn Trãi', 
+    @opening_time = '09:00', 
+    @closing_time = '22:30', 
+    @phone_number = '0909090909', 
+    @has_bike_parking_lot = 1, 
+    @has_car_parking_lot = 1;
+
+EXEC sp_add_new_branch 
+    @region_id = 'TPHCM', 
+    @branch_name = N'Landmark 81', 
+    @branch_address = N'208 Nguyễn Hữu Cảnh', 
+    @opening_time = '08:00', 
+    @closing_time = '23:00', 
+    @phone_number = '0888888888', 
+    @has_bike_parking_lot = 1, 
+    @has_car_parking_lot = 1;
+
+select * from Staff
+left join Department
+on Staff.department_id = Department.department_id
+where department_name = 'staff' and branch_id = 'B010'
+
+select * from Account where account_type = 'customer'
+select * from Customer
+select * from [Order] 
+select * from Staff join Department on Staff.department_id = Department.department_id where staff_id = 15
 
 
--- testing firing
-EXEC sp_fire_staff 9
-SELECT * FROM Staff
-SELECT * FROM WorkHistory
-SELECT * FROM Department	
--- testing transfering
---EXEC sp_transfer_staff 5, 'b002', 'chef'
--- testing update salary
---EXEC sp_update_staff_salary 19, 0.1
--- fetch branch rating
+/*
+delete from OrderDetails
+delete from DirectServiceOrder
+delete from [Order]
+*/
