@@ -5,16 +5,20 @@ import { AdminHeader } from "@/components/Admin/admin-header";
 import { SideNav } from "@/components/Admin/side-nav";
 
 const SalePage = () => {
-  interface Sale {
-    id?: string;
-    name?: string;
-    revenue?: number;
-    quantity?: number;
-    period?: string;
+  interface BranchSale {
+    id: string;
+    revenue: number;
+    period: string;
   }
 
-  const [branchSales, setBranchSales] = useState<Sale[]>([]);
-  const [itemSales, setItemSales] = useState<Sale[]>([]);
+  interface ItemSale {
+    name: string;
+    quantity: number;
+    id: string;
+  }
+
+  const [branchSales, setBranchSales] = useState<BranchSale[]>([]);
+  const [itemSales, setItemSales] = useState<ItemSale[]>([]);
   const [currentTab, setCurrentTab] = useState<"branch" | "item">("branch");
   const [filters, setFilters] = useState({
     start_date: "",
@@ -30,22 +34,25 @@ const SalePage = () => {
   });
 
   const [message, setMessage] = useState("");
+  const [totalRecords, setTotalRecords] = useState(0);
 
   // Fetch branch sales
   const fetchBranchSales = async () => {
     try {
       const response = await fetch("http://localhost:8000/company/branchsales", {
-        method: "GET",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...filters }),
+        body: JSON.stringify({ ...filters, ...pagination }),
       });
 
       const data = await response.json();
       if (data.success) {
         setBranchSales(data.data);
+        setTotalRecords(data.total_records || 0);
         setMessage("");
       } else {
         setBranchSales([]);
+        setTotalRecords(0);
         setMessage(data.message || "No branch sales found.");
       }
     } catch (error) {
@@ -58,17 +65,19 @@ const SalePage = () => {
   const fetchItemSales = async () => {
     try {
       const response = await fetch("http://localhost:8000/company/itemsales", {
-        method: "GET",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...filters }),
+        body: JSON.stringify({ ...filters, ...pagination }),
       });
 
       const data = await response.json();
       if (data.success) {
         setItemSales(data.data);
+        setTotalRecords(data.total_records || 0);
         setMessage("");
       } else {
         setItemSales([]);
+        setTotalRecords(0);
         setMessage(data.message || "No item sales stats found.");
       }
     } catch (error) {
@@ -84,7 +93,7 @@ const SalePage = () => {
     } else {
       fetchItemSales();
     }
-  }, [currentTab, filters]);
+  }, [currentTab, filters, pagination]);
 
   // Pagination handlers
   const handleNextPage = () => {
@@ -111,6 +120,7 @@ const SalePage = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              setPagination({ ...pagination, page_number: 1 });
               if (currentTab === "branch") fetchBranchSales();
               else fetchItemSales();
             }}
@@ -199,9 +209,10 @@ const SalePage = () => {
               <tr>
                 {currentTab === "branch" ? (
                   <>
-                    <th className="border p-2">Branch ID</th>
-                    <th className="border p-2">Revenue</th>
+                    <th className="border p-2">Branch Name</th>
                     <th className="border p-2">Period</th>
+                    <th className="border p-2">Total Revenue</th>
+                    <th className="border p-2">Total Orders</th>
                   </>
                 ) : (
                   <>
@@ -218,26 +229,45 @@ const SalePage = () => {
                   {currentTab === "branch" ? (
                     <>
                       <td className="border p-2">{sale.id}</td>
-                      <td className="border p-2">{sale.revenue}</td>
-                      <td className="border p-2">{sale.period}</td>
+                      <td className="border p-2">{(sale as BranchSale).revenue}</td>
+                      <td className="border p-2">{(sale as BranchSale).period}</td>
                     </>
                   ) : (
                     <>
-                      <td className="border p-2">{sale.name}</td>
-                      <td className="border p-2">{sale.quantity}</td>
-                      <td className="border p-2">{sale.id}</td>
+                      <td className="border p-2">{(sale as ItemSale).name}</td>
+                      <td className="border p-2">{(sale as ItemSale).quantity}</td>
+                      <td className="border p-2">{(sale as ItemSale).id}</td>
                     </>
                   )}
                 </tr>
               ))}
             </tbody>
           </table>
+          <div className="mt-4 text-right font-bold">Total Records: {totalRecords}</div>
         </div>
 
         {/* Message Display */}
         {message && (
           <div className="mt-4 text-center text-red-500 font-bold">{message}</div>
         )}
+
+        {/* Pagination Controls */}
+        <div className="mt-4 flex justify-between">
+          <button
+            onClick={handlePrevPage}
+            disabled={pagination.page_number === 1}
+            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="font-bold">Page {pagination.page_number}</span>
+          <button
+            onClick={handleNextPage}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </>
   );
