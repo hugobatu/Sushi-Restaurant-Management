@@ -9,7 +9,7 @@ const CONFIRM_ORDER_API = 'http://localhost:8000/staff/customer/order/confirm-di
 const user_ids = [6, 23, 36, 60, 66, 80, 96, 110, 126, 143];
 
 // Create a throttled queue with a max of 1 request per second
-const throttle = throttledQueue(100, 1000);  // 1 request per second
+const throttle = throttledQueue(300, 1000);  // 1 request per second
 
 // Fetch orders for a given user
 const fetchOrdersForUser = async (user_id, order_status = 'pending') => {
@@ -81,4 +81,4 @@ const processOrdersForAllUsers = async () => {
 };
 
 // Start the process
-processOrdersForAllUsers();
+processOrdersForAllUsers(); 

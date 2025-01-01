@@ -189,8 +189,6 @@ BEGIN
     OR ((DO.order_id IS NOT NULL OR RO.order_id IS NOT NULL) AND O.order_status = @order_status);
 END
 GO
-EXEC sp_view_order_by_userid 1
-SELECT * FROM [Order] WHERE order_status = 'PENDING'
 -- 3. nhân viên tạo order cho khách hàng dùng dịch vụ ĂN TRỰC TIẾP
 GO
 CREATE OR ALTER PROC sp_create_order_by_staff
@@ -258,9 +256,17 @@ BEGIN
         -- 3. Tạo đơn hàng
         DECLARE @order_id INT;
 
-        INSERT INTO [Order] (customer_id, branch_id, staff_id, order_datetime, order_status)
-        VALUES (@customer_id, @branch_id, @user_id, GETDATE(), N'pending');
+        --INSERT INTO [Order] (customer_id, branch_id, staff_id, order_datetime, order_status)
+        --VALUES (@customer_id, @branch_id, @user_id, GETDATE(), N'pending');
+		DECLARE @start_date DATETIME = '2020-01-01 00:00:00';
+		DECLARE @end_date DATETIME = '2024-12-31 23:59:59';
+		DECLARE @range_seconds INT = DATEDIFF(SECOND, @start_date, @end_date); -- Tổng số giây trong khoảng
+		DECLARE @random_seconds INT = FLOOR(RAND() * @range_seconds); -- Số giây ngẫu nhiên trong khoảng
+		DECLARE @random_datetime DATETIME = DATEADD(SECOND, @random_seconds, @start_date);
 
+
+		INSERT INTO [Order] (customer_id, branch_id, staff_id, order_datetime, order_status)
+        VALUES (@customer_id, @branch_id, @user_id, @random_datetime, N'pending');
         SET @order_id = SCOPE_IDENTITY();
         
         -- 4. Thêm vào chi tiết đơn hàng
@@ -334,6 +340,14 @@ BEGIN
         BEGIN
             RAISERROR('Invalid order ID or this order ID has been processed.', 16, 1);
         END;
+		
+		-- Retrieve the time
+		DECLARE @date_time DATETIME
+		SET @date_time = (
+			SELECT O.order_datetime
+			FROM [Order] O
+			WHERE O.order_id = @order_id
+		)
 
         -- Fetch discount percentage based on membership level
         SET @discount_percentage = ISNULL(
@@ -376,7 +390,7 @@ BEGIN
 			@discount_amount, 
 			@vat, 
 			'cash', 
-			GETDATE(), 
+			@date_time,
 			'paid');
 
         DECLARE @bill_id VARCHAR(10);
@@ -411,10 +425,10 @@ BEGIN
         SET order_status = 'done'
         WHERE order_id = @order_id;
 
-        ---- Update customer's points and spending
-        --UPDATE Membership
-        --SET points = points + FLOOR(@total_amount / 100000) -- 1 point per 100,000 VND spent
-        --WHERE customer_id = @customer_id;
+        -- Update customer's points and spending
+        UPDATE Membership
+        SET points = points + FLOOR(@total_amount / 100000) -- 1 point per 100,000 VND spent
+        WHERE customer_id = @customer_id;
 
         ---- Update membership level based on conditions
         --EXEC sp_update_membership_level @customer_id;
@@ -463,7 +477,14 @@ BEGIN
             (SELECT discount_percentage FROM MembershipLevel WHERE level_id = @membership_level_id),
             0
         );
-
+		
+		-- Retrieve the time
+		DECLARE @date_time DATETIME
+		SET @date_time = (
+			SELECT O.order_datetime
+			FROM [Order] O
+			WHERE O.order_id = @order_id
+		)
         -- Calculate total amount with VAT and discount
         DECLARE @total_amount FLOAT, @discount_amount FLOAT;
 		SET @total_amount = ISNULL((
@@ -503,7 +524,7 @@ BEGIN
 			@discount_amount, 
 			@vat, 
 			'cash', 
-			GETDATE(),
+			@date_time,
 			'paid');
 
         DECLARE @bill_id VARCHAR(10);
@@ -581,8 +602,8 @@ GO
 --SELECT * FROM [Order]
 --SELECT * FROM OrderDetails
 --SELECT * FROM DirectServiceOrder
- SELECT * FROM DeliveryOrder
- SELECT * FROM ReservationOrder
+ --SELECT * FROM DeliveryOrder
+ --SELECT * FROM ReservationOrder
 --SELECT * FROM Bill
 
 /*
@@ -594,6 +615,6 @@ where order_id = 1
 */
 
 
-SELECT * FROM MenuItem
+--SELECT * FROM MenuItem
 
 --EXEC sp_confirm_reserve_and_delivery_order 6

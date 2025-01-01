@@ -1,45 +1,34 @@
+GO
 USE SushiXRestaurant;
+
+-- xem danh sách menu của chi nhánh
 GO
-SELECT * FROM MenuItem
-SELECT * FROM MenuCategory
-/*
--- sp kiểm tra menu có tại chi nhánh B001
-CREATE OR ALTER PROCEDURE sp_get_branch_menu
-    @branch_id CHAR(10)
+CREATE OR ALTER PROCEDURE sp_get_branches_menu_items
+	@branch_id VARCHAR(10)
 AS
 BEGIN
-    SELECT 
-        mi.item_id,
-        mi.item_name,
-        mi.menu_item_description,
-        mi.base_price,
-        mi.menu_item_status,
-        mc.category_name
-    FROM 
-        BranchMenuItem bmi
-    JOIN MenuItem mi ON bmi.item_id = mi.item_id
-    JOIN MenuItemCategory mic ON mi.item_id = mic.item_id
-    JOIN MenuCategory mc ON mic.category_id = mc.category_id
-    WHERE 
-        bmi.branch_id = @branch_id AND bmi.is_available = 1;
-END;
-GO
+	BEGIN TRY
+	    SELECT 
+			B.item_id,
+			M.item_name,
+			B.is_available,
+			M.base_price
+		FROM BranchMenuItem B
+		JOIN MenuItem M 
+		ON B.item_id = M.item_id
+		WHERE B.branch_id = @branch_id
+		ORDER BY branch_id, B.item_id;
+	END TRY
 
-EXEC sp_get_branch_menu @branch_id = 'B001';
+	BEGIN CATCH
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
 
-SELECT * FROM MenuCategory;
-*/
--- sp kiểm tra các chi nhánh 
-/*
-CREATE OR ALTER PROCEDURE sp_get_all_branches
-AS
-BEGIN
-	SELECT * FROM Branch;
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+	END CATCH
 END
-
-EXEC sp_get_all_branches;
-*/
-
+GO
 -- 4.1 Thêm menu theo khu vực (branch), món này phải có trong MenuItem trước rồi mới được add vào branch
 GO
 CREATE OR ALTER PROCEDURE sp_add_menu_branch
@@ -237,3 +226,64 @@ BEGIN
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
+
+-- 4.6 xem danh sách đánh giá nhân viên tại 1 chi nhánh
+GO
+CREATE OR ALTER PROCEDURE sp_get_branch_staff_ratings
+    @user_id INT,
+    @page_number INT,
+    @page_size INT
+AS
+BEGIN
+    BEGIN TRY
+        -- Declare variables
+        DECLARE @branch_id VARCHAR(10);
+        DECLARE @offset INT;
+
+        -- Get the branch ID for the manager
+        SET @branch_id = (
+            SELECT TOP 1 B.branch_id
+            FROM Branch B
+            JOIN Department D
+                ON B.branch_id = D.branch_id
+            JOIN Staff S
+                ON S.department_id = D.department_id
+            WHERE S.staff_id = @user_id AND D.department_name = 'manager'
+        );
+
+        -- Ensure @branch_id is not NULL
+        IF @branch_id IS NULL
+        BEGIN
+            THROW 50001, 'Branch not found for the given user ID.', 1;
+        END
+
+        -- Calculate offset for pagination
+        SET @offset = (@page_number - 1) * @page_size;
+
+        -- Fetch staff ratings with pagination
+        SELECT
+            S.staff_id,
+            S.staff_name,
+            AVG(CR.service_manner_rating) AS Rating
+        FROM CustomerRating CR
+        JOIN Staff S     
+            ON CR.staff_id = S.staff_id
+        JOIN Department D
+            ON D.department_id = S.department_id
+        WHERE D.branch_id = @branch_id
+        GROUP BY S.staff_id, S.staff_name
+        ORDER BY AVG(CR.service_manner_rating) DESC
+        OFFSET @offset ROWS
+        FETCH NEXT @page_size ROWS ONLY;
+
+    END TRY
+    BEGIN CATCH
+        -- Error handling
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
+END;
+GO

@@ -267,7 +267,6 @@ BEGIN
     ORDER BY branch_id
 END
 GO
-EXEC sp_get_branches_data
 -- 5. add a new staff (ORM)
 /*GO
 CREATE OR ALTER PROCEDURE sp_add_staff
@@ -680,21 +679,24 @@ AS
 BEGIN
     BEGIN TRY
         DECLARE @offset INT;
-		SET @offset = (@page_number - 1) * @page_size;
+        SET @offset = (@page_number - 1) * @page_size;
 
+        -- Fetch staff ratings with pagination
         SELECT
+            S.staff_id,
             S.staff_name,
-            AVG(CR.service_manner_rating) AS StaffRating,
-            COUNT(CR.rating_id) AS TotalRatings
+            AVG(CR.service_manner_rating) AS Rating
         FROM CustomerRating CR
-        JOIN Staff S ON CR.staff_id = S.staff_id
+        JOIN Staff S 
+            ON CR.staff_id = S.staff_id
         GROUP BY S.staff_id, S.staff_name
-        ORDER BY StaffRating DESC, TotalRatings DESC
+        ORDER BY AVG(CR.service_manner_rating) DESC
         OFFSET @offset ROWS
         FETCH NEXT @page_size ROWS ONLY;
 
     END TRY
     BEGIN CATCH
+        -- Error handling
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
         DECLARE @ErrorState INT = ERROR_STATE();
@@ -709,7 +711,7 @@ CREATE OR ALTER PROCEDURE sp_get_branch_revenue_stats
     @start_date DATE,
     @end_date DATE,
     @branch_id VARCHAR(10) = NULL,  -- null for all branch
-    @group_by NVARCHAR(10)  -- 'day', 'month', 'quarter', 'year'
+    @group_by NVARCHAR(10)  -- 'day', 'month', 'year'
 AS
 BEGIN
     BEGIN TRY
@@ -720,8 +722,6 @@ BEGIN
             SET @dateFormat = 'yyyy-MM-dd';
         ELSE IF @group_by = 'month'
             SET @dateFormat = 'yyyy-MM';
-        ELSE IF @group_by = 'quarter'
-            SET @dateFormat = 'yyyy-qq';
         ELSE IF @group_by = 'year'
             SET @dateFormat = 'yyyy';
         ELSE
@@ -891,7 +891,7 @@ BEGIN
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        -- Rollback khi gặp lỗi
+        -- Rollback khi gặp lỗi	
 		IF @@TRANCOUNT > 0
 			ROLLBACK TRANSACTION;
 
@@ -1023,12 +1023,8 @@ BEGIN
     END CATCH
 END;
 
---EXEC sp_delete_combo 'COMBO1';
-
-SELECT * FROM MenuItem JOIN MenuItemCategory ON MenuItemCategory.item_id = MenuItem.item_id AND MenuItemCategory.category_id = 'HP'
 
 -- 19. xem tất cả các món có trong cơ sở dữ liệu
--- EXEC sp_get_menu_item_list 17, 10
 GO
 CREATE OR ALTER PROCEDURE sp_get_menu_item_list
     @page_number INT,

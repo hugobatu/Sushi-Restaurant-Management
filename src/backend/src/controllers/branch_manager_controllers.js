@@ -25,13 +25,13 @@ exports.addBranchMenuItem = async (req, res) => {
                 SELECT Department.branch_id
                 FROM Department
                 JOIN Staff ON Staff.department_id = Department.department_id
-                WHERE Staff.staff_id = @user_id;
+                WHERE Staff.staff_id = @user_id AND Department.department_name = 'manager';
             `);
-
+        
         if (!branchResult.recordset || branchResult.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: "Branch not found for the given user.",
+                message: `No branch found for user_id: ${user_id} or this user id is not a manager.`
             });
         }
 
@@ -77,13 +77,13 @@ exports.deleteBranchMenuItem = async (req, res) => {
                 SELECT Department.branch_id
                 FROM Department
                 JOIN Staff ON Staff.department_id = Department.department_id
-                WHERE Staff.staff_id = @user_id;
+                WHERE Staff.staff_id = @user_id AND Department.department_name = 'manager';
             `);
 
         if (!branchResult.recordset || branchResult.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: "Branch not found for the given user.",
+                message: `No branch found for user_id: ${user_id} or this user id is not a manager.`
             });
         }
 
@@ -129,13 +129,13 @@ exports.changeBranchMenuItem = async (req, res) => {
                 SELECT Department.branch_id
                 FROM Department
                 JOIN Staff ON Staff.department_id = Department.department_id
-                WHERE Staff.staff_id = @user_id;
+                WHERE Staff.staff_id = @user_id AND Department.department_name = 'manager';
             `);
 
         if (!branchResult.recordset || branchResult.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: `No branch found for user_id: ${user_id}.`,
+                message: `No branch found for user_id: ${user_id} or this user id is not a manager.`
             });
         }
 
@@ -216,13 +216,13 @@ exports.getStaffDataByName = async (req, res) => {
                 SELECT Department.branch_id
                 FROM Department
                 JOIN Staff ON Staff.department_id = Department.department_id
-                WHERE Staff.staff_id = @user_id;
+                WHERE Staff.staff_id = @user_id AND Department.department_name = 'manager';
             `);
 
         if (!branchResult.recordset || branchResult.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: "Branch not found for the given user.",
+                message: `No branch found for user_id: ${user_id} or this user id is not a manager.",`
             });
         }
 
@@ -283,13 +283,13 @@ exports.getAllBranchStaffData = async (req, res) => {
                 SELECT Department.branch_id
                 FROM Department
                 JOIN Staff ON Staff.department_id = Department.department_id
-                WHERE Staff.staff_id = @user_id;
+                WHERE Staff.staff_id = @user_id AND Department.department_name = 'manager';
             `);
 
         if (!branchResult.recordset || branchResult.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: "Branch not found for the given user.",
+                message: `No branch found for user_id: ${user_id} or this user id is not a manager.`
             });
         }
 
@@ -342,30 +342,12 @@ exports.getBranchStaffRatings = async (req, res) => {
             });
         }
         const pool = await con;
-        // Step 1: Fetch branch_id based on user_id (manager)
-        const branchResult = await pool.request()
+
+        const result = await pool.request()
             .input('user_id', sql.Int, user_id)
-            .query(`
-                SELECT Department.branch_id
-                FROM Department
-                JOIN Staff ON Staff.department_id = Department.department_id
-                WHERE Staff.staff_id = @user_id;
-            `);
-                
-        if (!branchResult.recordset || branchResult.recordset.length === 0) {
-            return res.status(404).json({
-                success: false,
-                message: "Branch not found for the given user.",
-            });
-        }
-
-        const branch_id = branchResult.recordset[0].branch_id;
-
-        const result = await pool
-            .input('branch_id', sql.VarChar(10), branch_id)
             .input('page_number', sql.Int, page_number)
             .input('page_size', sql.Int, page_size)
-            .query(`EXEC sp_get_branch_ratings @branch_id, @page_number, @page_size`)
+            .execute(`sp_get_branch_staff_ratings`)
 
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
@@ -391,9 +373,9 @@ exports.getBranchStaffRatings = async (req, res) => {
 // 7. xem doanh thu của chi nhánh mà quản lý đang quản
 exports.getBranchSales = async (req, res) => {
     const {
+        user_id,
         start_date,
         end_date,
-        user_id,
         group_by // day, month, quarter, year
     } = req.body;
     try {
@@ -410,18 +392,18 @@ exports.getBranchSales = async (req, res) => {
           SELECT Department.branch_id
           FROM Department
           JOIN Staff ON Staff.department_id = Department.department_id
-          WHERE Staff.staff_id = @user_id;
+          WHERE Staff.staff_id = @user_id AND Department.department_name = 'manager';
       `);
 
         if (!branchResult.recordset || branchResult.recordset.length === 0) {
             return res.status(404).json({
                 success: false,
-                message: "Branch not found for the given user.",
+                message: `No branch found for user_id: ${user_id} or this user id is not a manager.`
             });
         }
 
         const branch_id = branchResult.recordset[0].branch_id;
-        const result = await pool
+        const result = await pool.request()
             .input('start_date', sql.VarChar(10), start_date)
             .input('end_date', sql.VarChar(10), end_date)
             .input('branch_id', sql.VarChar(10), branch_id)
@@ -437,10 +419,6 @@ exports.getBranchSales = async (req, res) => {
         res.status(200).json({
             success: true,
             data: result.recordset,
-            pagination: {
-                page: page_number,
-                size: page_size,
-            },
         });
     } catch (error) {
         console.error('Error fetching sales data', error.message);
