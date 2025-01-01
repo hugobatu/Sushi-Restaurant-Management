@@ -10,23 +10,28 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        -- Calculate total spending in the past year
+        -- Khóa dòng dữ liệu khách hàng trong bảng Membership để tránh xung đột với các giao dịch khác
+        SELECT * 
+        FROM Membership WITH (ROWLOCK)
+        WHERE customer_id = @customer_id;
+
+        -- Tính toán tổng chi tiêu trong vòng 1 năm qua
         DECLARE @total_spending FLOAT = (
             SELECT SUM(B.subtotal)
             FROM Bill B
-			JOIN [Order] O
-			ON O.order_id = B.order_id
+            JOIN [Order] O
+            ON O.order_id = B.order_id
             WHERE O.customer_id = @customer_id 
               AND B.bill_date >= DATEADD(YEAR, -1, GETDATE())
         );
 
-        -- Retrieve current membership level
+        -- Lấy cấp độ membership hiện tại
         DECLARE @current_level_id INT;
         SELECT @current_level_id = level_id
         FROM Membership
         WHERE customer_id = @customer_id;
 
-        -- Determine the new membership level
+        -- Xác định cấp độ membership mới
         DECLARE @new_level_id INT;
         IF @total_spending >= 10000000 -- 10,000,000 VND
         BEGIN
@@ -47,14 +52,14 @@ BEGIN
             WHERE level_name = N'membership';
         END;
 
-        -- Update membership level if it has changed
+        -- Cập nhật cấp độ membership nếu có sự thay đổi
         IF @new_level_id <> @current_level_id
         BEGIN
             UPDATE Membership
             SET level_id = @new_level_id,
                 issued_date = GETDATE(),
                 valid_until = DATEADD(YEAR, 1, GETDATE()),
-                points = 0 -- Reset points for the new level
+                points = 0 -- Reset points cho cấp độ mới
             WHERE customer_id = @customer_id;
         END;
 
@@ -406,13 +411,13 @@ BEGIN
         SET order_status = 'done'
         WHERE order_id = @order_id;
 
-        -- Update customer's points and spending
-        UPDATE Membership
-        SET points = points + FLOOR(@total_amount / 100000) -- 1 point per 100,000 VND spent
-        WHERE customer_id = @customer_id;
+        ---- Update customer's points and spending
+        --UPDATE Membership
+        --SET points = points + FLOOR(@total_amount / 100000) -- 1 point per 100,000 VND spent
+        --WHERE customer_id = @customer_id;
 
-        -- Update membership level based on conditions
-        EXEC sp_update_membership_level @customer_id;
+        ---- Update membership level based on conditions
+        --EXEC sp_update_membership_level @customer_id;
 
         -- Return bill details
         SELECT * FROM Bill WHERE bill_id = @bill_id;

@@ -5,7 +5,7 @@ const iconv = require('iconv-lite');
 const throttledQueue = require('throttled-queue');
 
 // Throttling setup - 15 requests per second
-const throttle = throttledQueue(100, 1000);
+const throttle = throttledQueue(200, 1000);
 const API_URL = 'http://localhost:8000/staff/customer/order/create';
 
 const readMenuItemsFromCSV = (fileName) => {
@@ -47,16 +47,22 @@ const readCustomerDataFromCSV = (fileName) => {
 };
 
 const createOrder = async (user_id, customer_name, phone_number, table_id, menuItems) => {
-    const numItems = Math.floor(Math.random() * 3) + 1; // Select 1-3 items
+    const numItems = Math.floor(Math.random() * 3) + 1; // Chọn từ 1 đến 3 món
     const selectedItems = [];
+    const selectedItemIds = new Set(); // Dùng Set để lưu trữ các item_id đã chọn
 
-    for (let i = 0; i < numItems; i++) {
+    while (selectedItems.length < numItems) {
         const item = menuItems[Math.floor(Math.random() * menuItems.length)];
         const quantity = Math.floor(Math.random() * 3) + 1;
-        selectedItems.push({
-            item_id: item,
-            quantity: quantity
-        });
+
+        // Kiểm tra xem món đã được chọn chưa
+        if (!selectedItemIds.has(item)) {
+            selectedItems.push({
+                item_id: item,
+                quantity: quantity
+            });
+            selectedItemIds.add(item); // Thêm món vào Set
+        }
     }
 
     const orderData = {

@@ -114,13 +114,14 @@ EXEC sp_add_new_branch
 select * from Staff
 left join Department
 on Staff.department_id = Department.department_id
-where department_name = 'staff' and branch_id = 'B010'
+where department_name = 'manager' and branch_id = 'B010'
 
 select * from Account where account_type = 'customer'
 select * from Customer
 select * from [Order] 
 select * from Staff join Department on Staff.department_id = Department.department_id where staff_id = 15
-
+SELECT * FROM CustomerRating
+SELECT * FROM Bill
 
 /*
 delete from OrderDetails
