@@ -591,4 +591,4 @@ where order_id = 1
 
 SELECT * FROM MenuItem
 
-EXEC sp_confirm_reserve_and_delivery_order 6
+--EXEC sp_confirm_reserve_and_delivery_order 6

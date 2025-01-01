@@ -122,7 +122,7 @@ export function CustomerHeader() {
                 localStorage.removeItem("totalAmount");
 
                 Cookies.remove("username"); // Remove username cookie
-                Cookies.remove("usser_id");
+                Cookies.remove("user_id");
                 Cookies.remove("role"); // Remove role cookie
                 Cookies.remove("token"); // Remove token cookie
                 setUsername(null);

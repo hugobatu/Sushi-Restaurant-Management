@@ -21,9 +21,12 @@ router.put('/staff/update', admin_controllers.updateStaffSalary);   // 7. tăng 
 router.put('/staff/transfer', admin_controllers.transferStaff);     // 8. chuyển nhân viên sang chi nhánh khác
 router.get('/staff/getstaffdata', admin_controllers.getStaffData);  // 9. tìm nhân viên dựa theo tên (có thể có nhiều kết quả)
 
+
+router.post('/ratings/branches', admin_controllers.getBranchRating); // 10. xem đánh giá chi nhánh
+router.post('/ratings/staffs', admin_controllers.getStaffRating); 
 // // Doanh thu và đánh giá
-router.get('/ratings/branches', admin_controllers.getBranchRating); // 10. xem đánh giá chi nhánh
-router.get('/ratings/staffs', admin_controllers.getStaffRating);    // 11. xem đánh giá nhân viên
+// router.get('/ratings/branches', admin_controllers.getBranchRating); // 10. xem đánh giá chi nhánh
+// router.get('/ratings/staffs', admin_controllers.getStaffRating);    // 11. xem đánh giá nhân viên
 router.get('/branchsales', admin_controllers.getSales);             // 12. xem doanh thu theo tháng, quý, năm
 router.get('/itemsales', admin_controllers.getItemSalesStats);      // 13. xem thống kê số lượng món ăn bán ra được
 
@@ -37,5 +40,6 @@ router.delete('/combo/delete', admin_controllers.deleteCombo);      // 17. xóa 
 
 // xem tất cả các có trong nhà hàng
 router.get('/menu-item/get', admin_controllers.viewAllMenuItem);    // 18. xem tất cả các món có trong cơ sở dữ liệu
+router.post('/menu-item/get-page', admin_controllers.getAllMenuItem);     // 19. xem tất cả các món có trong cơ sở dữ liệu
 
 module.exports = router;

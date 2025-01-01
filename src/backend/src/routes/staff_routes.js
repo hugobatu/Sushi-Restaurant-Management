@@ -12,6 +12,6 @@ router.post('/customer/order/create', staff_controllers.createOrder);           
 router.post('/customer/order/confirm-direct', staff_controllers.confirmDirectOrder);    // 4. xác nhận order ăn trực tiếp + xuất hóa đơn
 // 5. xác nhận order reserve + delivery
 router.post('/customer/order/confirm-reserve-delivery', staff_controllers.confirmDeliveryReserve) 
-router.post('/customer/order/delete', staff_controllers.deleteOrder);                   // 6. xóa order
+router.delete('/customer/order/delete', staff_controllers.deleteOrder);                   // 6. xóa order
 
 module.exports = router;

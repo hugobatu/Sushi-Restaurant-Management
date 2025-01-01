@@ -487,7 +487,8 @@ exports.getBranchRating = async (req, res) => {
         const result = await pool.request()
             .input('page_number', sql.Int, page_number)
             .input('page_size', sql.Int, page_size)
-            .execute(`sp_get_branch_ratings`);
+            .execute('sp_get_branch_ratings');
+            // .execute(`EXEC sp_get_branch_ratings page_number, page_size`);
 
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
@@ -825,8 +826,42 @@ exports.viewAllMenuItem = async (req, res) => {
         console.error("Error fetching menu item id, error:", error.message);
         return res.status(500).json({
             success: false,
-            message: "An error occurred while deleting the combo.",
+            message: "An error occurred while fetching menu item id.",
             error: error.message,
         });
     }
 }
+// 19. lấy danh sách tất cả các món ăn có trong chuỗi nhà hàng
+exports.getAllMenuItem = async (req, res) => {
+    const {
+        page_number,
+        page_size = 10
+    } = req.body;
+    try {
+        const pool = await con;
+        const result = await pool.request()
+            .input('page_number', sql.Int, page_number)
+            .input('page_size', sql.Int, page_size)
+            .query('EXEC sp_get_menu_item_list @page_number, @page_size')
+        if (!result.recordset || result.recordset.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No menu item found.',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: result.recordset,
+            pagination: {
+                page: page_number,
+                size: page_size,
+            },
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Cannot find menu item",
+            error: error.message
+        });
+    }
+};
