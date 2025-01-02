@@ -166,7 +166,7 @@ exports.getBranchMenuItem = async (req, res) => {
     const {
         user_id,
         page_number = 1,
-        page_size = 200
+        page_size = 200,
     } = req.body
     if (!user_id || !page_number || !page_size) {
         return res.status(400).json({
@@ -341,8 +341,8 @@ exports.getAllBranchStaffData = async (req, res) => {
 exports.getBranchStaffRatings = async (req, res) => {
     const {
         user_id,
-        page_number,
-        page_size
+        page_number = 1,
+        page_size = 1000
     } = req.body;
     try {
         if (!user_id) {

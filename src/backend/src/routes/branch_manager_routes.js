@@ -11,7 +11,7 @@ router.delete('/menu-branch-item/delete', manager_controllers.deleteBranchMenuIt
 router.post('/menu-branch-item/change-status', manager_controllers.changeBranchMenuItem); // 3. chỉnh sửa trạng thái menu chi nhánh
 // router.get('/menu-branch-item', manager_controllers.getBranchMenuItem); // *. lấy danh sách các menu chi nhánh
 
-router.get('/menu-branch-item', manager_controllers.getBranchMenuItem); // *. lấy danh sách các menu chi nhánh
+router.post('/menu-branch-item', manager_controllers.getBranchMenuItem); // *. lấy danh sách các menu chi nhánh
 // xem danh sách nhân viên
 router.post('/staff/name', manager_controllers.getStaffDataByName); // 4. xem nhân viên theo tên
 router.post('/staff/all-data', manager_controllers.getAllBranchStaffData); // 5. xem tất cả nhân viên theo chi nhánh

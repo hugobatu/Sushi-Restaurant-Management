@@ -3,10 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { ManagerHeader } from "@/components/Manager/manager-header";
 import { SideNav } from "@/components/Manager/side-nav";
-
+import Cookies from "js-cookie";
 const BranchMenuPage = () => {
   interface BranchMenuItem {
-    branch_id: string;
     item_id: string;
     item_name: string;
     is_available: boolean;
@@ -34,11 +33,18 @@ const BranchMenuPage = () => {
     is_available: 1 as number,
   });
 
+  const currentUserId = Cookies.get("user_id")
+
   const fetchBranchMenuItems = async () => {
     try {
       const response = await fetch("http://localhost:8000/manager/menu-branch-item", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: currentUserId,
+          page_number: 1,
+          page_size: 200,
+        }),
       });
       const data = await response.json();
       if (data.success) {
@@ -271,7 +277,6 @@ const BranchMenuPage = () => {
           <table className="w-full border-collapse border">
             <thead>
               <tr>
-                <th className="border p-2">Branch ID</th>
                 <th className="border p-2">Item ID</th>
                 <th className="border p-2">Item Name</th>
                 <th className="border p-2">Status</th>
@@ -281,8 +286,8 @@ const BranchMenuPage = () => {
             <tbody>
               {branchMenuItems.length > 0 ? (
                 branchMenuItems.map((item) => (
-                  <tr key={`${item.branch_id}-${item.item_id}`}>
-                    <td className="border p-2">{item.branch_id}</td>
+                  <tr key={`${item.item_id}-${item.item_id}`}>
+              
                     <td className="border p-2">{item.item_id}</td>
                     <td className="border p-2">{item.item_name}</td>
                     <td className="border p-2">
