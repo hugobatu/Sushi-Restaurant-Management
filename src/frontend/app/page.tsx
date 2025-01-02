@@ -6,7 +6,6 @@ export default function Home() {
     <div className="flex min-h-screen flex-col">
       <main className="flex-1">
       <SiteHeader/>
-      XIN CHÀO QUÝ DỊ 
         <HeroSection />
       </main>
 
