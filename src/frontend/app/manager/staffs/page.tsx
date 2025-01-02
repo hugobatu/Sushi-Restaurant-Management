@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { ManagerHeader } from "@/components/Manager/manager-header";
 import { SideNav } from "@/components/Manager/side-nav";
+import Cookies from "js-cookie";
 
 const StaffManagementPage = () => {
   interface Staff {
@@ -25,10 +26,13 @@ const StaffManagementPage = () => {
   interface StaffRating {
     staff_id: string;
     staff_name: string;
-    rating: number;
-    comment: string;
-    rating_date: string;
+    Rating: number;
   }
+
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10); // Fixed page size
+  const [totalRatings, setTotalRatings] = useState(0);
 
   const [staffList, setStaffList] = useState<Staff[]>([]);
   const [staffRatings, setStaffRatings] = useState<StaffRating[]>([]);
@@ -36,7 +40,8 @@ const StaffManagementPage = () => {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error">("success");
   const [activeView, setActiveView] = useState("all"); // all, search, ratings
-  const [currentUserId, setCurrentUserId] = useState("");
+
+  const [currentUserId, setCurrentUserId] = useState(Cookies.get("user_id") || "");
 
   const showMessage = (msg: string, type: "success" | "error") => {
     setMessage(msg);
@@ -116,8 +121,8 @@ const StaffManagementPage = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             user_id: parseInt(currentUserId),
-            page_number: 1,
-            page_size: 100000
+            page_number: currentPage,
+            page_size: pageSize
           })
         });
         const data = await response.json();
@@ -142,6 +147,40 @@ const StaffManagementPage = () => {
       }
     }
   }, [currentUserId, activeView]);
+
+  useEffect(() => {
+    const fetchStaffRatings = async () => {
+      if (!currentUserId) {
+        showMessage("Please enter User ID", "error");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8000/manager/staff/ratings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: parseInt(currentUserId),
+            page_number: currentPage,
+            page_size: pageSize
+          })
+        });
+        const data = await response.json();
+        if (data.success) {
+          setStaffRatings(data.data);
+          showMessage("Staff ratings fetched successfully!", "success");
+        } else {
+          setStaffRatings([]);
+          showMessage(data.message || "Error fetching staff ratings.", "error");
+        }
+      } catch (error) {
+        console.error("Error fetching staff ratings:", error);
+        showMessage("Error occurred while fetching staff ratings.", "error");
+      }
+    };
+
+    fetchStaffRatings();
+  }, [currentPage]);
 
   return (
     <>
@@ -224,16 +263,16 @@ const StaffManagementPage = () => {
             <table className="w-full border-collapse border">
               <thead>
                 <tr>
-                <th className="border p-2">Staff ID</th>
-                <th className="border p-2">Name</th>
-                <th className="border p-2">Department</th>
-                <th className="border p-2">Branch</th>
-                <th className="border p-2">Gender</th>
-                <th className="border p-2">Phone</th>
-                <th className="border p-2">Birth Date</th>
-                <th className="border p-2">Join Date</th>
-                <th className="border p-2">Status</th>
-                <th className="border p-2">Salary</th>
+                  <th className="border p-2">Staff ID</th>
+                  <th className="border p-2">Name</th>
+                  <th className="border p-2">Department</th>
+                  <th className="border p-2">Branch</th>
+                  <th className="border p-2">Gender</th>
+                  <th className="border p-2">Phone</th>
+                  <th className="border p-2">Birth Date</th>
+                  <th className="border p-2">Join Date</th>
+                  <th className="border p-2">Status</th>
+                  <th className="border p-2">Salary</th>
                 </tr>
               </thead>
               <tbody>
@@ -241,19 +280,19 @@ const StaffManagementPage = () => {
                   staffList.map((staff) => (
                     <tr key={staff.staff_id}>
                       <td className="border p-2">{staff.staff_id}</td>
-                    <td className="border p-2">{staff.staff_name}</td>
-                    <td className="border p-2">{staff.department_name}</td>
-                    <td className="border p-2">{staff.branch_id}</td>
-                    <td className="border p-2 capitalize">{staff.gender}</td>
-                    <td className="border p-2">{staff.phone_number}</td>
-                    <td className="border p-2">
-                      {new Date(staff.birth_date).toLocaleDateString()}
-                    </td>
-                    <td className="border p-2">
-                      {new Date(staff.join_date).toLocaleDateString()}
-                    </td>
-                    <td className="border p-2 capitalize">{staff.staff_status}</td>
-                    <td className="border p-2">{staff.salary.toLocaleString()} VND</td>
+                      <td className="border p-2">{staff.staff_name}</td>
+                      <td className="border p-2">{staff.department_name}</td>
+                      <td className="border p-2">{staff.branch_id}</td>
+                      <td className="border p-2 capitalize">{staff.gender}</td>
+                      <td className="border p-2">{staff.phone_number}</td>
+                      <td className="border p-2">
+                        {new Date(staff.birth_date).toLocaleDateString()}
+                      </td>
+                      <td className="border p-2">
+                        {new Date(staff.join_date).toLocaleDateString()}
+                      </td>
+                      <td className="border p-2 capitalize">{staff.staff_status}</td>
+                      <td className="border p-2">{staff.salary.toLocaleString()} VND</td>
                     </tr>
                   ))
                 ) : (
@@ -278,8 +317,6 @@ const StaffManagementPage = () => {
                   <th className="border p-2">Staff ID</th>
                   <th className="border p-2">Name</th>
                   <th className="border p-2">Rating</th>
-                  <th className="border p-2">Comment</th>
-                  <th className="border p-2">Date</th>
                 </tr>
               </thead>
               <tbody>
@@ -288,20 +325,49 @@ const StaffManagementPage = () => {
                     <tr key={index}>
                       <td className="border p-2">{rating.staff_id}</td>
                       <td className="border p-2">{rating.staff_name}</td>
-                      <td className="border p-2">{rating.rating}</td>
-                      <td className="border p-2">{rating.comment}</td>
-                      <td className="border p-2">{rating.rating_date}</td>
+                      <td className="border p-2">{rating.Rating}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={5} className="border p-2 text-center">
+                    <td colSpan={3} className="border p-2 text-center">
                       No ratings available.
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
+
+            {/* Pagination Controls */}
+            <div className="mt-4 flex justify-between">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                className={`px-4 py-2 rounded ${
+                  currentPage === 1
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                }`}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              
+              <span className="px-4 py-2">
+                Page {currentPage} of {totalPages || 1}
+              </span>
+
+              <button
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                className={`px-4 py-2 rounded ${
+                  currentPage === totalPages
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-blue-500 text-white hover:bg-blue-600"
+                }`}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
 

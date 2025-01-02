@@ -8,8 +8,6 @@ export default function Home() {
       <SiteHeader/>
         <HeroSection />
       </main>
-
-      
     </div>
   )
 }

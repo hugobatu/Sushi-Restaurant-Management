@@ -37,7 +37,7 @@ const BranchMenuPage = () => {
   const fetchBranchMenuItems = async () => {
     try {
       const response = await fetch("http://localhost:8000/manager/menu-branch-item", {
-        method: "GET",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();
@@ -50,7 +50,6 @@ const BranchMenuPage = () => {
       }
     } catch (error) {
       console.error("Error fetching menu items:", error);
-      alert("An error occurred while fetching menu items.");
     }
   };
 
