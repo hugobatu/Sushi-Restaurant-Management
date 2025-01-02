@@ -13,7 +13,7 @@ const BranchMenuPage = () => {
     base_price: number;
   }
 
-  const formatPrice = (base_price) => {
+  const formatPrice = (base_price: number) => {
     return `${base_price.toLocaleString("vi-VN")} VND`;
   };
 
@@ -25,39 +25,35 @@ const BranchMenuPage = () => {
 
   const [deleteMenuItem, setDeleteMenuItem] = useState({
     user_id: "",
-    item_id: ""
+    item_id: "",
   });
 
   const [updateMenuItem, setUpdateMenuItem] = useState({
     user_id: "",
     item_id: "",
-    is_available: true
+    is_available: 1 as number,
   });
 
-  const [message, setMessage] = useState("");
-
-  // Fetch branch menu items
   const fetchBranchMenuItems = async () => {
     try {
       const response = await fetch("http://localhost:8000/manager/menu-branch-item", {
-        method: "GET", // Changed to POST as per controller
+        method: "GET",
         headers: { "Content-Type": "application/json" },
       });
       const data = await response.json();
       if (data.success) {
         setBranchMenuItems(data.data);
-        setMessage("Menu items fetched successfully!");
+        alert("Menu items fetched successfully!");
       } else {
         setBranchMenuItems([]);
-        setMessage(data.message || "Error fetching menu items.");
+        alert(data.message || "Error fetching menu items.");
       }
     } catch (error) {
       console.error("Error fetching menu items:", error);
-      setMessage("Error occurred while fetching menu items.");
+      alert("An error occurred while fetching menu items.");
     }
   };
 
-  // Add menu item to branch
   const addBranchMenuItem = async () => {
     try {
       const response = await fetch("http://localhost:8000/manager/menu-branch-item/add", {
@@ -65,24 +61,23 @@ const BranchMenuPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_id: parseInt(newMenuItem.user_id),
-          item_id: newMenuItem.item_id
+          item_id: newMenuItem.item_id,
         }),
       });
       const data = await response.json();
       if (data.success) {
-        setMessage("Menu item added successfully!");
+        alert("Menu item added successfully!");
         fetchBranchMenuItems();
         setNewMenuItem({ user_id: "", item_id: "" });
       } else {
-        setMessage(data.message || "Error adding menu item.");
+        alert(data.message || "Error adding menu item.");
       }
     } catch (error) {
       console.error("Error adding menu item:", error);
-      setMessage("Error adding menu item.");
+      alert("Error adding menu item.\nOr this menu item is exists in the branch already ");
     }
   };
 
-  // Delete menu item from branch
   const deleteBranchMenuItem = async () => {
     try {
       const response = await fetch("http://localhost:8000/manager/menu-branch-item/delete", {
@@ -90,46 +85,45 @@ const BranchMenuPage = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_id: parseInt(deleteMenuItem.user_id),
-          item_id: deleteMenuItem.item_id
+          item_id: deleteMenuItem.item_id,
         }),
       });
       const data = await response.json();
       if (data.success) {
-        setMessage("Menu item deleted successfully!");
+        alert("Menu item deleted successfully!");
         fetchBranchMenuItems();
         setDeleteMenuItem({ user_id: "", item_id: "" });
       } else {
-        setMessage(data.message || "Error deleting menu item.");
+        alert(data.message || "Error deleting menu item.");
       }
     } catch (error) {
       console.error("Error deleting menu item:", error);
-      setMessage("Error deleting menu item.");
+      alert("Error deleting menu item.");
     }
   };
 
-  // Update menu item status
   const updateBranchMenuItemStatus = async () => {
     try {
       const response = await fetch("http://localhost:8000/manager/menu-branch-item/change-status", {
-        method: "PUT",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_id: parseInt(updateMenuItem.user_id),
           item_id: updateMenuItem.item_id,
-          is_available: updateMenuItem.is_available
+          is_available: updateMenuItem.is_available,
         }),
       });
       const data = await response.json();
       if (data.success) {
-        setMessage("Menu item status updated successfully!");
+        alert("Menu item status updated successfully!");
         fetchBranchMenuItems();
-        setUpdateMenuItem({ user_id: "", item_id: "", is_available: true });
+        setUpdateMenuItem({ user_id: "", item_id: "", is_available: 1 });
       } else {
-        setMessage(data.message || "Error updating menu item status.");
+        alert(data.message || "Error updating menu item status.");
       }
     } catch (error) {
       console.error("Error updating menu item status:", error);
-      setMessage("Error updating menu item status.");
+      alert("Error updating menu item status.");
     }
   };
 
@@ -147,13 +141,15 @@ const BranchMenuPage = () => {
         {/* Add New Menu Item Form */}
         <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Add Menu Item to Branch</h2>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            addBranchMenuItem();
-          }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              addBranchMenuItem();
+            }}
+          >
             <div className="grid grid-cols-2 gap-4">
               <input
-                type="number"
+                type="text"
                 placeholder="User ID"
                 value={newMenuItem.user_id}
                 onChange={(e) => setNewMenuItem({ ...newMenuItem, user_id: e.target.value })}
@@ -181,13 +177,15 @@ const BranchMenuPage = () => {
         {/* Delete Menu Item Form */}
         <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Delete Menu Item</h2>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            deleteBranchMenuItem();
-          }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              deleteBranchMenuItem();
+            }}
+          >
             <div className="grid grid-cols-2 gap-4">
               <input
-                type="number"
+                type="text"
                 placeholder="User ID"
                 value={deleteMenuItem.user_id}
                 onChange={(e) => setDeleteMenuItem({ ...deleteMenuItem, user_id: e.target.value })}
@@ -215,13 +213,15 @@ const BranchMenuPage = () => {
         {/* Update Menu Item Status Form */}
         <div className="border p-4 rounded-lg bg-gray-100 mb-6">
           <h2 className="font-bold text-xl mb-4">Update Menu Item Status</h2>
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            updateBranchMenuItemStatus();
-          }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              updateBranchMenuItemStatus();
+            }}
+          >
             <div className="grid grid-cols-3 gap-4">
               <input
-                type="number"
+                type="text"
                 placeholder="User ID"
                 value={updateMenuItem.user_id}
                 onChange={(e) => setUpdateMenuItem({ ...updateMenuItem, user_id: e.target.value })}
@@ -238,15 +238,17 @@ const BranchMenuPage = () => {
               />
               <select
                 value={updateMenuItem.is_available.toString()}
-                onChange={(e) => setUpdateMenuItem({ 
-                  ...updateMenuItem, 
-                  is_available: e.target.value === "true" 
-                })}
+                onChange={(e) =>
+                  setUpdateMenuItem({
+                    ...updateMenuItem,
+                    is_available: e.target.value === "true" ? 1 : 0,
+                  })
+                }
                 className="p-2 border rounded"
                 required
               >
-                <option value="true">Available</option>
-                <option value="false">Unavailable</option>
+                <option value="1">Available</option>
+                <option value="0">Unavailable</option>
               </select>
             </div>
             <button
@@ -300,10 +302,6 @@ const BranchMenuPage = () => {
             </tbody>
           </table>
         </div>
-
-        {message && (
-          <div className="mt-4 text-center text-red-500 font-bold">{message}</div>
-        )}
       </div>
     </>
   );

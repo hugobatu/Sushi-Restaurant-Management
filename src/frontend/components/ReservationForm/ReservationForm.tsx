@@ -117,10 +117,23 @@ const ReservationForm = () => {
               <option value="B001">B001 - TPHCM - TEKASHIMAYA QUẬN 1</option>
               <option value="B002">B002 - TPHCM - NGUYỄN VĂN CỪ</option>
               <option value="B003">B003 - NT - TOKYO DELI KOMODO</option>
-              {Array.from({ length: 6 }, (_, i) => (
+
+              <option value="B004">B004 - HN - VINCOM BÀ TRIỆU</option>
+              <option value="B005">B005 -	ÐN -	HÀN RIVER CENTER</option>
+              <option value="B006">B006	- KH - TOKYO DELI ĐÀ NẴNG CẦU RỒNG</option>
+
+              <option value="B007">B007 -	NT -	NHA TRANG CENTER</option>
+              <option value="B008">B008 -	NT -	SENSE CITY NHA TRANG</option>
+              <option value="B009">B009 -	HN -	ROYAL CITY</option>
+
+              <option value="B010">B010 -	TPHCM -	LANDMARK 81</option>
+
+
+
+              {/* {Array.from({ length: 6 }, (_, i) => (
                 <option key={i + 4} value={`B00${i + 4}`}>B00{i + 4}</option>
               ))}
-              <option value="B010">B010</option>
+              <option value="B010">B010</option> */}
             </select>
           </div>
 
