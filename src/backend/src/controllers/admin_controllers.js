@@ -617,8 +617,8 @@ exports.getItemSalesStats = async (req, res) => {
             .input('end_date', sql.Date, end_date)
             .input('branch_id', sql.VarChar(10), branch_id)
             .input('region_id', sql.VarChar(10), region_id)
-            .query('sp_get_menu_sales_stats @start_date, @end_date, @branch_id, @region_id');
-
+            .query('exec sp_get_menu_sales_stats @start_date, @end_date, @branch_id, @region_id');
+        
         console.log(result.recordset)
         
         if (!result.recordset || result.recordset.length === 0) {

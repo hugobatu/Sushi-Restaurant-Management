@@ -20,4 +20,4 @@ EXEC sp_get_branch_staff_ratings 15, 1, 100000
 -- 6. xem hạng mức thẻ thành viên của khách hàng
 EXEC sp_view_customer_points '0953316642'
 
-SELECT * FROM Bill
+SELECT * FROM Membership
