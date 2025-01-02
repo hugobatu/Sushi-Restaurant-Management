@@ -164,13 +164,23 @@ exports.changeBranchMenuItem = async (req, res) => {
 // *. Get all menu items from all branches
 exports.getBranchMenuItem = async (req, res) => {
     const {
+        user_id,
         page_number = 1,
-        page_size = 1000
+        page_size = 200
     } = req.body
+    if (!user_id || !page_number || !page_size) {
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields (user_id, page_number, page_size).",
+        });
+    }
     try {
         const pool = await con;
         const result = await pool.request()
-            .query('EXEC sp_get_branches_menu_items');
+            .input('user_id', sql.Int, user_id)
+            .input('page_number', sql.Int, page_number)
+            .input('page_size', sql.Int, page_size)
+            .execute('sp_get_branches_menu_items');
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
                 success: false,

@@ -4,10 +4,18 @@ USE SushiXRestaurant;
 -- xem danh sách menu của chi nhánh
 GO
 CREATE OR ALTER PROCEDURE sp_get_branches_menu_items
-	@branch_id VARCHAR(10)
+	@user_id INT
 AS
 BEGIN
 	BEGIN TRY
+        DECLARE @branch_id VARCHAR(10)
+        SET @branch_id = (
+            SELECT D.branch_id
+            FROM Department D
+            JOIN Staff S
+            ON S.department_id = D.department_id
+            WHERE S.staff_id = @user_id AND D.department_name = 'manager'
+        )
 	    SELECT 
 			B.item_id,
 			M.item_name,

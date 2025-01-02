@@ -14,6 +14,4 @@ join Department d
 on s.department_id = d.department_id
 where d.department_name = 'manager'
 
-select * from Customer
-
 select * from CustomerRating
