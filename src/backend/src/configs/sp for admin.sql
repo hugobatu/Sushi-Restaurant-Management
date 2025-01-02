@@ -732,10 +732,10 @@ BEGIN
         SELECT 
             B.branch_name,
             FORMAT(O.order_datetime, @dateFormat) AS Period,
-            SUM(OD.quantity * OD.unit_price) AS TotalRevenue,
+            SUM(Bi.subtotal) AS TotalRevenue,
             COUNT(O.order_id) AS TotalOrders
-        FROM OrderDetails OD
-        JOIN [Order] O ON OD.order_id = O.order_id
+        FROM Bill Bi
+        JOIN [Order] O ON Bi.order_id = O.order_id
         JOIN Branch B ON O.branch_id = B.branch_id
         WHERE O.order_datetime BETWEEN @start_date AND @end_date
             AND (@branch_id IS NULL OR B.branch_id = @branch_id)

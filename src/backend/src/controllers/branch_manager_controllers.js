@@ -352,7 +352,7 @@ exports.getBranchStaffRatings = async (req, res) => {
             });
         }
         const pool = await con;
-
+        
         const result = await pool.request()
             .input('user_id', sql.Int, user_id)
             .input('page_number', sql.Int, page_number)
