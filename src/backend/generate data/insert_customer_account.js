@@ -8,7 +8,7 @@ const { formatBirthDate } = require('../src/utils/stringUtils');
 const API_URL = 'http://localhost:8000/signup';
 
 // Tạo throttle queue
-const throttle = throttledQueue(250, 1000);
+const throttle = throttledQueue(300, 1000);
 
 // Hàm tạo username và password
 const generateUsernameAndPassword = (phone_number, birth_date) => {

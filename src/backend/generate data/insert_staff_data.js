@@ -38,5 +38,5 @@ const importStaffFromCSV = (csvFilePath) => {
         });
 };
 
-const csvFilePath = './data/staff_data.csv';
+const csvFilePath = './generate data/staff_data.csv';
 importStaffFromCSV(csvFilePath);
