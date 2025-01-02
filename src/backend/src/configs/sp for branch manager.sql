@@ -4,39 +4,61 @@ USE SushiXRestaurant;
 -- xem danh sách menu của chi nhánh
 GO
 CREATE OR ALTER PROCEDURE sp_get_branches_menu_items
-	@user_id INT
+	@user_id INT,
+    @page_number INT,
+    @page_size INT
 AS
 BEGIN
-	BEGIN TRY
-        DECLARE @branch_id VARCHAR(10)
+    BEGIN TRY
+        DECLARE @branch_id VARCHAR(10);
         SET @branch_id = (
             SELECT D.branch_id
             FROM Department D
             JOIN Staff S
             ON S.department_id = D.department_id
             WHERE S.staff_id = @user_id AND D.department_name = 'manager'
-        )
-	    SELECT 
-			B.item_id,
-			M.item_name,
-			B.is_available,
-			M.base_price
-		FROM BranchMenuItem B
-		JOIN MenuItem M 
-		ON B.item_id = M.item_id
-		WHERE B.branch_id = @branch_id
-		ORDER BY branch_id, B.item_id;
-	END TRY
+        );
 
-	BEGIN CATCH
-		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        IF @branch_id IS NULL
+        BEGIN
+            RAISERROR('User does not manage any branch.', 16, 1)
+        END
+
+        DECLARE @start_row INT = (@page_number - 1) * @page_size + 1;
+        DECLARE @end_row INT = @page_number * @page_size;
+
+        ;WITH CTE_MenuItems AS (
+            SELECT 
+                B.item_id,
+                M.item_name,
+                B.is_available,
+                M.base_price,
+                ROW_NUMBER() OVER (ORDER BY B.branch_id, B.item_id) AS RowNum
+            FROM BranchMenuItem B
+            JOIN MenuItem M 
+            ON B.item_id = M.item_id
+            WHERE B.branch_id = @branch_id
+        )
+        SELECT 
+            item_id,
+            item_name,
+            is_available,
+            base_price
+        FROM CTE_MenuItems
+        WHERE RowNum BETWEEN @start_row AND @end_row
+        ORDER BY RowNum;
+
+    END TRY
+    BEGIN CATCH
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
         DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
         DECLARE @ErrorState INT = ERROR_STATE();
 
         RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
-	END CATCH
+    END CATCH
 END
 GO
+
 -- 4.1 Thêm menu theo khu vực (branch), món này phải có trong MenuItem trước rồi mới được add vào branch
 GO
 CREATE OR ALTER PROCEDURE sp_add_menu_branch
