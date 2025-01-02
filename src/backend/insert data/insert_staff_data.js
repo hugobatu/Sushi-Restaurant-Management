@@ -1,6 +1,7 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const csvParser = require('csv-parser');
 const axios = require('axios');
+const iconv = require('iconv-lite');
 
 const sendStaffData = async (staff) => {
     try {
@@ -15,6 +16,8 @@ const importStaffFromCSV = (csvFilePath) => {
     const staffData = [];
 
     fs.createReadStream(csvFilePath)
+        .pipe(iconv.decodeStream('utf16-be')) // Convert UTF-16BE to UTF-8
+        .pipe(iconv.encodeStream('utf8'))    // Ensure the data is in UTF-8
         .pipe(csvParser())
         .on('data', (row) => {
             staffData.push({

@@ -181,7 +181,7 @@ exports.addStaff = async (req, res) => {
         phone_number,
         gender,
     } = req.body;
-
+    
     // Validate required fields
     if (!branch_id || !department_name || !staff_name || !birth_date || !phone_number || !gender) {
         return res.status(400).json({
@@ -608,6 +608,7 @@ exports.getItemSalesStats = async (req, res) => {
             message: "Missing required fields."
         });
     }
+    console.log(req.body)
     try {
         const pool = await con;
         console.log(start_date, end_date, branch_id, region_id);
@@ -618,6 +619,8 @@ exports.getItemSalesStats = async (req, res) => {
             .input('region_id', sql.VarChar(10), region_id)
             .query('sp_get_menu_sales_stats @start_date, @end_date, @branch_id, @region_id');
 
+        console.log(result.recordset)
+        
         if (!result.recordset || result.recordset.length === 0) {
             return res.status(404).json({
                 success: false,

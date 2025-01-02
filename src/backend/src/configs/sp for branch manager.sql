@@ -39,7 +39,7 @@ BEGIN
             ON B.item_id = M.item_id
             WHERE B.branch_id = @branch_id
         )
-        SELECT 
+        SELECT
             item_id,
             item_name,
             is_available,

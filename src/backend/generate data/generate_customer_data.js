@@ -32,5 +32,5 @@ const exportToCSV = (data, fileName) => {
     }
 };
 
-const customers = generateCustomers(100); // 100 customers
+const customers = generateCustomers(10000); // 100 customers
 exportToCSV(customers, './data/customers.csv');

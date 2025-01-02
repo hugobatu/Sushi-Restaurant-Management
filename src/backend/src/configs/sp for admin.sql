@@ -777,21 +777,6 @@ BEGIN
         GROUP BY MI.item_name
         ORDER BY TotalRevenue DESC;
 
-        -- bot 1 sale
-        SELECT TOP 1
-            MI.item_name,
-            SUM(OD.quantity * OD.unit_price) AS TotalRevenue,
-            SUM(OD.quantity) AS TotalQuantitySold
-        FROM OrderDetails OD
-        JOIN [Order] O ON OD.order_id = O.order_id
-        JOIN MenuItem MI ON OD.item_id = MI.item_id
-        JOIN Branch B ON O.branch_id = B.branch_id
-        WHERE O.order_datetime BETWEEN @start_date AND @end_date
-            AND (@branch_id IS NULL OR B.branch_id = @branch_id)
-            AND (@region_id IS NULL OR B.region_id = @region_id)
-        GROUP BY MI.item_name
-        ORDER BY TotalRevenue ASC;
-
     END TRY
     BEGIN CATCH
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();

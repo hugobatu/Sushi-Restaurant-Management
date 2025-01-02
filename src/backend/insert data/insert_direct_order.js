@@ -5,7 +5,7 @@ const iconv = require('iconv-lite');
 const throttledQueue = require('throttled-queue');
 
 // Throttling setup - 15 requests per second
-const throttle = throttledQueue(200, 1000);
+const throttle = throttledQueue(300, 1000);
 const API_URL = 'http://localhost:8000/staff/customer/order/create';
 
 const readMenuItemsFromCSV = (fileName) => {
@@ -32,36 +32,48 @@ const readMenuItemsFromCSV = (fileName) => {
 const readCustomerDataFromCSV = (fileName) => {
     return new Promise((resolve, reject) => {
         const customers = [];
-        fs.createReadStream(fileName)
-            .pipe(csv())
-            .on('data', (row) => {
-                customers.push(row);
-            })
-            .on('end', () => {
-                resolve(customers);
-            })
-            .on('error', (error) => {
-                reject(error);
+        const stream = fs.createReadStream(fileName)
+            .pipe(iconv.decodeStream('utf16be')) // Decode UTF-16BE to UTF-8
+            .pipe(csv());
+
+        stream.on('data', (row) => {
+            customers.push({
+                customer_id: row.customer_id,
+                customer_name: row.customer_name,
+                email: row.email,
+                phone_number: row.phone_number,
+                gender: row.gender,
+                birth_date: row.birth_date,
+                id_number: row.id_number,
+                username: row.username,
             });
+        });
+
+        stream.on('end', () => {
+            resolve(customers);
+        });
+
+        stream.on('error', (error) => {
+            reject(error);
+        });
     });
 };
 
 const createOrder = async (user_id, customer_name, phone_number, table_id, menuItems) => {
-    const numItems = Math.floor(Math.random() * 3) + 1; // Chọn từ 1 đến 3 món
+    const numItems = Math.floor(Math.random() * 5) + 1; // Select 1 to 5 items
     const selectedItems = [];
-    const selectedItemIds = new Set(); // Dùng Set để lưu trữ các item_id đã chọn
+    const selectedItemIds = new Set();
 
     while (selectedItems.length < numItems) {
         const item = menuItems[Math.floor(Math.random() * menuItems.length)];
         const quantity = Math.floor(Math.random() * 3) + 1;
 
-        // Kiểm tra xem món đã được chọn chưa
         if (!selectedItemIds.has(item)) {
             selectedItems.push({
                 item_id: item,
-                quantity: quantity
+                quantity: quantity,
             });
-            selectedItemIds.add(item); // Thêm món vào Set
+            selectedItemIds.add(item);
         }
     }
 
@@ -70,7 +82,7 @@ const createOrder = async (user_id, customer_name, phone_number, table_id, menuI
         customer_name: customer_name,
         phone_number: phone_number,
         table_id: table_id,
-        items: selectedItems
+        items: selectedItems,
     };
 
     try {
@@ -81,7 +93,6 @@ const createOrder = async (user_id, customer_name, phone_number, table_id, menuI
     }
 };
 
-// Function to create orders with throttling and batching
 const processOrdersFromCSV = async (customerFile, menuFile) => {
     try {
         const customers = await readCustomerDataFromCSV(customerFile);
@@ -89,30 +100,31 @@ const processOrdersFromCSV = async (customerFile, menuFile) => {
         console.log(`Parsed ${customers.length} customers and ${menuItems.length} menu items. Creating orders...`);
 
         const ordersToCreate = [];
-        const ordersCount = 10000; // 10,000 orders per user
+        const ordersCount = 500; // 10,000 orders per user
         const user_ids = [6, 23, 36, 60, 66, 80, 96, 110, 126, 143]; // Array of user IDs
 
-        // Iterate through each user_id and create 10,000 orders
         for (const user_id of user_ids) {
             for (let i = 0; i < ordersCount; i++) {
-                const customer = customers[Math.floor(Math.random() * customers.length)]; // Randomly pick a customer
+                const customer = customers[Math.floor(Math.random() * customers.length)];
+                if (!customer || !customer.customer_name || !customer.phone_number) {
+                    console.error('Invalid customer data:', customer);
+                    continue;
+                }
+
                 const { customer_name, phone_number } = customer;
 
-                // Generate a random table_id between 1 and 30
                 const table_id = Math.floor(Math.random() * 30) + 1;
 
-                // Add the order creation function to the queue with throttling
                 ordersToCreate.push(
                     throttle(() => createOrder(user_id, customer_name, phone_number, table_id, menuItems))
                 );
             }
         }
 
-        // Batch processing - process orders in smaller groups to avoid overwhelming the server
-        const batchSize = 100; // Adjust batch size as needed
+        const batchSize = 100;
         for (let i = 0; i < ordersToCreate.length; i += batchSize) {
             const batch = ordersToCreate.slice(i, i + batchSize);
-            await Promise.all(batch); // Process batch in parallel
+            await Promise.all(batch);
             console.log(`Processed ${i + batch.length} orders`);
         }
 
@@ -123,6 +135,5 @@ const processOrdersFromCSV = async (customerFile, menuFile) => {
 };
 
 const customerFile = './data/customers_data.csv';
-const menuFile = './data/menu_item.csv';  // Make sure this file contains item_id and item_name
-
+const menuFile = './data/menu_item.csv';
 processOrdersFromCSV(customerFile, menuFile);
