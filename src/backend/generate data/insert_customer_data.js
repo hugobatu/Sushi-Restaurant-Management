@@ -52,5 +52,5 @@ const insertCustomersFromCSV = async (fileName) => {
     }
 };
 
-const fileName = './';
+const fileName = './data/customers_data.csv';
 insertCustomersFromCSV(fileName);

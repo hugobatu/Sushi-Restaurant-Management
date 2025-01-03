@@ -100,9 +100,9 @@ const processOrdersFromCSV = async (customerFile, menuFile) => {
         console.log(`Parsed ${customers.length} customers and ${menuItems.length} menu items. Creating orders...`);
 
         const ordersToCreate = [];
-        const ordersCount = 500; // 10,000 orders per user
-        const user_ids = [6, 23, 36, 60, 66, 80, 96, 110, 126, 143]; // Array of user IDs
-
+        const ordersCount = 10000; // 10,000 orders per user
+        const user_ids = [6, 23, 36, 50, 79, 94, 109, 124, 140, 156]; // Array of user IDs
+        
         for (const user_id of user_ids) {
             for (let i = 0; i < ordersCount; i++) {
                 const customer = customers[Math.floor(Math.random() * customers.length)];

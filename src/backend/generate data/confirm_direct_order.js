@@ -6,7 +6,7 @@ const VIEW_ORDERS_API = 'http://localhost:8000/staff/customer/order/view';
 const CONFIRM_ORDER_API = 'http://localhost:8000/staff/customer/order/confirm-direct';
 
 // The list of user IDs
-const user_ids = [6, 23, 36, 60, 66, 80, 96, 110, 126, 143];
+const user_ids = [6, 23, 36, 50, 79, 94, 109, 124, 140, 156];
 
 // Create a throttled queue with a max of 1 request per second
 const throttle = throttledQueue(300, 1000);  // 1 request per second
