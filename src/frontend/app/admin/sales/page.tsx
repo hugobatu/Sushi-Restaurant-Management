@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ManagerHeader } from "@/components/Manager/manager-header";
+import { AdminHeader } from "@/components/Admin/admin-header";
 import { SideNav } from "@/components/Manager/side-nav";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
@@ -96,7 +96,7 @@ const SalesDashboardPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <ManagerHeader />
+      <AdminHeader />
       <SideNav />
 
       <div className="ml-60 p-6">
